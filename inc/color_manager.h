@@ -1,7 +1,7 @@
 /**
  * @class ColorManager
  *
- * ColorManager is a class that holds all of the colors, and manages when they
+ * ColorManager holds all of the colors, and manages when they
  * will be created and destroyed. 
  *
  * @author Cole Lyman

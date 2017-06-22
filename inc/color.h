@@ -1,7 +1,7 @@
 /**
  * @class Color
  *
- * Color is a class that represents a single sample or species, which make up
+ * Color represents a single sample or species, which make up
  * the colored de Bruijn graph. This class is essentially a wrapper for the
  * DBGQuery class in the dbgfm package.
  *

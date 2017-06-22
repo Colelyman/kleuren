@@ -1,3 +1,6 @@
 [submodule "thirdparty/dbgfm"]
 	path = thirdparty/dbgfm
 	url = git@github.com:jts/dbgfm.git
+[submodule "thirdparty/cxxopts"]
+	path = thirdparty/cxxopts
+	url = git@github.com:jarro2783/cxxopts.git

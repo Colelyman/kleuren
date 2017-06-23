@@ -14,22 +14,20 @@ class ArgParse {
     public:
         
         Args parseArgs(int argc, char* argv[]) {
-            Args args = Args();
+            args = Args();
             
             try {
-                Options options("kleuren", "A colored de Bruijn graph implementation using dbgfm.");
-
                 // set up each argument
                 options.add_options()
-                    ("c,colors", "Path to the file that holds the paths to the individual colors.",
+                    ("c,colorsFilePath", "Path to the file that holds the paths to the individual colors.",
                         cxxopts::value<string>())
-                    ("k,kmer_len", "Kmer length to use when querying the colors.", cxxopts::value<size_t>(),
+                    ("k,kmerLen", "Kmer length to use when querying the colors.", cxxopts::value<size_t>(),
                         "31")
                     ("h,help", "Print help")
                 ;
 
                 // parse the positional arguments
-                options.parse_positional({"colors"});
+                options.parse_positional({"colorsFilePath"});
 
                 // parse the arguments
                 options.parse(argc, argv);
@@ -40,15 +38,9 @@ class ArgParse {
                     exit(0);
                 }
 
-                /*
-                 * Set the required arguments.
-                 */
+                setRequiredArgs();
 
-
-                /*
-                 * Set the optional arguments.
-                 */
-
+                setOptionalArgs();
 
             } catch(const cxxopts::OptionsException& e) {
                 cout << "Error parsing options: " << e.what() << endl;
@@ -58,4 +50,18 @@ class ArgParse {
             return args;
         }
 
+    private:
+
+        void setRequiredArgs() {
+            args.setColorsFilePath(options["colorsFilePath"].as<string>());
+            args.setKmerLen(options["kmerLen"].as<size_t>());
+        }
+
+        void setOptionalArgs() {
+
+        }
+
+        Options options("kleuren", "A colored de Bruijn graph implementation using dbgfm.");
+
+        Args args;
 }

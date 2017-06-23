@@ -23,7 +23,7 @@ class ArgParse {
 
     public:
         /// Parse the incoming arguments and return Args
-        Args parseArgs(char* argv[]);
+        Args parseArgs(int argc, char* argv[]);
 
 };
 

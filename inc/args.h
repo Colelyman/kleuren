@@ -22,6 +22,12 @@ class Args {
         /// Returns a string representation of the arguments provided
         string toString();
 
+        string getColorsFilePath();
+        void setColorsFilePath(string path);
+
+        size_t getKmerLen();
+        void setKmerLen(size_t len);
+
     private:
         /**
          * The path to the file that specifies the colors.

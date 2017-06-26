@@ -26,6 +26,8 @@ using std::vector;
 class Bubble {
     
     public:
+        Bubble();
+
         /** 
          * Runs Needleman-Wunsch algorithm on each pair in a pair-wise fashion.
          * @return a map of key pair<int, int> where each int in the pair is the

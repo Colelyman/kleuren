@@ -41,7 +41,7 @@ class Color {
         bool isPrefixNeighbor(string& s, char b);
 
         /// Returns whether or not there is an incoming edge, b, present for node s
-        bool isSuffixNeighbor(string&s, char b);
+        bool isSuffixNeighbor(string& s, char b);
 
         /// Returns the outgoing edges of s. 
         /// @todo figure out what this really returns

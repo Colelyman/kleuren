@@ -4,31 +4,15 @@
 
 #include "driver.h"
 
-class Driver {
+Driver::Driver() {
+    visitedKmers = new set<string>();
+}
 
-    public:
+Driver::~Driver() {
+    delete visitedKmers;
+}
 
-        Driver() {
-            visitedKmers = new set<string>();
-        }
+void Driver::run(Args args) {
 
-        ~Driver() {
-            delete visitedKmers;
-        }
-
-        void run(Args args) {
-
-            return;
-        }
-
-    private:
-
-        ColorManager colorManager;
-
-        KmerBank kmerBank;
-
-        BubbleBuilder bubbleBuilder;
-
-        set<string>* visitedKmers;
-
+    return;
 }

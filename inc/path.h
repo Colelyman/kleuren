@@ -14,10 +14,12 @@
 #define PATH_H
 
 #include <string>
+#include <vector>
 
 #include "color.h"
 
 using std::string;
+using std::vector;
 
 class Path {
 

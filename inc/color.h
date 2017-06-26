@@ -14,12 +14,14 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#include <utility>
 #include <string>
 
 #include "fm_index.h"
 #include "dbg_query.h"
 
 using std::string;
+using std::pair;
 
 class Color {
 
@@ -85,9 +87,6 @@ class Color {
          * all of the data for the color are stored.
          */
         FMIndex* fmIndex;
-
-        /// The instance of DBGQuery that provides access into the FMIndex
-        DBGQuery dbg;
 };
 
 #endif // COLOR_H

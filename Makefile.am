@@ -5,7 +5,8 @@ bin_PROGRAMS = kleuren
 kleuren_CPPFLAGS = $(INC_CPPFLAGS)
 
 # Build all of the kleuren source files
-kleuren_SOURCES = src/args.cpp src/arg_parse.cpp src/main.cpp 
+kleuren_SOURCES = src/args.cpp src/arg_parse.cpp src/main.cpp \
+				  src/driver.cpp
 
 # Link dbgfm library to kleuren 
 #kleuren_LDADD = thirdparty/dbgfm/libdbgfm.a

@@ -16,13 +16,10 @@ using std::vector;
 using std::string;
 
 Args ArgParse::parseArgs(int argc, char* argv[]) {
-    cout << "In parseArgs" << endl;
     Options options("kleuren", "A colored de Bruijn graph implementation using dbgfm.");
 
     this->args = Args();
 
-    cout << "After options and Args are made." << endl;
-    
     try {
         // set up each argument
         options.add_options()
@@ -57,7 +54,6 @@ Args ArgParse::parseArgs(int argc, char* argv[]) {
         exit(1);
     }
 
-    cout << "Returning args." << endl;
     return args;
 }
 

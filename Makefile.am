@@ -10,4 +10,4 @@ kleuren_SOURCES = src/args.cpp src/arg_parse.cpp src/driver.cpp src/main.cpp \
 				  src/path.cpp src/bubble.cpp src/bubble_builder.cpp src/kmer_bank.cpp
 
 # Link dbgfm library to kleuren 
-#kleuren_LDADD = thirdparty/dbgfm/libdbgfm.a
+kleuren_LDADD = thirdparty/dbgfm/libdbgfm.a

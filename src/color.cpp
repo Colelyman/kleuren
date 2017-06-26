@@ -4,12 +4,13 @@
 
 #include "color.h"
 
-Color::Color(string name, string pathToFMIndex) {
-
+Color::Color(int id, string name, string pathToFMIndex) {
+    this->id = id;
+    /// @todo initialize the FMIndex
 }
 
 Color::~Color() {
-
+    /// @todo destruct the FMIndex
 }
 
 bool Color::isVertex(string& s) {

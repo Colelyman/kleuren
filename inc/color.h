@@ -26,7 +26,7 @@ using std::pair;
 class Color {
 
     public:
-        Color(string name, string pathToFMIndex);
+        Color(int id, string name, string pathToFMIndex);
 
         ~Color();
 

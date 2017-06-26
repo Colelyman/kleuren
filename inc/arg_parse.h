@@ -26,14 +26,8 @@ class ArgParse {
         Args parseArgs(int argc, char* argv[]);
 
     private:
-        /// Helper method to set the required arguments
-        void setRequriedArgs();
-
-        /// Helper method to set the optional arguments
-        void setOptionalArgs();
-
-        /// The object used by cxxopts to parse the arguments
-        Options options;
+        /// Helper method to set the arguments
+        void setArgs(Options options);
 
         /// The holder class for all of the parse arguments
         Args args;

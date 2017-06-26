@@ -8,16 +8,22 @@
  * @date 2017/6/22
  */
 
+#include <iostream>
+
 #include "arg_parse.h"
-#include "driver.h"
+
+using std::cout;
+using std::endl;
 
 int main(int argc, char* argv[]) {
 
+    cout << "Before argParse = ArgParse()" << endl;
+
     ArgParse argParse = ArgParse();
 
-    Driver driver = Driver();
+    argParse.parseArgs(argc, argv);
 
-    driver.run(argParse.parseArgs(argc, argv));
+    cout << "After argParse.parseArgs()" << endl;
 
     return 0;
 }

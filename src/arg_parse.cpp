@@ -3,65 +3,65 @@
  */
 
 #include <iostream>
+#include <cstdlib>
+#include <vector>
+#include <string>
 
 #include "arg_parse.h"
 
 using std::cout;
 using std::endl;
+using std::exit;
+using std::vector;
+using std::string;
 
-class ArgParse {
+Args ArgParse::parseArgs(int argc, char* argv[]) {
+    cout << "In parseArgs" << endl;
+    Options options("kleuren", "A colored de Bruijn graph implementation using dbgfm.");
 
-    public:
-        
-        Args parseArgs(int argc, char* argv[]) {
-            args = Args();
-            
-            try {
-                // set up each argument
-                options.add_options()
-                    ("c,colorsFilePath", "Path to the file that holds the paths to the individual colors.",
-                        cxxopts::value<string>())
-                    ("k,kmerLen", "Kmer length to use when querying the colors.", cxxopts::value<size_t>(),
-                        "31")
-                    ("h,help", "Print help")
-                ;
+    this->args = Args();
 
-                // parse the positional arguments
-                options.parse_positional({"colorsFilePath"});
+    cout << "After options and Args are made." << endl;
+    
+    try {
+        // set up each argument
+        options.add_options()
+            ("c,colorsFilePath", "Path to the file that holds the paths to the individual colors.",
+                cxxopts::value<string>())
+            ("k,kmerLen", "Kmer length to use when querying the colors.", cxxopts::value<size_t>(),
+                "31")
+            ("h,help", "Print help")
+        ;
 
-                // parse the arguments
-                options.parse(argc, argv);
+        // specify required arguments
+        vector<string> required;
+        required.push_back("colorsFilePath");
+        required.push_back("kmerLen");
 
-                // print the help menu
-                if(options.count("help")) {
-                    cout << options.help() << endl;
-                    exit(0);
-                }
+        // parse the arguments
+        options.parse(argc, argv);
 
-                setRequiredArgs();
-
-                setOptionalArgs();
-
-            } catch(const cxxopts::OptionsException& e) {
-                cout << "Error parsing options: " << e.what() << endl;
-                exit(1);
-            }
-
-            return args;
+        // print the help menu
+        if(options.count("help")) {
+            cout << options.help() << endl;
+            exit(0);
         }
 
-    private:
+        check_required(options, required);
 
-        void setRequiredArgs() {
-            args.setColorsFilePath(options["colorsFilePath"].as<string>());
-            args.setKmerLen(options["kmerLen"].as<size_t>());
-        }
+        setArgs(options);
 
-        void setOptionalArgs() {
+    } catch(const cxxopts::OptionException& e) {
+        cout << options.help() << endl;
+        cout << "Error parsing options: " << e.what() << endl;
+        exit(1);
+    }
 
-        }
+    cout << "Returning args." << endl;
+    return args;
+}
 
-        Options options("kleuren", "A colored de Bruijn graph implementation using dbgfm.");
-
-        Args args;
+void ArgParse::setArgs(Options options) {
+    args.setColorsFilePath(options["colorsFilePath"].as<string>());
+    args.setKmerLen(options["kmerLen"].as<size_t>());
 }

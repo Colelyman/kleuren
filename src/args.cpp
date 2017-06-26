@@ -4,26 +4,22 @@
 
 #include "args.h"
 
-class Args {
+string Args::toString() {
+    return "";
+}
 
-    public:
+string Args::getColorsFilePath() {
+    return colorsFilePath;
+}
 
-        string toString() {
-            return "";
-        }
+void Args::setColorsFilePath(string path) {
+    colorsFilePath = path;
+}
 
-        string getColorsFilePath() {
-            return colorsFilePath;
-        }
+size_t Args::getKmerLen() {
+    return kmerLen;
+}
 
-        void setColorsFilePath(string path) {
-            this.colorsFilePath = path;
-        }
-
-    private:
-
-        string colorsFilePath;
-
-        size_t kmerLen;
-
+void Args::setKmerLen(size_t len) {
+    kmerLen = len;
 }

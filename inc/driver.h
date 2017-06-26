@@ -25,6 +25,10 @@ using std::set;
 class Driver {
 
     public:
+        Driver();
+
+        ~Driver();
+
         /// Starts the whole algorithm given the arguments
         void run(Args args);
 

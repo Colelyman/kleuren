@@ -23,8 +23,14 @@ class ArgParse {
 
     public:
         /// Parse the incoming arguments and return Args
-        Args parseArgs(char* argv[]);
+        Args parseArgs(int argc, char* argv[]);
 
+    private:
+        /// Helper method to set the arguments
+        void setArgs(Options options);
+
+        /// The holder class for all of the parse arguments
+        Args args;
 };
 
 #endif // ARG_PARSE_H

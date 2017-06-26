@@ -30,3 +30,18 @@
 *.exe
 *.out
 *.app
+kleuren
+
+# Automake
+Makefile
+Makefile.in
+.deps
+.dirstamp
+
+# Autoconf
+config*
+install-sh
+depcomp
+missing
+aclocal.m4
+autom4te.cache

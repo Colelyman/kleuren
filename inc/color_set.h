@@ -37,9 +37,11 @@ class ColorSet {
         /// Returns the set of all colors
         set<Color*> getColors();
 
-        /// Returns an iterator over the set of colors
-        /// @todo figure out how the correct return type...
-        void getIterator();
+        /// Returns a begin iterator over the set of colors
+        set<Color*>::iterator getBeginIterator();
+
+        /// Returns an end iterator over the set of colors
+        set<Color*>::iterator getEndIterator();
 
     private:
         /// The set of colors contained by this object

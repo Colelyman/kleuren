@@ -9,12 +9,14 @@
  */
 
 #include "arg_parse.h"
+#include "driver.h"
 
 int main(int argc, char* argv[]) {
 
     ArgParse argParse = ArgParse();
+    Driver driver = Driver();
 
-    argParse.parseArgs(argc, argv);
+    driver.run(argParse.parseArgs(argc, argv));
 
     return 0;
 }

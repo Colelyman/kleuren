@@ -29,6 +29,9 @@ class Path {
         /// Returns the actual sequence of the path
         string getSequence();
 
+        /// Adds an index to the path
+        void addIndex(size_t idx);
+
         /// Returns the ID of the Color that this path is associated with
         int getColorID();
 

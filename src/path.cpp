@@ -22,6 +22,10 @@ string Path::getSequence() {
     return seq.str();
 }
 
+void Path::addIndex(size_t idx) {
+    indexes.push_back(idx);
+}
+
 int Path::getColorID() {
     return color->getID();
 }

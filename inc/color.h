@@ -16,12 +16,14 @@
 
 #include <utility>
 #include <string>
+#include <vector>
 
 #include "fm_index.h"
 #include "dbg_query.h"
 
 using std::string;
 using std::pair;
+using std::vector;
 
 class Color {
 
@@ -43,19 +45,18 @@ class Color {
         /// Returns whether or not there is an incoming edge, b, present for node s
         bool isSuffixNeighbor(string& s, char b);
 
-        /// Returns the outgoing edges of s. 
-        /// @todo figure out what this really returns
-        string getSuffixNeighbors(string& s);
+        /// Returns the outgoing edges of s as a vector of kmers that are each outgoing edge
+        vector<string> getSuffixNeighbors(string& s);
 
-        /// Returns the incoming edges of s. 
-        /// @todo figure out what this really returns
-        string getPrefixNeighbors(string& s);
+        /// Returns the incoming edges of s as a vector of kmers that are each incoming edge
+        vector<string> getPrefixNeighbors(string& s);
 
         /**
          * Get the substring and index of a substring in the color.
          * @param idx the position of where the substring begins
          * @param len how long the substring is
-         * @return a pair, where first is the substring, and second is the index
+         * @return a pair, where first is the substring at idx of length len, and second is 
+         * the index of the substring
          */
         pair<string, size_t> extractSubstringAndIndex(size_t idx, size_t len);
 

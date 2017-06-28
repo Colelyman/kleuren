@@ -25,12 +25,30 @@ bool Color::isSuffixNeighbor(string& s, char b) {
     return DBGQuery::isSuffixNeighbor(fmIndex, s, b);
 }
 
-string Color::getSuffixNeighbors(string& s) {
-    return DBGQuery::getSuffixNeighbors(fmIndex, s);
+vector<string> Color::getSuffixNeighbors(string& s) {
+    vector<string> neighbors;
+    string neighborBases = DBGQuery::getSuffixNeighbors(fmIndex, s);
+    string suffix = s.substr(1, s.length() - 1);
+
+    for(unsigned int i = 0; i < neighborBases.length(); i++) {
+        string neighbor = suffix + neighborBases[i];
+        neighbors.push_back(neighbor);
+    }
+
+    return neighbors;
 }
 
-string Color::getPrefixNeighbors(string& s) {
-    return DBGQuery::getPrefixNeighbors(fmIndex, s);
+vector<string> Color::getPrefixNeighbors(string& s) {
+    vector<string> neighbors;
+    string neighborBases = DBGQuery::getPrefixNeighbors(fmIndex, s);
+    string prefix = s.substr(0, s.length() - 1);
+
+    for(unsigned int i = 0; i < neighborBases.length(); i++) {
+        string neighbor = neighborBases[i] + prefix;
+        neighbors.push_back(neighbor);
+    }
+
+    return neighbors;
 }
 
 pair<string, size_t> Color::extractSubstringAndIndex(size_t idx, size_t len) {

@@ -24,30 +24,35 @@ using std::string;
 class BubbleBuilder {
 
     public:
-        BubbleBuilder();
+        BubbleBuilder(size_t len);
 
-        /// Returns the Bubble built starting at kmer for colors
-        Bubble build(string& kmer, ColorSet colors);
+        /// Returns the Bubble built starting at startKmer for colors
+        Bubble build(string& startKmer, ColorSet colors);
 
     private:
         /** 
-         * Finds the ending kmer, which is the next kmer that contains all of the colors.
+         * Finds the index of the ending kmer, which is the next kmer 
+         * that contains all of the colors.
          * @param startKmer the kmer to start searching for
          * @param color the Color to find the endKmer in
          * @param colors the ColorSet to check against
-         * @return the next kmer that is present in all of the colors of the ColorSet
+         * @return the next kmer that is present in all of the colors of the ColorSet, but
+         * if there is no kmer that is present in all of the colors of the ColorSet the function
+         * will return null
          */
-        string& findEndKmer(string& startKmer, Color color, ColorSet colors);
+        size_t findEndKmerIdx(string& startKmer, Color* color, ColorSet colors);
 
         /**
          * Extends the path between startKmer and endKmer for a given color.
-         * @param startKmer the kmer to start the path with
-         * @param endKmer the kmer to finish the path with
-         * @param color the Color to use to extend the path
+         * @param startIdx the index to start the path with
+         * @param endIdx the index to finish the path with
+         * @param color the Color to use in order to extend the path
          * @return the path for color between startKmer and endKmer
          */
-        Path extendPath(string& startKmer, string& endKmer, Color color);
+        Path extendPath(size_t startIdx, size_t endIdx, Color* color);
 
+        /// The kmer length to extend at each index
+        size_t kmerLen;
 };
 
 #endif // BUBBLE_BUILDER_H

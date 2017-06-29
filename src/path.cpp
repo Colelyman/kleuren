@@ -2,13 +2,13 @@
  * Implementation of path.h
  */
 
-#include <stringstream>
+#include <sstream>
 
 #include "path.h"
 
 using std::stringstream;
 
-Path::Path(Color* color, size_t kmerLen) {
+Path::Path(const Color* color, size_t kmerLen) {
     this->color = color;
     this->kmerLen = kmerLen;
 }

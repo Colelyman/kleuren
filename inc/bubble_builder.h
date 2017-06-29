@@ -42,16 +42,16 @@ class BubbleBuilder {
          * if there is no kmer that is present in all of the colors of the ColorSet the function
          * will return null
          */
-        size_t findEndKmerIdx(string& startKmer, Color* color, ColorSet colors);
+        string findEndKmer(string& startKmer, const Color* color, const ColorSet colors);
 
         /**
          * Extends the path between startKmer and endKmer for a given color.
-         * @param startIdx the index to start the path with
-         * @param endIdx the index to finish the path with
+         * @param startKmer the kmer to start the path with
+         * @param endKmer the kmer to finish the path with
          * @param color the Color to use in order to extend the path
          * @return the path for color between startKmer and endKmer
          */
-        Path extendPath(size_t startIdx, size_t endIdx, Color* color);
+        Path extendPath(string& startKmer, string& endKmer, const Color* color);
 
         /// The kmer length to extend at each index
         size_t kmerLen;

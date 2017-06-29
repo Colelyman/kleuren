@@ -45,5 +45,7 @@ depcomp
 missing
 ar-lib
 compile
+libtool
+ltmain.sh
 aclocal.m4
 autom4te.cache

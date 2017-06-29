@@ -26,22 +26,22 @@ class ColorSet {
         ColorSet(set<Color*> colors);
 
         /// Returns true if all of the colors contain the kmer
-        bool allContainsKmer(string& kmer);
+        bool allContainsKmer(string& kmer) const;
 
         /// Returns the number of colors that contain the kmer
-        int numContainsKmer(string& kmer);
+        int numContainsKmer(string& kmer) const;
 
         /// Returns the subset of colors that contain the kmer
-        ColorSet containsKmer(string& kmer);
+        ColorSet containsKmer(string& kmer) const;
 
         /// Returns the set of all colors
-        set<Color*> getColors();
+        set<Color*> getColors() const;
 
         /// Returns a begin iterator over the set of colors
-        set<Color*>::iterator getBeginIterator();
+        set<Color*>::iterator getBeginIterator() const;
 
         /// Returns an end iterator over the set of colors
-        set<Color*>::iterator getEndIterator();
+        set<Color*>::iterator getEndIterator() const;
 
     private:
         /// The set of colors contained by this object

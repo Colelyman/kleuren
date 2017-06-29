@@ -8,7 +8,7 @@ ColorSet::ColorSet(set<Color*> colors) {
     this->colors = colors;
 }
 
-bool ColorSet::allContainsKmer(string& kmer) {
+bool ColorSet::allContainsKmer(string& kmer) const {
     if(numContainsKmer(kmer) == colors.size()) {
         return true;
     }
@@ -17,11 +17,11 @@ bool ColorSet::allContainsKmer(string& kmer) {
     }
 }
 
-int ColorSet::numContainsKmer(string& kmer) {
+int ColorSet::numContainsKmer(string& kmer) const {
     return containsKmer(kmer).getColors().size();
 }
 
-ColorSet ColorSet::containsKmer(string& kmer) {
+ColorSet ColorSet::containsKmer(string& kmer) const {
     set<Color*> subColors;
 
     for(Color* color : colors) {
@@ -33,14 +33,14 @@ ColorSet ColorSet::containsKmer(string& kmer) {
     return ColorSet(subColors);
 }
 
-set<Color*> ColorSet::getColors() {
+set<Color*> ColorSet::getColors() const {
     return colors;
 }
 
-set<Color*>::iterator ColorSet::getBeginIterator() {
+set<Color*>::iterator ColorSet::getBeginIterator() const {
     return colors.begin();
 }
 
-set<Color*>::iterator ColorSet::getEndIterator() {
+set<Color*>::iterator ColorSet::getEndIterator() const {
     return colors.end();
 }

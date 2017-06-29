@@ -4,7 +4,12 @@
 
 #include "driver.h"
 
-Driver::Driver() {
+Driver::Driver(Args args) {
+    this->args = args;
+
+    colorManager = ColorManager();
+    kmerBank = KmerBank();
+    bubbleBuilder = BubbleBuilder(args.getKmerLen());
     visitedKmers = new set<string>();
 }
 
@@ -12,7 +17,7 @@ Driver::~Driver() {
     delete visitedKmers;
 }
 
-void Driver::run(Args args) {
+void Driver::run() {
 
     return;
 }

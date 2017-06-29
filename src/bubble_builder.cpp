@@ -22,21 +22,21 @@ Bubble BubbleBuilder::build(string& startKmer, ColorSet colors) {
     Color* color = *colors.getColors().begin();
 
     // find the next kmer that occurs in all of the colors
-    string endKmer = findEndKmer(startKmer, color, colors);
+    string endKmer = this->findEndKmer(startKmer, color, colors);
     
     /// @todo add a check if there is no endKmer in color...?
 
     vector<Path> paths;
     // extend the path from kmer to endKmer for each color in colors
     for(set<Color*>::iterator it = colors.getBeginIterator(); it != colors.getEndIterator(); ++it) {
-        Path path = extendPath(startKmer, endKmer, *it);
+        Path path = this->extendPath(startKmer, endKmer, *it);
         paths.push_back(path);
     }
 
     return bubble;
 }
 
-string BubbleBuilder::findEndKmer(string& startKmer, Color* color, ColorSet colors) {
+string BubbleBuilder::findEndKmer(string& startKmer, const Color* color, const ColorSet colors) {
     string currentKmer = startKmer;
     vector<string> neighbors;
     
@@ -50,16 +50,15 @@ string BubbleBuilder::findEndKmer(string& startKmer, Color* color, ColorSet colo
         }
     }
 
-    return endKmerIdx;
+    return currentKmer;
 }
 
-Path BubbleBuilder::extendPath(size_t startIdx, size_t endIdx, Color* color) {
-    size_t currentIdx = startIdx; 
-    string currentKmer = color->extractSubstring(startIdx, kmerLen);
-    Path path = Path(color);
+Path BubbleBuilder::extendPath(string& startKmer, string& endKmer, const Color* color) {
+    string currentKmer = startKmer;
+    Path path = Path(color, kmerLen);
 
-    while(currentIdx != endIdx) {
-        path.addIndex(currentIdx);
+    while(currentKmer != endKmer) {
+        //path.addIndex(currentIdx);
         vector<string> suffixNeighbors = color->getSuffixNeighbors(currentKmer);
         for(string neighbor : suffixNeighbors) {
             // extend the possible paths for each of the neighbors

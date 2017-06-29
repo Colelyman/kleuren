@@ -43,5 +43,7 @@ config*
 install-sh
 depcomp
 missing
+ar-lib
+compile
 aclocal.m4
 autom4te.cache

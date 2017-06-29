@@ -13,19 +13,19 @@ Color::~Color() {
     /// @todo destruct the FMIndex
 }
 
-bool Color::isVertex(string& s) {
+bool Color::isVertex(string& s) const {
     return DBGQuery::isVertex(fmIndex, s);
 }
 
-bool Color::isPrefixNeighbor(string& s, char b) {
+bool Color::isPrefixNeighbor(string& s, char b) const {
     return DBGQuery::isPrefixNeighbor(fmIndex, s, b);
 }
 
-bool Color::isSuffixNeighbor(string& s, char b) {
+bool Color::isSuffixNeighbor(string& s, char b) const {
     return DBGQuery::isSuffixNeighbor(fmIndex, s, b);
 }
 
-vector<string> Color::getSuffixNeighbors(string& s) {
+vector<string> Color::getSuffixNeighbors(string& s) const {
     vector<string> neighbors;
     string neighborBases = DBGQuery::getSuffixNeighbors(fmIndex, s);
     string suffix = s.substr(1, s.length() - 1);
@@ -38,7 +38,7 @@ vector<string> Color::getSuffixNeighbors(string& s) {
     return neighbors;
 }
 
-vector<string> Color::getPrefixNeighbors(string& s) {
+vector<string> Color::getPrefixNeighbors(string& s) const {
     vector<string> neighbors;
     string neighborBases = DBGQuery::getPrefixNeighbors(fmIndex, s);
     string prefix = s.substr(0, s.length() - 1);
@@ -51,22 +51,22 @@ vector<string> Color::getPrefixNeighbors(string& s) {
     return neighbors;
 }
 
-pair<string, size_t> Color::extractSubstringAndIndex(size_t idx, size_t len) {
+pair<string, size_t> Color::extractSubstringAndIndex(size_t idx, size_t len) const {
     return DBGQuery::extractSubstringAndIndex(fmIndex, idx, len);
 }
 
-string Color::extractSubstring(size_t idx, size_t len) {
+string Color::extractSubstring(size_t idx, size_t len) const {
     return DBGQuery::extractSubstring(fmIndex, idx, len);
 }
 
-string Color::getName() {
+string Color::getName() const {
     return name;
 }
 
-int Color::getID() {
+int Color::getID() const {
     return id;
 }
 
-FMIndex* Color::getFMIndex() {
+FMIndex* Color::getFMIndex() const {
     return fmIndex;
 }

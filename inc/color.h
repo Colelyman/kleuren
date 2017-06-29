@@ -37,19 +37,19 @@ class Color {
          */
         
         /// Returns whether or not s is a vertex of the color 
-        bool isVertex(string& s);
+        bool isVertex(string& s) const;
 
         /// Returns whether or not there is an outgoing edge, b, present for node s
-        bool isPrefixNeighbor(string& s, char b);
+        bool isPrefixNeighbor(string& s, char b) const;
 
         /// Returns whether or not there is an incoming edge, b, present for node s
-        bool isSuffixNeighbor(string& s, char b);
+        bool isSuffixNeighbor(string& s, char b) const;
 
         /// Returns the outgoing edges of s as a vector of kmers that are each outgoing edge
-        vector<string> getSuffixNeighbors(string& s);
+        vector<string> getSuffixNeighbors(string& s) const;
 
         /// Returns the incoming edges of s as a vector of kmers that are each incoming edge
-        vector<string> getPrefixNeighbors(string& s);
+        vector<string> getPrefixNeighbors(string& s) const;
 
         /**
          * Get the substring and index of a substring in the color.
@@ -58,23 +58,23 @@ class Color {
          * @return a pair, where first is the substring at idx of length len, and second is 
          * the index of the substring
          */
-        pair<string, size_t> extractSubstringAndIndex(size_t idx, size_t len);
+        pair<string, size_t> extractSubstringAndIndex(size_t idx, size_t len) const;
 
         /// Returns the substring at index for a certain length
-        string extractSubstring(size_t idx, size_t len);
+        string extractSubstring(size_t idx, size_t len) const;
 
         /*
          * Getters
          */
 
         /// Return the name of the color
-        string getName();
+        string getName() const;
 
         /// Return the ID of the color
-        int getID();
+        int getID() const;
 
         /// Return the FMIndex of the color
-        FMIndex* getFMIndex();
+        FMIndex* getFMIndex() const;
 
     private:
         /// The name of the color

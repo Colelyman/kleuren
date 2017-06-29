@@ -24,7 +24,9 @@ using std::vector;
 class Path {
 
     public:
-        Path(Color* color);
+        Path() {}
+
+        Path(const Color* color, size_t kmerLen);
 
         /// Returns the actual sequence of the path
         string getSequence();
@@ -45,7 +47,7 @@ class Path {
 
     private:
         /// The color that the path represents
-        Color* color;
+        const Color* color;
 
         /**
          * indexes is how the sequence of the path is stored in an efficient manner.

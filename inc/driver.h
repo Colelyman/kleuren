@@ -25,12 +25,12 @@ using std::set;
 class Driver {
 
     public:
-        Driver();
+        Driver(Args args);
 
         ~Driver();
 
         /// Starts the whole algorithm given the arguments
-        void run(Args args);
+        void run();
 
     private:
         /// The only instance of the ColorManager, which regulates the addition,
@@ -46,6 +46,9 @@ class Driver {
         /// Holds the kmers that have been visited already so that they are not repeated
         /// @todo implement a bloom filter for efficiency instead of a set?
         set<string>* visitedKmers;
+
+        /// The arguments for the current run
+        Args args;
 
 };
 

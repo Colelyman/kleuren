@@ -24,6 +24,8 @@ using std::string;
 class BubbleBuilder {
 
     public:
+        BubbleBuilder() {}
+
         BubbleBuilder(size_t len);
 
         /// Returns the Bubble built starting at startKmer for colors

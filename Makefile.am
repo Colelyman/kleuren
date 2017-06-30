@@ -15,6 +15,6 @@ kleuren_LDADD = thirdparty/dbgfm/libdbgfm.a
 # Create the kleuren static library
 noinst_LTLIBRARIES = libkleuren.la
 libkleuren_la_CPPFLAGS = $(INC_CPPFLAGS)
-libkleuren_la_SOURCES = src/args.cpp src/arg_parse.cpp src/driver.cpp src/main.cpp \
+libkleuren_la_SOURCES = src/args.cpp src/arg_parse.cpp src/driver.cpp \
 				  src/color.cpp src/color_set.cpp src/color_manager.cpp \
 				  src/path.cpp src/bubble.cpp src/bubble_builder.cpp src/kmer_bank.cpp

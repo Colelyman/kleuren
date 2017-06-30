@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include <set>
+#include <cstring>
 
 #include "bubble_builder.h"
 
@@ -19,12 +20,15 @@ BubbleBuilder::BubbleBuilder(size_t len) {
 Bubble BubbleBuilder::build(string& startKmer, ColorSet colors) {
     Bubble bubble = Bubble();
     // get the first color in ColorSet
-    Color* color = *colors.getColors().begin();
+    set<Color*>::iterator colorIt = colors.getBeginIterator();
 
     // find the next kmer that occurs in all of the colors
-    string endKmer = this->findEndKmer(startKmer, color, colors);
-    
-    /// @todo add a check if there is no endKmer in color...?
+    // loop until there is an endKmer, or all colors have been tried
+    /// @todo this loop could be optimized...
+    string endKmer = "";
+    while(strcmp(endKmer.c_str(), "") == 0 && colorIt != colors.getEndIterator()) {
+        endKmer = findEndKmer(startKmer, *colorIt++, colors);
+    }
 
     vector<Path> paths;
     // extend the path from kmer to endKmer for each color in colors
@@ -36,6 +40,11 @@ Bubble BubbleBuilder::build(string& startKmer, ColorSet colors) {
     return bubble;
 }
 
+/**
+ * Helper function to get the neighbors in color of kmers.
+ * @param kmers the kmers to get the neighbors from
+ * @return a vector of type string with all of the neighbors of the kmers
+ */
 vector<string> getNeighbors(vector<string> kmers, const Color* color) {
     vector<string> neighbors;
     for(string kmer : kmers) {

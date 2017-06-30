@@ -6,11 +6,12 @@
 
 Color::Color(int id, string name, string pathToFMIndex) {
     this->id = id;
-    /// @todo initialize the FMIndex
+    this->name = name;
+    fmIndex = new FMIndex(pathToFMIndex, 256);
 }
 
 Color::~Color() {
-    /// @todo destruct the FMIndex
+    delete fmIndex;
 }
 
 bool Color::isVertex(string& s) const {

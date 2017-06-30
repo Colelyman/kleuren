@@ -31,6 +31,7 @@
 *.out
 *.app
 kleuren
+kleuren-test
 
 # Automake
 Makefile
@@ -43,5 +44,14 @@ config*
 install-sh
 depcomp
 missing
+ar-lib
+compile
+libtool
+ltmain.sh
 aclocal.m4
 autom4te.cache
+
+# dbgfm
+dbgfm.lm
+dbgfm.sm
+dbgfm.str

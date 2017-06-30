@@ -36,21 +36,35 @@ Bubble BubbleBuilder::build(string& startKmer, ColorSet colors) {
     return bubble;
 }
 
-string BubbleBuilder::findEndKmer(string& startKmer, const Color* color, const ColorSet colors) {
-    string currentKmer = startKmer;
+vector<string> getNeighbors(vector<string> kmers, const Color* color) {
     vector<string> neighbors;
-    
-    // should this function be recursive...?
-
-    // loop until the currentKmer is in all of the colors
-    while(!colors.allContainsKmer(currentKmer)) {
-        neighbors = color->getSuffixNeighbors(currentKmer);
-        for(string neighbor : neighbors) {
-            // explore the path for each kmer... 
+    for(string kmer : kmers) {
+        for(string neighbor : color->getSuffixNeighbors(kmer)) {
+            neighbors.push_back(neighbor);
         }
     }
 
-    return currentKmer;
+    return neighbors;
+}
+
+string BubbleBuilder::findEndKmer(string& startKmer, const Color* color, const ColorSet colors) {
+    vector<string> neighbors({startKmer});
+
+    while(true) {
+        neighbors = getNeighbors(neighbors, color);
+        if(neighbors.size() == 0) { // there are no neighbors to check, so break out of the loop
+            break;
+        }
+
+        for(string neighbor : neighbors) {
+            if(colors.allContainsKmer(neighbor)) {
+                return neighbor;
+            }
+        }
+    }
+
+    // there is no kmer in color that is present in all colors
+    return "";
 }
 
 Path BubbleBuilder::extendPath(string& startKmer, string& endKmer, const Color* color) {

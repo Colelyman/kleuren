@@ -50,3 +50,8 @@ libtool
 ltmain.sh
 aclocal.m4
 autom4te.cache
+
+# dbgfm
+dbgfm.lm
+dbgfm.sm
+dbgfm.str

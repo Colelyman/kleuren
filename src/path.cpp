@@ -8,12 +8,15 @@
 
 using std::stringstream;
 
-Path::Path(const Color* color, size_t kmerLen) {
-    this->color = color;
+Path::Path(const Path& p) : color(p.color) {
+    this->kmerLen = p.kmerLen;
+}
+
+Path::Path(const Color* color, size_t kmerLen) : color(color) {
     this->kmerLen = kmerLen;
 }
 
-string Path::getSequence() {
+string Path::getSequence() const {
     stringstream seq;
     for(size_t index : indexes) {
         seq << color->extractSubstring(index, kmerLen);
@@ -26,13 +29,19 @@ void Path::addIndex(size_t idx) {
     indexes.push_back(idx);
 }
 
-int Path::getColorID() {
+void Path::append(string suffix) {
+    seq << suffix;
+}
+
+int Path::getColorID() const {
     return color->getID();
 }
 
-int Path::runNW(Path path) {
+int Path::runNW(Path path) const {
     string seqA = getSequence();
     string seqB = path.getSequence();
 
     /// @todo integrate the NW into this function
+    
+    return 0;
 }

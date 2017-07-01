@@ -10,6 +10,7 @@ using std::stringstream;
 
 Path::Path(const Path& p) : color(p.color) {
     this->kmerLen = p.kmerLen;
+    this->seq << p.seq.rdbuf();
 }
 
 Path::Path(const Color* color, size_t kmerLen) : color(color) {
@@ -17,16 +18,7 @@ Path::Path(const Color* color, size_t kmerLen) : color(color) {
 }
 
 string Path::getSequence() const {
-    stringstream seq;
-    for(size_t index : indexes) {
-        seq << color->extractSubstring(index, kmerLen);
-    }
-
     return seq.str();
-}
-
-void Path::addIndex(size_t idx) {
-    indexes.push_back(idx);
 }
 
 void Path::append(string suffix) {

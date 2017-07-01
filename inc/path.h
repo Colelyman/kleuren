@@ -33,9 +33,6 @@ class Path {
         /// Returns the actual sequence of the path
         string getSequence() const;
 
-        /// Adds an index to the path
-        void addIndex(size_t idx);
-
         /// Appends to the seq
         void append(string suffix);
 
@@ -53,15 +50,6 @@ class Path {
     private:
         /// The color that the path represents
         const Color* color;
-
-        /**
-         * indexes is how the sequence of the path is stored in an efficient manner.
-         * Each element in indexes is an index corresponding to the color such that the
-         * sequence of the path can be constructed by concatenating the substring at each
-         * index, where each substring is of length kmerLen.
-         */
-        /// @todo figure out the best way to represent the sequence of indexes...
-        vector<size_t> indexes;
 
         /**
          * seq is a stringstream that represents the sequence of the path. This is a 

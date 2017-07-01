@@ -6,6 +6,7 @@
 #include <utility>
 #include <set>
 #include <cstring>
+#include <assert.h>
 
 #include "bubble_builder.h"
 
@@ -29,6 +30,9 @@ Bubble BubbleBuilder::build(string& startKmer, ColorSet colors) {
     while(strcmp(endKmer.c_str(), "") == 0 && colorIt != colors.getEndIterator()) {
         endKmer = findEndKmer(startKmer, *colorIt++, colors);
     }
+
+    // assert that an endKmer exists for this bubble
+    assert(strcmp(endKmer.c_str(), "") != 0);
 
     vector<Path> paths;
     // extend the path from kmer to endKmer for each color in colors
@@ -76,19 +80,37 @@ string BubbleBuilder::findEndKmer(string& startKmer, const Color* color, const C
     return "";
 }
 
-Path BubbleBuilder::extendPath(string& startKmer, string& endKmer, const Color* color) {
-    string currentKmer = startKmer;
-    Path path = Path(color, kmerLen);
-
-    while(currentKmer != endKmer) {
-        //path.addIndex(currentIdx);
-        vector<string> suffixNeighbors = color->getSuffixNeighbors(currentKmer);
-        for(string neighbor : suffixNeighbors) {
-            // extend the possible paths for each of the neighbors
+set<string> getNeighbors(set<string> kmers, const Color* color) {
+    set<string> neighbors;
+    for(string kmer : kmers) {
+        for(string neighbor : color->getSuffixNeighbors(kmer)) {
+            neighbors.insert(neighbor);
         }
-
-        break; // remove when the logic is actually implemented
     }
 
-    return path;
+    return neighbors;
+}
+
+Path recursiveExtend(string currentKmer, string endKmer, Path path, const Color* color) {
+    // the base case is reached when the currentKmer is the same as the endKmer
+    if(strcmp(currentKmer.c_str(), endKmer.c_str()) == 0) {
+        return path;
+    }
+
+    // call recursiveExtend on each of the neighbors of currentKmer
+    for(string neighbor : getNeighbors(color->getSuffixNeighbors(currentKmer), color)) {
+        Path newPath = Path(path);
+        newPath.append(neighbor.substr(1, neighbor.length() - 1));
+        recursiveExtend(neighbor, endKmer, newPath, color);
+    }
+}
+
+Path BubbleBuilder::extendPath(string& startKmer, string& endKmer, const Color* color) {
+    set<string> currentKmers({startKmer});
+    map<string, string> neighborMap;
+
+    Path path = Path(color, kmerLen);
+    path.append(startKmer);
+
+    return recursiveExtend(startKmer, endKmer, path, color);
 }

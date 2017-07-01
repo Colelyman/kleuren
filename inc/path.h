@@ -15,27 +15,29 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 
 #include "color.h"
 
 using std::string;
 using std::vector;
+using std::stringstream;
 
 class Path {
 
     public:
-        Path() {}
+        Path(const Path& p);
 
         Path(const Color* color, size_t kmerLen);
 
         /// Returns the actual sequence of the path
-        string getSequence();
+        string getSequence() const;
 
-        /// Adds an index to the path
-        void addIndex(size_t idx);
+        /// Appends to the seq
+        void append(string suffix);
 
         /// Returns the ID of the Color that this path is associated with
-        int getColorID();
+        int getColorID() const;
 
         /** 
          * Runs the Needleman-Wunsch alignment algorithm to compare with another 
@@ -43,20 +45,18 @@ class Path {
          * @param path the path to compare to
          * @return the score, which shows how similar two paths are with each other
          */
-        int runNW(Path path);
+        int runNW(Path path) const;
 
     private:
         /// The color that the path represents
         const Color* color;
 
         /**
-         * indexes is how the sequence of the path is stored in an efficient manner.
-         * Each element in indexes is an index corresponding to the color such that the
-         * sequence of the path can be constructed by concatenating the substring at each
-         * index, where each substring is of length kmerLen.
+         * seq is a stringstream that represents the sequence of the path. This is a 
+         * stringstream because it makes the path easier to construct and get the sequence
+         * from.
          */
-        /// @todo figure out the best way to represent the sequence of indexes...
-        vector<size_t> indexes;
+        stringstream seq;
 
         size_t kmerLen;
 

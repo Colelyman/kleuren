@@ -9,7 +9,7 @@ Driver::Driver(Args args) {
 
     colorManager = ColorManager();
     kmerBank = KmerBank();
-    bubbleBuilder = BubbleBuilder(args.getKmerLen());
+    bubbleBuilder = BubbleBuilder();
     visitedKmers = new set<string>();
 }
 

@@ -14,10 +14,6 @@ using std::vector;
 using std::pair;
 using std::set;
 
-BubbleBuilder::BubbleBuilder(size_t len) {
-    kmerLen = len;
-}
-
 Bubble BubbleBuilder::build(string& startKmer, ColorSet colors) {
     Bubble bubble = Bubble();
     // get the first color in ColorSet
@@ -109,7 +105,7 @@ Path BubbleBuilder::extendPath(string& startKmer, string& endKmer, const Color* 
     set<string> currentKmers({startKmer});
     map<string, string> neighborMap;
 
-    Path path = Path(color, kmerLen);
+    Path path = Path(color);
     path.append(startKmer);
 
     return recursiveExtend(startKmer, endKmer, path, color);

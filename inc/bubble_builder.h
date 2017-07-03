@@ -47,10 +47,13 @@ class BubbleBuilder {
          * @return the path for color between startKmer and endKmer
          */
         Path extendPath(string& startKmer, string& endKmer, const Color* color);
+<<<<<<< Updated upstream
 
     private:
         /// The kmer length to extend at each index
         size_t kmerLen;
+=======
+>>>>>>> Stashed changes
 };
 
 #endif // BUBBLE_BUILDER_H

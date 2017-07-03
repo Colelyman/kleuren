@@ -1,6 +1,8 @@
 # Specify the name of the program
 bin_PROGRAMS = kleuren
 
+ACLOCAL_AMFLAGS = $($ACLOCAL_AMFLAGS -I m4)
+
 # Include the right headers for kleuren, cxxopts and dbgfm
 kleuren_CPPFLAGS = $(INC_CPPFLAGS)
 

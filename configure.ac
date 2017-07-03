@@ -1,5 +1,5 @@
 AC_INIT([kleuren], [0.0.1], [cole@colelyman.com])
-AM_PROG_AR
+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 LT_INIT
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
 INC_CPPFLAGS="-I./inc -I./thirdparty/dbgfm -I./thirdparty/cxxopts/include"

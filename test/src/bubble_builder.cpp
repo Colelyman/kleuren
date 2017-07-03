@@ -7,7 +7,7 @@
 #include "bubble_builder.h"
 
 TEST_CASE("BubbleBuilder findEndKmer", "[bubble]") {
-    BubbleBuilder bb = BubbleBuilder(3);
+    BubbleBuilder bb = BubbleBuilder();
     string pathToToy1 = "./data/toy1.bwtdisk";
     string pathtoToy2 = "./data/toy2.bwtdisk";
     Color toyColor1 = Color(1, "toyColor1", pathToToy1);

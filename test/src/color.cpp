@@ -5,11 +5,10 @@
 #include "catch.hpp"
 
 #include "color.h"
-#include "fm_index.h"
 
 using namespace Catch::Matchers;
 
-TEST_CASE("FMIndex and Color operations", "[color][fm_index]") {
+TEST_CASE("Color operations", "[color]") {
     string pathToFMIndex = "./data/zika.bwtdisk";
     Color testColor1 = Color(0, "testColor1", pathToFMIndex);
 

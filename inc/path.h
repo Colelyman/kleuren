@@ -28,7 +28,7 @@ class Path {
     public:
         Path(const Path& p);
 
-        Path(const Color* color, size_t kmerLen);
+        Path(const Color* color);
 
         /// Returns the actual sequence of the path
         string getSequence() const;
@@ -57,8 +57,6 @@ class Path {
          * from.
          */
         stringstream seq;
-
-        size_t kmerLen;
 
 };
 

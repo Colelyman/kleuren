@@ -24,14 +24,9 @@ using std::string;
 class BubbleBuilder {
 
     public:
-        BubbleBuilder() {}
-
-        BubbleBuilder(size_t len);
-
         /// Returns the Bubble built starting at startKmer for colors
         Bubble build(string& startKmer, ColorSet colors);
 
-    private:
         /** 
          * Finds the index of the ending kmer, which is the next kmer 
          * that contains all of the colors.
@@ -53,6 +48,7 @@ class BubbleBuilder {
          */
         Path extendPath(string& startKmer, string& endKmer, const Color* color);
 
+    private:
         /// The kmer length to extend at each index
         size_t kmerLen;
 };

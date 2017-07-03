@@ -8,6 +8,7 @@ A colored de Bruijn graph implementation using the `dbgfm` library as the underl
 **Coming soon...**
 
 ### Development
+
 To install `kleuren` with the intent to develop it, one must follow these steps:
 
 1. Get the code. Clone the repository from Github by running the following command: `git clone https://github.com/Colelyman/kleuren.git`, and then move into the project folder `cd kleuren`.
@@ -21,3 +22,9 @@ To install `kleuren` with the intent to develop it, one must follow these steps:
 4. *Optional:* If one would like to run `kleuren` from anywhere on one's system, run `sudo make install`. In order for this to work one must have super-user privileges. One could also add the path to the directory in which `kleuren` is install to one's `PATH` variable, like this: `export PATH=$PATH:<path to where kleuren is installed>`.
 5. Go forth and develop! 
 
+### Testing
+
+`kleuren` uses the C++ unit-testing library [catch](https://github.com/philsquared/Catch) to run unit tests.
+To install the test cases, one must first follow the instructions above to install `kleuren` itself. Then one must move to the test directory: `cd test` and install the unit test: `make`.
+
+The data for the unit test is found in the `test/data` directory, and the unit tests themselves are found in `test/src` directory.

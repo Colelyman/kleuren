@@ -28,3 +28,7 @@ To install `kleuren` with the intent to develop it, one must follow these steps:
 To install the test cases, one must first follow the instructions above to install `kleuren` itself. Then one must move to the test directory: `cd test` and install the unit test: `make`.
 
 The data for the unit test is found in the `test/data` directory, and the unit tests themselves are found in `test/src` directory.
+
+## What's in a name?
+
+*Kleuren* is the Dutch word for colors, which pays homage to the language of the home country of the de Bruin graph's namesake, [Nicolaas Govert de Bruijn](https://en.wikipedia.org/wiki/Nicolaas_Govert_de_Bruijn).

@@ -55,3 +55,6 @@ autom4te.cache
 dbgfm.lm
 dbgfm.sm
 dbgfm.str
+
+# bwtdisk
+thirdparty/bwtdisk/

@@ -29,6 +29,16 @@ To install the test cases, one must first follow the instructions above to insta
 
 The data for the unit test is found in the `test/data` directory, and the unit tests themselves are found in `test/src` directory.
 
+### Preparing Data Files
+
+`dbgfm` uses [bwtdisk](http://people.unipmn.it/manzini/bwtdisk/) to construct and store the FM-Index, therefore `kleuren` uses the same file format.
+Here is how you install the necessary packages to create .bwtdisk files from .fasta files.
+
+1. Unzip and install `bwtdisk`. 
+    1. A zipped version of `bwtdisk` is included in the `thirdparty` directory, go to that directory: `cd thirdparty`, unzip it: `mkdir bwtdisk && tar zxvf bwtdisk.0.9.0.tgz -C bwtdisk`. (For reference, the zipped file is found [here](http://people.unipmn.it/manzini/bwtdisk/bwtdisk.0.9.0.tgz))
+    2. Install `bwtdisk` by going into the directory: `cd bwtdisk` and running `make`.
+    3. If there were no errors and there is a `bwte` file (among other executables) in the `bwtdisk` directory, it installed correctly!
+
 ## What's in a name?
 
 *Kleuren* is the Dutch word for colors, which pays homage to the language of the home country of the de Bruin graph's namesake, [Nicolaas Govert de Bruijn](https://en.wikipedia.org/wiki/Nicolaas_Govert_de_Bruijn).

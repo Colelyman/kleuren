@@ -9,13 +9,10 @@
 using std::stringstream;
 
 Path::Path(const Path& p) : color(p.color) {
-    this->kmerLen = p.kmerLen;
     this->seq << p.seq.rdbuf();
 }
 
-Path::Path(const Color* color, size_t kmerLen) : color(color) {
-    this->kmerLen = kmerLen;
-}
+Path::Path(const Color* color) : color(color) { }
 
 string Path::getSequence() const {
     return seq.str();

@@ -29,7 +29,7 @@ class ColorSet {
         bool allContainsKmer(string& kmer) const;
 
         /// Returns the number of colors that contain the kmer
-        int numContainsKmer(string& kmer) const;
+        size_t numContainsKmer(string& kmer) const;
 
         /// Returns the subset of colors that contain the kmer
         ColorSet containsKmer(string& kmer) const;

@@ -17,7 +17,7 @@ bool ColorSet::allContainsKmer(string& kmer) const {
     }
 }
 
-int ColorSet::numContainsKmer(string& kmer) const {
+size_t ColorSet::numContainsKmer(string& kmer) const {
     return containsKmer(kmer).getColors().size();
 }
 

@@ -25,7 +25,7 @@ class BubbleBuilder {
 
     public:
         /// Returns the Bubble built starting at startKmer for colors
-        Bubble build(string& startKmer, ColorSet colors);
+        Bubble build(string& startKmer, ColorSet colors, unsigned int maxDepth);
 
         /** 
          * Finds the index of the ending kmer, which is the next kmer 
@@ -40,13 +40,16 @@ class BubbleBuilder {
         string findEndKmer(string& startKmer, const Color* color, const ColorSet colors);
 
         /**
-         * Extends the path between startKmer and endKmer for a given color.
+         * Extends the path between startKmer and endKmer for a given color. The function will
+         * search for the path between the startKmer and the endKmer, or until the maxDepth is 
+         * reached in which an empty string is returned as the path.
          * @param startKmer the kmer to start the path with
          * @param endKmer the kmer to finish the path with
          * @param color the Color to use in order to extend the path
+         * @param maxDepth the maxmimum recursive depth for the underlying recursive function
          * @return the path for color between startKmer and endKmer
          */
-        Path extendPath(string& startKmer, string& endKmer, const Color* color);
+        string extendPath(string startKmer, string endKmer, const Color* color, unsigned int maxDepth);
 };
 
 #endif // BUBBLE_BUILDER_H

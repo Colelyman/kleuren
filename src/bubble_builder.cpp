@@ -7,14 +7,18 @@
 #include <set>
 #include <cstring>
 #include <assert.h>
+#include <iostream>
 
 #include "bubble_builder.h"
 
 using std::vector;
 using std::pair;
 using std::set;
+using std::cerr;
+using std::endl;
+using std::random_shuffle;
 
-Bubble BubbleBuilder::build(string& startKmer, ColorSet colors) {
+Bubble BubbleBuilder::build(string& startKmer, ColorSet colors, unsigned int maxDepth) {
     Bubble bubble = Bubble();
     // get the first color in ColorSet
     set<Color*>::iterator colorIt = colors.getBeginIterator();
@@ -30,10 +34,10 @@ Bubble BubbleBuilder::build(string& startKmer, ColorSet colors) {
     // assert that an endKmer exists for this bubble
     assert(strcmp(endKmer.c_str(), "") != 0);
 
-    vector<Path> paths;
+    vector<string> paths;
     // extend the path from kmer to endKmer for each color in colors
     for(set<Color*>::iterator it = colors.getBeginIterator(); it != colors.getEndIterator(); ++it) {
-        Path path = this->extendPath(startKmer, endKmer, *it);
+        string path = this->extendPath(startKmer, endKmer, *it, maxDepth);
         paths.push_back(path);
     }
 
@@ -87,26 +91,45 @@ set<string> getNeighbors(set<string> kmers, const Color* color) {
     return neighbors;
 }
 
-Path recursiveExtend(string currentKmer, string endKmer, Path path, const Color* color) {
+void recursiveExtend(const string& currentKmer, const string& endKmer, string& path, const Color* color, unsigned int depth, unsigned int maxDepth) {
+    cerr << "In recursiveExtend" << endl;
+    cerr << "currentKmer: " << currentKmer << " endKmer: " << endKmer << endl;
+    // the maxDepth has been reached, therefore return an empty path 
+    if(depth == maxDepth) {
+        path = "";
+        return;
+    }
+
     // the base case is reached when the currentKmer is the same as the endKmer
     if(strcmp(currentKmer.c_str(), endKmer.c_str()) == 0) {
-        return path;
+        cerr << "Returning: " << path << endl;
+        return;
     }
 
     // call recursiveExtend on each of the neighbors of currentKmer
-    for(string neighbor : getNeighbors(color->getSuffixNeighbors(currentKmer), color)) {
-        Path newPath = Path(path);
-        newPath.append(neighbor.substr(1, neighbor.length() - 1));
-        recursiveExtend(neighbor, endKmer, newPath, color);
+    cerr << "\tnum neighbors: " << getNeighbors(color->getSuffixNeighbors(currentKmer), color).size() << endl;
+    vector<string> neighbors = getNeighbors(color->getSuffixNeighbors(currentKmer), color);
+    cerr << "\tneighbors: " << endl;
+    for(string neighbor : neighbors) {
+        cerr << "\t\t" << neighbor << endl;
     }
+    // randomly shuffle the neighbors of currentKmer
+    random_shuffle(neighbors.begin(), neighbors.end());
+    for(string neighbor : neighbors) {
+        cerr << "\tneighbor: " << neighbor << endl;
+        string neighborSuffix = neighbor.substr(1, neighbor.length() - 1);
+        path += neighborSuffix;
+        recursiveExtend(neighbor, endKmer, path, color, ++depth, maxDepth);
+    }
+    cerr << "End of recursiveExtend" << endl;
 }
 
-Path BubbleBuilder::extendPath(string& startKmer, string& endKmer, const Color* color) {
-    set<string> currentKmers({startKmer});
-    map<string, string> neighborMap;
+string BubbleBuilder::extendPath(string startKmer, string endKmer, const Color* color, unsigned int maxDepth) {
+    cerr << "In extendPath" << endl;
 
-    Path path = Path(color);
-    path.append(startKmer);
+    string path = startKmer;
 
-    return recursiveExtend(startKmer, endKmer, path, color);
+    recursiveExtend(startKmer, endKmer, path, color, 0, maxDepth);
+
+    return path; 
 }

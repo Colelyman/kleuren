@@ -6,8 +6,6 @@
 
 #include "color.h"
 
-using namespace Catch::Matchers;
-
 TEST_CASE("Color operations", "[color]") {
     string pathToFMIndex = "./data/zika.bwtdisk";
     Color testColor1 = Color(0, "testColor1", pathToFMIndex);
@@ -28,7 +26,7 @@ TEST_CASE("Color operations", "[color]") {
         REQUIRE(!testColor1.isVertex(vertex3));
     }
 
-    SECTION("Neighbor testing") {
+    SECTION("Single neighbor testing") {
         string neighborVertex1 = "TGGCCATTTGAAATGCCGC";
         string prefix1 = neighborVertex1.substr(1);
         REQUIRE(testColor1.isPrefixNeighbor(prefix1, 'T'));
@@ -38,11 +36,18 @@ TEST_CASE("Color operations", "[color]") {
         REQUIRE(testColor1.isSuffixNeighbor(suffix1, 'C'));
         REQUIRE(!testColor1.isSuffixNeighbor(suffix1, 'T'));
 
-        /// @todo test getting Suffix and Prefix neighbors
-        
-        neighborVertex1 = neighborVertex1.substr(1, neighborVertex1.length() - 1);
-        //CHECK_THAT(testColor1.getSuffixNeighbors(neighborVertex1), VectorContains("C"));
-        //CHECK_THAT(testColor1.getPrefixNeighbors(neighborVertex1), VectorContains("T"));
+        neighborVertex1 = neighborVertex1.substr(1, neighborVertex1.length() - 2);
+        vector<string> suffixNeighbors = {"GCCATTTGAAATGCCGC"};
+        REQUIRE(testColor1.getSuffixNeighbors(neighborVertex1) == suffixNeighbors);
+
+        vector<string> prefixNeighbors = {"TGGCCATTTGAAATGCC"};
+        REQUIRE(testColor1.getPrefixNeighbors(neighborVertex1) == prefixNeighbors);
+    }
+
+    SECTION("Multiple neighbor testing") {
+        string neighborVertex2 = "ACCAAG";
+        vector<string> neighbors = {"CCAAGA", "CCAAGC", "CCAAGG", "CCAAGT"};
+        REQUIRE(testColor1.getSuffixNeighbors(neighborVertex2) == neighbors);
     }
 
 }

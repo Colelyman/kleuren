@@ -1,0 +1,53 @@
+A colored de Bruijn graph implementation using the {\ttfamily dbgfm} library as the underlying de Bruijn graph structure.
+
+\subsection*{Installation}
+
+\subsubsection*{Regular Use}
+
+{\bfseries Coming soon...}
+
+\subsubsection*{Development}
+
+To install {\ttfamily kleuren} with the intent to develop it, one must follow these steps\+:
+
+
+\begin{DoxyEnumerate}
+\item Get the code. Clone the repository from Github by running the following command\+: {\ttfamily git clone \href{https://github.com/Colelyman/kleuren.git}{\tt https\+://github.\+com/\+Colelyman/kleuren.\+git}}, and then move into the project folder {\ttfamily cd kleuren}.
+\item Get the Third Party dependencies. To get the dependencies, run\+: {\ttfamily git submodule update -\/-\/init -\/-\/recursive}.
+\begin{DoxyEnumerate}
+\item Install {\ttfamily dbgfm}. First go to the {\ttfamily dbgfm} directory\+: {\ttfamily cd thirdparty/dbgfm}, then install\+: {\ttfamily make}.
+\end{DoxyEnumerate}
+\item Setup the installation. {\ttfamily kleuren} uses \href{https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html}{\tt autotools} to maximize the portability of the project. Here are the steps to get the project configured\+:
+\begin{DoxyEnumerate}
+\item Run {\ttfamily autoreconf -\/-\/install}, which will install any missing tools and set up the build environment.
+\item Run {\ttfamily ./configure}, which will create a {\ttfamily Makefile} (among other files) that is tailored to your system.
+\item Run {\ttfamily make}, which will install the {\ttfamily kleuren} library (which is found in {\ttfamily ./.libs/libkleuren.\+a}) and the kleuren binary (which is found in {\ttfamily ./kleuren}).
+\item Run {\ttfamily ./kleuren} to actually run {\ttfamily kleuren}.
+\end{DoxyEnumerate}
+\item {\itshape Optional\+:} If one would like to run {\ttfamily kleuren} from anywhere on one\textquotesingle{}s system, run {\ttfamily sudo make install}. In order for this to work one must have super-\/user privileges. One could also add the path to the directory in which {\ttfamily kleuren} is install to one\textquotesingle{}s {\ttfamily P\+A\+TH} variable, like this\+: {\ttfamily export P\+A\+TH=\$\+P\+A\+TH\+:$<$path to where kleuren is installed$>$}.
+\item Go forth and develop!
+\end{DoxyEnumerate}
+
+\subsubsection*{Testing}
+
+{\ttfamily kleuren} uses the C++ unit-\/testing library \href{https://github.com/philsquared/Catch}{\tt catch} to run unit tests. To install the test cases, one must first follow the instructions above to install {\ttfamily kleuren} itself. Then one must move to the test directory\+: {\ttfamily cd test} and install the unit test\+: {\ttfamily make}.
+
+The data for the unit test is found in the {\ttfamily test/data} directory, and the unit tests themselves are found in {\ttfamily test/src} directory.
+
+\subsubsection*{Preparing Data Files}
+
+{\ttfamily dbgfm} uses \href{http://people.unipmn.it/manzini/bwtdisk/}{\tt bwtdisk} to construct and store the F\+M-\/\+Index, therefore {\ttfamily kleuren} uses the same file format. Here is how you install the necessary packages to create .bwtdisk files from .fasta files.
+
+
+\begin{DoxyEnumerate}
+\item Unzip and install {\ttfamily bwtdisk}.
+\begin{DoxyEnumerate}
+\item A zipped version of {\ttfamily bwtdisk} is included in the {\ttfamily thirdparty} directory, go to that directory\+: {\ttfamily cd thirdparty}, unzip it\+: {\ttfamily mkdir bwtdisk \&\& tar zxvf bwtdisk.\+0.\+9.\+0.\+tgz -\/C bwtdisk}. (For reference, the zipped file is found \href{http://people.unipmn.it/manzini/bwtdisk/bwtdisk.0.9.0.tgz}{\tt here})
+\item Install {\ttfamily bwtdisk} by going into the directory\+: {\ttfamily cd bwtdisk} and running {\ttfamily make}.
+\item If there were no errors and there is a {\ttfamily bwte} file (among other executables) in the {\ttfamily bwtdisk} directory, it installed correctly!
+\end{DoxyEnumerate}
+\end{DoxyEnumerate}
+
+\subsection*{What\textquotesingle{}s in a name?}
+
+{\itshape Kleuren} is the Dutch word for colors, which pays homage to the language of the home country of the de Bruin graph\textquotesingle{}s namesake, \href{https://en.wikipedia.org/wiki/Nicolaas_Govert_de_Bruijn}{\tt Nicolaas Govert de Bruijn}. 

@@ -29,7 +29,7 @@ TEST_CASE("BubbleBuilder findEndKmer", "[bubble]") {
         string endKmer = "AAT";
         string path3 = "CTGCAAT";
         Color toyColor3 = Color(3, "toyColor3", pathToToy3);
-        CHECK(bb.extendPath(startKmer, endKmer, &toyColor3, 10) == path3);
+        REQUIRE(bb.extendPath(startKmer, endKmer, &toyColor3, 10) == path3);
     }
 
     SECTION("Extending a path with a loop in it") {
@@ -37,7 +37,7 @@ TEST_CASE("BubbleBuilder findEndKmer", "[bubble]") {
         string endKmer = "AAT";
         string path4 = "CTGAAAT";
         Color toyColor4 = Color(4, "toyColor4", pathToToy4);
-        bb.extendPath(startKmer, endKmer, &toyColor4, 10);
+        //bb.extendPath(startKmer, endKmer, &toyColor4, 10);
         CHECK(bb.extendPath(startKmer, endKmer, &toyColor4, 10) ==  path4);
     }
 }

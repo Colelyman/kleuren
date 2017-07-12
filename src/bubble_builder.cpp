@@ -91,26 +91,25 @@ set<string> getNeighbors(set<string> kmers, const Color* color) {
     return neighbors;
 }
 
-void recursiveExtend(const string& currentKmer, const string& endKmer, string& path, const Color* color, set<string>& visited, unsigned int depth, unsigned int maxDepth) {
+bool recursiveExtend(const string& currentKmer, const string& endKmer, string& path, const Color* color, set<string>& visited, unsigned int depth, unsigned int maxDepth) {
     // mark the currentKmer as visited
     visited.insert(currentKmer);
     cerr << "In recursiveExtend" << endl;
     cerr << "currentKmer: " << currentKmer << " endKmer: " << endKmer << endl;
     // the maxDepth has been reached, therefore return an empty path 
     if(depth >= maxDepth) {
+        cerr << "Returning false with path: " << path << endl;
         path = "";
-        return;
+        return false;
     }
 
     // the base case is reached when the currentKmer is the same as the endKmer
     if(strcmp(currentKmer.c_str(), endKmer.c_str()) == 0) {
-        cerr << "Returning: " << path << endl;
-        return;
+        cerr << "Returning true with path: " << path << endl;
+        return true;
     }
 
-    // call recursiveExtend on each of the neighbors of currentKmer
-    vector<string> neighbors = getNeighbors(color->getSuffixNeighbors(currentKmer), color);
-    random_shuffle(neighbors.begin(), neighbors.end());
+    vector<string> neighbors = color->getSuffixNeighbors(currentKmer);
     cerr << "\tneighbors: " << endl;
     for(string neighbor : neighbors) {
         if(visited.find(neighbor) == visited.end()) {
@@ -124,12 +123,21 @@ void recursiveExtend(const string& currentKmer, const string& endKmer, string& p
             continue;
         }
         cerr << "\tneighbor: " << neighbor << endl;
-        string neighborSuffix = neighbor.substr(1, neighbor.length() - 1);
+        string neighborSuffix = neighbor.substr(neighbor.length() - 1, 1);
+        string oldPath = path;
         path += neighborSuffix;
         depth += 1;
         cerr << "\tdepth: " << depth << endl;
         cerr << "\tpath: " << path << endl;
-        recursiveExtend(neighbor, endKmer, path, color, visited, depth, maxDepth);
+        cerr << "\toldPath: " << oldPath << endl;
+        if(!recursiveExtend(neighbor, endKmer, path, color, visited, depth, maxDepth)) {
+            path = oldPath;
+            cerr << "\tpath is now oldPath: " << path << endl;
+        }
+        else {
+            cerr << "\tReturn true!" << endl;
+            return true;
+        }
     }
     cerr << "End of recursiveExtend with path: " << path << endl;
 }

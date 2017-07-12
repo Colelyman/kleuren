@@ -26,10 +26,10 @@ bool Color::isSuffixNeighbor(string& s, char b) const {
     return DBGQuery::isSuffixNeighbor(fmIndex, s, b);
 }
 
-vector<string> Color::getSuffixNeighbors(string& s) const {
+vector<string> Color::getSuffixNeighbors(string s) const {
     vector<string> neighbors;
     string neighborBases = DBGQuery::getSuffixNeighbors(fmIndex, s);
-    string suffix = s.substr(1, s.length() - 1);
+    string suffix = s.substr(1);
 
     for(unsigned int i = 0; i < neighborBases.length(); i++) {
         string neighbor = suffix + neighborBases[i];

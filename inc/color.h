@@ -46,7 +46,7 @@ class Color {
         bool isSuffixNeighbor(string& s, char b) const;
 
         /// Returns the outgoing edges of s as a vector of kmers that are each outgoing edge
-        vector<string> getSuffixNeighbors(string& s) const;
+        vector<string> getSuffixNeighbors(string s) const;
 
         /// Returns the incoming edges of s as a vector of kmers that are each incoming edge
         vector<string> getPrefixNeighbors(string& s) const;

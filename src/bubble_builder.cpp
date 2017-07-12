@@ -91,11 +91,13 @@ set<string> getNeighbors(set<string> kmers, const Color* color) {
     return neighbors;
 }
 
-void recursiveExtend(const string& currentKmer, const string& endKmer, string& path, const Color* color, unsigned int depth, unsigned int maxDepth) {
+void recursiveExtend(const string& currentKmer, const string& endKmer, string& path, const Color* color, set<string>& visited, unsigned int depth, unsigned int maxDepth) {
+    // mark the currentKmer as visited
+    visited.insert(currentKmer);
     cerr << "In recursiveExtend" << endl;
     cerr << "currentKmer: " << currentKmer << " endKmer: " << endKmer << endl;
     // the maxDepth has been reached, therefore return an empty path 
-    if(depth == maxDepth) {
+    if(depth >= maxDepth) {
         path = "";
         return;
     }
@@ -107,21 +109,29 @@ void recursiveExtend(const string& currentKmer, const string& endKmer, string& p
     }
 
     // call recursiveExtend on each of the neighbors of currentKmer
-    cerr << "\tnum neighbors: " << getNeighbors(color->getSuffixNeighbors(currentKmer), color).size() << endl;
     vector<string> neighbors = getNeighbors(color->getSuffixNeighbors(currentKmer), color);
+    random_shuffle(neighbors.begin(), neighbors.end());
     cerr << "\tneighbors: " << endl;
     for(string neighbor : neighbors) {
-        cerr << "\t\t" << neighbor << endl;
+        if(visited.find(neighbor) == visited.end()) {
+            cerr << "\t\t" << neighbor << endl;
+        }
     }
     // randomly shuffle the neighbors of currentKmer
-    random_shuffle(neighbors.begin(), neighbors.end());
     for(string neighbor : neighbors) {
+        if(visited.find(neighbor) != visited.end()) { // the kmer has already been visited, thus skip it
+            cerr << "\t" << neighbor << " is visited!" << endl;
+            continue;
+        }
         cerr << "\tneighbor: " << neighbor << endl;
         string neighborSuffix = neighbor.substr(1, neighbor.length() - 1);
         path += neighborSuffix;
-        recursiveExtend(neighbor, endKmer, path, color, ++depth, maxDepth);
+        depth += 1;
+        cerr << "\tdepth: " << depth << endl;
+        cerr << "\tpath: " << path << endl;
+        recursiveExtend(neighbor, endKmer, path, color, visited, depth, maxDepth);
     }
-    cerr << "End of recursiveExtend" << endl;
+    cerr << "End of recursiveExtend with path: " << path << endl;
 }
 
 string BubbleBuilder::extendPath(string startKmer, string endKmer, const Color* color, unsigned int maxDepth) {
@@ -129,7 +139,9 @@ string BubbleBuilder::extendPath(string startKmer, string endKmer, const Color* 
 
     string path = startKmer;
 
-    recursiveExtend(startKmer, endKmer, path, color, 0, maxDepth);
+    set<string> visited;
 
-    return path; 
+    recursiveExtend(startKmer, endKmer, path, color, visited, 0, maxDepth);
+
+    return path;
 }

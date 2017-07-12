@@ -14,30 +14,38 @@ TEST_CASE("BubbleBuilder findEndKmer", "[bubble]") {
     string pathToToy4 = "./data/toy4.bwtdisk";
     Color toyColor1 = Color(1, "toyColor1", pathToToy1);
     Color toyColor2 = Color(2, "toyColor2", pathToToy2);
+    Color toyColor3 = Color(3, "toyColor3", pathToToy3);
+    Color toyColor4 = Color(4, "toyColor4", pathToToy4);
 
     ColorSet colors = ColorSet(set<Color*>({&toyColor1, &toyColor2}));
 
     SECTION("Finding a simple endKmer of two colors with a single SNP, that turns out to be a loop") {
         string startKmer = "AAA";
-        const char* endKmer = "AAA";
-        REQUIRE(strcmp(bb.findEndKmer(startKmer, &toyColor1, colors).c_str(), endKmer) == 0);
-        REQUIRE(strcmp(bb.findEndKmer(startKmer, &toyColor2, colors).c_str(), endKmer) == 0);
+        string endKmer = "AAA";
+        REQUIRE(bb.findEndKmer(startKmer, &toyColor1, colors) == endKmer);
+        REQUIRE(bb.findEndKmer(startKmer, &toyColor2, colors) == endKmer);
+    }
+
+    SECTION("Finding the endKmer between toy 3 and toy 4 colors") {
+        string startKmer = "CTG";
+        string endKmer = "AAT";
+        ColorSet colors = ColorSet(set<Color*>({&toyColor3, &toyColor4}));
+        REQUIRE(bb.findEndKmer(startKmer, &toyColor3, colors) == endKmer);
+        REQUIRE(bb.findEndKmer(startKmer, &toyColor4, colors) == endKmer);
     }
 
     SECTION("Extending a simple linear path") {
         string startKmer = "CTG";
         string endKmer = "AAT";
         string path3 = "CTGCAAT";
-        Color toyColor3 = Color(3, "toyColor3", pathToToy3);
         REQUIRE(bb.extendPath(startKmer, endKmer, &toyColor3, 10) == path3);
     }
 
-    SECTION("Extending a path with a loop in it") {
+    SECTION("Extending a simple branching path") {
         string startKmer = "CTG";
         string endKmer = "AAT";
         string path4 = "CTGAAAT";
-        Color toyColor4 = Color(4, "toyColor4", pathToToy4);
-        //bb.extendPath(startKmer, endKmer, &toyColor4, 10);
-        CHECK(bb.extendPath(startKmer, endKmer, &toyColor4, 10) ==  path4);
+        REQUIRE(bb.extendPath(startKmer, endKmer, &toyColor4, 10) ==  path4);
     }
+
 }

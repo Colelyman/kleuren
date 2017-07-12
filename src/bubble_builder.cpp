@@ -27,12 +27,12 @@ Bubble BubbleBuilder::build(string& startKmer, ColorSet colors, unsigned int max
     // loop until there is an endKmer, or all colors have been tried
     /// @todo this loop could be optimized...
     string endKmer = "";
-    while(strcmp(endKmer.c_str(), "") == 0 && colorIt != colors.getEndIterator()) {
+    while(endKmer.empty() && colorIt != colors.getEndIterator()) {
         endKmer = findEndKmer(startKmer, *colorIt++, colors);
     }
 
     // assert that an endKmer exists for this bubble
-    assert(strcmp(endKmer.c_str(), "") != 0);
+    assert(!endKmer.empty());
 
     vector<string> paths;
     // extend the path from kmer to endKmer for each color in colors
@@ -61,8 +61,10 @@ vector<string> getNeighbors(vector<string> kmers, const Color* color) {
 }
 
 string BubbleBuilder::findEndKmer(string& startKmer, const Color* color, const ColorSet colors) {
-    vector<string> neighbors({startKmer});
+    string revComp = reverseComplement(startKmer);
+    vector<string> neighbors = color->getSuffixNeighbors(startKmer);
 
+    // loop until a kmer is found or there are no more neighbors to check
     while(true) {
         neighbors = getNeighbors(neighbors, color);
         if(neighbors.size() == 0) { // there are no neighbors to check, so break out of the loop
@@ -70,7 +72,7 @@ string BubbleBuilder::findEndKmer(string& startKmer, const Color* color, const C
         }
 
         for(string neighbor : neighbors) {
-            if(colors.allContainsKmer(neighbor)) {
+            if(colors.allContainsKmer(neighbor) && strcmp(neighbor.c_str(), revComp.c_str())) {
                 return neighbor;
             }
         }
@@ -78,17 +80,6 @@ string BubbleBuilder::findEndKmer(string& startKmer, const Color* color, const C
 
     // there is no kmer in color that is present in all colors
     return "";
-}
-
-set<string> getNeighbors(set<string> kmers, const Color* color) {
-    set<string> neighbors;
-    for(string kmer : kmers) {
-        for(string neighbor : color->getSuffixNeighbors(kmer)) {
-            neighbors.insert(neighbor);
-        }
-    }
-
-    return neighbors;
 }
 
 bool recursiveExtend(const string& currentKmer, const string& endKmer, string& path, const Color* color, set<string>& visited, unsigned int depth, unsigned int maxDepth) {

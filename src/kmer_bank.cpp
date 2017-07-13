@@ -4,8 +4,13 @@
 
 #include "kmer_bank.h"
 
-KmerBank::KmerBank() {
+KmerBank::KmerBank(string path) {
+    kmerFilePath = path;
+    visited = new set<string>();
+}
 
+KmerBank::~KmerBank() {
+    delete visited;
 }
 
 string KmerBank::getRandomKmer() {

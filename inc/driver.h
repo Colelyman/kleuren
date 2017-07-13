@@ -27,8 +27,6 @@ class Driver {
     public:
         Driver(Args args);
 
-        ~Driver();
-
         /// Starts the whole algorithm given the arguments
         void run();
 
@@ -42,10 +40,6 @@ class Driver {
 
         /// Builds bubbles!
         BubbleBuilder bubbleBuilder;
-
-        /// Holds the kmers that have been visited already so that they are not repeated
-        /// @todo implement a bloom filter for efficiency instead of a set?
-        set<string>* visitedKmers;
 
         /// The arguments for the current run
         Args args;

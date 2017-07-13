@@ -14,15 +14,21 @@
 #define KMER_BANK_H
 
 #include <string>
+#include <set>
 
 using std::string;
+using std::set;
 
 class KmerBank {
 
     public:
-        KmerBank();
+        KmerBank() { }
 
-        /// Returns a random kmer 
+        KmerBank(string path);
+
+        ~KmerBank();
+
+        /// Returns a random kmer that has not been returned yet
         string getRandomKmer();
 
         /// Returns an iterator over the kmers
@@ -30,8 +36,11 @@ class KmerBank {
         void getIterator();
 
     private:
-        /// @todo figure out what data members are needed for this
-    
+        /// The path to where the kmers are stored
+        string kmerFilePath; 
+
+        /// The set of visited kmers
+        set<string>* visited;
 };
 
 #endif // KMER_BANK_H

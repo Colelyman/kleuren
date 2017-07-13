@@ -44,6 +44,9 @@ class KmerBank {
         /// The kmer length found in kmerFile
         size_t kmerLen;
 
+        /// A buffer for holding the next kmer
+        char* buffer;
+
         /// The set of visited kmers
         set<string>* visited;
 };

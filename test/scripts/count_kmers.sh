@@ -23,5 +23,8 @@ OUT_FILE=../data/super_viruses.count.txt
 echo "Convert the binary output file to a text file"
 $DSK2ASCII -file $H5_FILE -out $OUT_FILE
 
+# remove the count values from the text file, so only the kmers are left
+awk '{ print $1 }' $OUT_FILE > $OUT_FILE.tmp && mv $OUT_FILE.tmp $OUT_FILE
+
 # remove the binary output file
 rm $H5_FILE

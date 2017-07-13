@@ -14,6 +14,7 @@
 #define DRIVER_H
 
 #include <set>
+#include <fstream>
 
 #include "args.h"
 #include "color_manager.h"
@@ -21,6 +22,7 @@
 #include "bubble_builder.h"
 
 using std::set;
+using std::ifstream;
 
 class Driver {
 
@@ -37,15 +39,14 @@ class Driver {
         /// removal, and access of colors
         ColorManager colorManager;
 
+        /// The pointer to the file handle that contains the kmers
+        ifstream* kmerFile;
+
         /// The KmerBank provides a super set of kmers for each color
         KmerBank kmerBank;
 
         /// Builds bubbles!
         BubbleBuilder bubbleBuilder;
-
-        /// Holds the kmers that have been visited already so that they are not repeated
-        /// @todo implement a bloom filter for efficiency instead of a set?
-        set<string>* visitedKmers;
 
         /// The arguments for the current run
         Args args;

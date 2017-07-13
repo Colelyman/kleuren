@@ -8,13 +8,15 @@ Driver::Driver(Args args) {
     this->args = args;
 
     colorManager = ColorManager();
-    kmerBank = KmerBank();
+    kmerFile = new ifstream();
+    kmerFile->open(args.getKmerFilePath());
+    kmerBank = KmerBank(kmerFile);
     bubbleBuilder = BubbleBuilder();
-    visitedKmers = new set<string>();
 }
 
 Driver::~Driver() {
-    delete visitedKmers;
+    kmerFile->close();
+    delete kmerFile;
 }
 
 void Driver::run() {

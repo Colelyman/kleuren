@@ -22,5 +22,14 @@ KmerBank::~KmerBank() {
 }
 
 string KmerBank::getNextKmer() {
-    
+    string nextKmer;
+    // move the cursor to the next line, with the next kmer
+    kmerFile->seekg(lineNum * kmerLen);
+    getline(*kmerFile, nextKmer);
+    lineNum++;
+
+    // add the kmer to visited
+    visited->insert(nextKmer);
+
+    return nextKmer;
 }

@@ -14,6 +14,7 @@
 #define DRIVER_H
 
 #include <set>
+#include <fstream>
 
 #include "args.h"
 #include "color_manager.h"
@@ -21,11 +22,14 @@
 #include "bubble_builder.h"
 
 using std::set;
+using std::ifstream;
 
 class Driver {
 
     public:
         Driver(Args args);
+
+        ~Driver();
 
         /// Starts the whole algorithm given the arguments
         void run();
@@ -34,6 +38,9 @@ class Driver {
         /// The only instance of the ColorManager, which regulates the addition,
         /// removal, and access of colors
         ColorManager colorManager;
+
+        /// The pointer to the kmer file handle
+        ifstream* kmerFile;
 
         /// The KmerBank provides a super set of kmers for each color
         KmerBank kmerBank;

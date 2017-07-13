@@ -39,7 +39,7 @@ class Driver {
         /// removal, and access of colors
         ColorManager colorManager;
 
-        /// The pointer to the kmer file handle
+        /// The pointer to the file handle that contains the kmers
         ifstream* kmerFile;
 
         /// The KmerBank provides a super set of kmers for each color

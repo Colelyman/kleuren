@@ -34,7 +34,7 @@ class KmerBank {
         string getNextKmer();
 
     private:
-        /// The file handle to the file of kmers
+        /// The pointer to the file handle to the file of kmers
         ifstream* kmerFile; 
 
         /// The current line in kmerFile that, which is also equal to the number of kmers

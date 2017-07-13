@@ -25,8 +25,8 @@ class Args {
         string getColorsFilePath();
         void setColorsFilePath(string path);
 
-        size_t getKmerLen();
-        void setKmerLen(size_t len);
+        string getKmerFilePath();
+        void setKmerFilePath(string path);
 
     private:
         /**
@@ -47,8 +47,18 @@ class Args {
          */
         string colorsFilePath;
 
-        /// The length of kmer to use when querying for nodes 
-        size_t kmerLen;
+        /**
+         * The path to the file that contains the super set of all of the kmers from
+         * each of the colors.
+         * The formatting of the file should be as follows:
+         *      
+         *      <kmer> <number of occurances of the kmer>
+         *      ...
+         *
+         * One can use any kmer counting software as long as it can output a file in the
+         * above format. The kmer counting software DSK is provided and recommended.
+         */
+        string kmerFilePath;
 
 };
 

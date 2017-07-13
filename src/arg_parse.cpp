@@ -25,15 +25,14 @@ Args ArgParse::parseArgs(int argc, char* argv[]) {
         options.add_options()
             ("c,colorsFilePath", "Path to the file that holds the paths to the individual colors.",
                 cxxopts::value<string>())
-            ("k,kmerLen", "Kmer length to use when querying the colors.", cxxopts::value<size_t>(),
-                "31")
+            ("k,kmerFilePath", "Path to the file that contains the kmers", cxxopts::value<string>())
             ("h,help", "Print help")
         ;
 
         // specify required arguments
         vector<string> required;
         required.push_back("colorsFilePath");
-        required.push_back("kmerLen");
+        required.push_back("kmerFilePath");
 
         // parse the arguments
         options.parse(argc, argv);
@@ -59,5 +58,5 @@ Args ArgParse::parseArgs(int argc, char* argv[]) {
 
 void ArgParse::setArgs(Options options) {
     args.setColorsFilePath(options["colorsFilePath"].as<string>());
-    args.setKmerLen(options["kmerLen"].as<size_t>());
+    args.setKmerFilePath(options["kmerFilePath"].as<string>());
 }

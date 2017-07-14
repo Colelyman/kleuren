@@ -7,7 +7,9 @@
 Driver::Driver(Args args) {
     this->args = args;
 
-    colorManager = ColorManager();
+    colorFile = new ifstream();
+    colorFile->open(args.getColorsFilePath());
+    colorManager = ColorManager(colorFile);
     kmerFile = new ifstream();
     kmerFile->open(args.getKmerFilePath());
     kmerBank = KmerBank(kmerFile);
@@ -15,6 +17,8 @@ Driver::Driver(Args args) {
 }
 
 Driver::~Driver() {
+    colorFile->close();
+    delete colorFile;
     kmerFile->close();
     delete kmerFile;
 }

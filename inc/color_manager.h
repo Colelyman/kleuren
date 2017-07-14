@@ -15,18 +15,25 @@
 
 #include <string>
 #include <map>
+#include <fstream>
 
 #include "color.h"
 
 using std::string;
 using std::map;
+using std::ifstream;
 
 class ColorManager {
 
     public:
-        ColorManager();
+        ColorManager() { }
+
+        ColorManager(ifstream* fileStream);
 
         ~ColorManager();
+
+        /// Adds all of the colors from the color file
+        void addColors();
 
         /**
          * Adds a color to the de Bruijn graph.
@@ -43,14 +50,17 @@ class ColorManager {
         /// Removes all colors and properly deallocates them
         void removeAllColors();
 
-        // colors is where each Color is located.
-        // @key is of type int and represents the id of the Color.
-        // @value is of type Color*.
+        /// The pointer to the file handle of the color file
+        ifstream* colorFile;
+
+        /// colors is where each Color is located.
+        /// @key is of type int and represents the id of the Color.
+        /// @value is of type Color*.
         map<int, Color*> colors;
 
-        // numColors is the total number of colors added.
-        // It also determines the ID of each Color.
-        int numColors;
+        /// numColors is the total number of colors added.
+        /// It also determines the ID of each Color.
+        unsigned int numColors;
 
 };
 

@@ -39,6 +39,9 @@ class Driver {
         /// removal, and access of colors
         ColorManager colorManager;
 
+        /// The point to the file hand that contains the colors
+        ifstream* colorFile;
+
         /// The pointer to the file handle that contains the kmers
         ifstream* kmerFile;
 

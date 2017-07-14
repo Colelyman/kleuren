@@ -10,22 +10,25 @@ KmerBank::KmerBank(ifstream* fileStream) {
     string firstKmer;
     // get the first kmer of the file
     getline(*kmerFile, firstKmer);
-    // set the kmerLen
-    kmerLen = firstKmer.length();
+    // set the kmerLen as the length of the firstKmer + 1 to account for \n
+    kmerLen = firstKmer.length() + 1;
     // return to read the first line of the file again
     kmerFile->seekg(0, kmerFile->beg);
+
+    buffer = new char[kmerLen];
     visited = new set<string>();
 }
 
 KmerBank::~KmerBank() {
+    delete[] buffer;
     delete visited;
 }
 
 string KmerBank::getNextKmer() {
-    string nextKmer;
     // move the cursor to the next line, with the next kmer
     kmerFile->seekg(lineNum * kmerLen);
-    getline(*kmerFile, nextKmer);
+    kmerFile->read(buffer, kmerLen - 1);
+    string nextKmer = string(buffer);
     lineNum++;
 
     // add the kmer to visited

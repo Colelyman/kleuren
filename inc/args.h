@@ -28,6 +28,9 @@ class Args {
         string getKmerFilePath();
         void setKmerFilePath(string path);
 
+        string getBubbleFilePath();
+        void setBubbleFilePath(string path);
+
         unsigned int getN();
         void setN(unsigned int n);
 
@@ -62,6 +65,21 @@ class Args {
          * above format. The kmer counting software DSK is provided and recommended.
          */
         string kmerFilePath;
+
+        /**
+         * The path to the file that will be created that will hold the bubbles in FASTA format.
+         * The outputted file will look something like this:
+         *
+         *      > bubble 1 <color1 name>
+         *      ACTGT ...
+         *      > bubble 1 <color2 name>
+         *      ACTGG ...
+         *      ...
+         *      > bubble 1 <colorn name>
+         *      ...
+         *      > bubble n <colorn name>
+         */
+        string bubbleFilePath;
 
         /**
          * The number of colors necessary in order to start a bubble formation. This parameter

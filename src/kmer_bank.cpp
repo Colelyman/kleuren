@@ -27,6 +27,11 @@ KmerBank::~KmerBank() {
 string KmerBank::getNextKmer() {
     // move the cursor to the next line, with the next kmer
     kmerFile->seekg(lineNum * kmerLen);
+    // check if the end of file is reached or an error has occurred
+    if((kmerFile->rdstate() & std::ifstream::eofbit) != 0 ||
+            (kmerFile->rdstate() & std::ifstream::failbit) != 0) {
+        return "";
+    }
     kmerFile->read(buffer, kmerLen - 1);
     string nextKmer = string(buffer);
     lineNum++;

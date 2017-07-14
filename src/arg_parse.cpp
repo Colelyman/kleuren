@@ -26,6 +26,7 @@ Args ArgParse::parseArgs(int argc, char* argv[]) {
             ("c,colorsFilePath", "Path to the file that holds the paths to the individual colors.",
                 cxxopts::value<string>())
             ("k,kmerFilePath", "Path to the file that contains the kmers", cxxopts::value<string>())
+            ("n,numMinKmers", "The number of colors a kmer must be present in for a bubble to be formed [Default: 0 (which means all colors must be present)]", cxxopts::value<unsigned int>())
             ("h,help", "Print help")
         ;
 
@@ -59,4 +60,5 @@ Args ArgParse::parseArgs(int argc, char* argv[]) {
 void ArgParse::setArgs(Options options) {
     args.setColorsFilePath(options["colorsFilePath"].as<string>());
     args.setKmerFilePath(options["kmerFilePath"].as<string>());
+    args.setN(options["numMinKmers"].as<unsigned int>());
 }

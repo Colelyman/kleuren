@@ -18,6 +18,7 @@
 #include <fstream>
 
 #include "color.h"
+#include "color_set.h"
 
 using std::string;
 using std::map;
@@ -45,6 +46,13 @@ class ColorManager {
 
         /// Returns the color given a colorID
         Color* getColor(int colorID);
+
+        /** 
+         * Returns colors as a ColorSet, with n provided.
+         * @param n the parameter to pass to the newly formed ColorSet.
+         * @returns a ColorSet with the colors, and with the provided n
+         */
+        ColorSet getColors(unsigned int n);
 
     private:
         /// Removes all colors and properly deallocates them

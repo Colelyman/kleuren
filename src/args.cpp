@@ -23,3 +23,11 @@ string Args::getKmerFilePath() {
 void Args::setKmerFilePath(string path) {
     kmerFilePath = path;
 }
+
+unsigned int Args::getN() {
+    return n;
+}
+
+void Args::setN(unsigned int n) {
+    this->n = n;
+}

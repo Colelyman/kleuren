@@ -72,7 +72,7 @@ string BubbleBuilder::findEndKmer(string& startKmer, const Color* color, const C
         }
 
         for(string neighbor : neighbors) {
-            if(colors.allContainsKmer(neighbor) && strcmp(neighbor.c_str(), revComp.c_str())) {
+            if(colors.nContainsKmer(neighbor) && strcmp(neighbor.c_str(), revComp.c_str())) {
                 return neighbor;
             }
         }

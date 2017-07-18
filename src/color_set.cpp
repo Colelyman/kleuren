@@ -14,7 +14,7 @@ ColorSet::ColorSet(set<Color*> colors, unsigned int n) {
     if(n > 0) {
         this->n = n;
     }
-    else if(n == 0) {
+    else if(n == 0) { // an n of 0 indicates to n to be set to the size of colors
         this->n = colors.size();
     }
 }

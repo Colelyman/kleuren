@@ -20,9 +20,11 @@
 #include "color_manager.h"
 #include "kmer_bank.h"
 #include "bubble_builder.h"
+#include "bubble_manager.h"
 
 using std::set;
 using std::ifstream;
+using std::ofstream;
 
 class Driver {
 
@@ -39,17 +41,23 @@ class Driver {
         /// removal, and access of colors
         ColorManager colorManager;
 
-        /// The point to the file hand that contains the colors
+        /// The pointer to the file handle that contains the colors
         ifstream* colorFile;
 
         /// The pointer to the file handle that contains the kmers
         ifstream* kmerFile;
+
+        /// The pointer to the file handle that will output the bubbles
+        ofstream* bubbleFile;
 
         /// The KmerBank provides a super set of kmers for each color
         KmerBank kmerBank;
 
         /// Builds bubbles!
         BubbleBuilder bubbleBuilder;
+
+        /// Manages bubbles
+        BubbleManager bubbleManager;
 
         /// The arguments for the current run
         Args args;

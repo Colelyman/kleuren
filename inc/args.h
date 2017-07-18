@@ -28,6 +28,12 @@ class Args {
         string getKmerFilePath();
         void setKmerFilePath(string path);
 
+        string getBubbleFilePath();
+        void setBubbleFilePath(string path);
+
+        unsigned int getN();
+        void setN(unsigned int n);
+
     private:
         /**
          * The path to the file that specifies the colors.
@@ -59,6 +65,28 @@ class Args {
          * above format. The kmer counting software DSK is provided and recommended.
          */
         string kmerFilePath;
+
+        /**
+         * The path to the file that will be created that will hold the bubbles in FASTA format.
+         * The outputted file will look something like this:
+         *
+         *      > bubble 1 <color1 name>
+         *      ACTGT ...
+         *      > bubble 1 <color2 name>
+         *      ACTGG ...
+         *      ...
+         *      > bubble 1 <colorn name>
+         *      ...
+         *      > bubble n <colorn name>
+         */
+        string bubbleFilePath;
+
+        /**
+         * The number of colors necessary in order to start a bubble formation. This parameter
+         * is checked in the method ColorSet::nContainsKmer(). In essence, the higher the value
+         * of n is, the less bubbles will be found, and the faster kleuren will run; and vice versa.
+         */
+        unsigned int n;
 
 };
 

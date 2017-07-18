@@ -4,8 +4,9 @@
 
 #include "color_set.h"
 
-ColorSet::ColorSet(set<Color*> colors) {
+ColorSet::ColorSet(set<Color*> colors, unsigned int n) {
     this->colors = colors;
+    this->n = n;
 }
 
 bool ColorSet::allContainsKmer(string& kmer) const {
@@ -17,10 +18,20 @@ bool ColorSet::allContainsKmer(string& kmer) const {
     }
 }
 
+bool ColorSet::nContainsKmer(string& kmer) const {
+    if(numContainsKmer(kmer) >= n) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 int ColorSet::numContainsKmer(string& kmer) const {
     return containsKmer(kmer).getColors().size();
 }
 
+/// @todo determine if this method should be deleted...
 ColorSet ColorSet::containsKmer(string& kmer) const {
     set<Color*> subColors;
 
@@ -30,7 +41,8 @@ ColorSet ColorSet::containsKmer(string& kmer) const {
         }
     }
 
-    return ColorSet(subColors);
+    /// @todo figure out where to get n from...
+    return ColorSet(subColors, 0);
 }
 
 set<Color*> ColorSet::getColors() const {

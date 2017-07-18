@@ -23,3 +23,7 @@ map<pair<int, int>, int> Bubble::runNW() {
         }
     }
 }
+
+vector<Path> Bubble::getPaths() {
+    return paths;
+}

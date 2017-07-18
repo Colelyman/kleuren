@@ -23,10 +23,13 @@ using std::set;
 class ColorSet {
 
     public:
-        ColorSet(set<Color*> colors);
+        ColorSet(set<Color*> colors, unsigned int n);
 
         /// Returns true if all of the colors contain the kmer
         bool allContainsKmer(string& kmer) const;
+
+        /// Returns true if n or more of the colors contain the kmer
+        bool nContainsKmer(string& kmer) const;
 
         /// Returns the number of colors that contain the kmer
         int numContainsKmer(string& kmer) const;
@@ -47,6 +50,8 @@ class ColorSet {
         /// The set of colors contained by this object
         set<Color*> colors;
 
+        /// The number of colors needed to consider a building a bubble
+        unsigned int n;
 };
 
 #endif // COLOR_SET_H

@@ -3,10 +3,12 @@
  */
 
 #include <sstream>
+#include <set>
 
 #include "color_manager.h"
 
 using std::stringstream;
+using std::set;
 
 ColorManager::ColorManager(ifstream* fileStream) {
     colorFile = fileStream;
@@ -36,6 +38,14 @@ Color* ColorManager::addColor(string& colorName, string& pathToBWT) {
 
 Color* ColorManager::getColor(int colorID) {
     return colors[colorID];
+}
+
+ColorSet ColorManager::getColors(unsigned int n) {
+    set<Color*> colorSet;
+    for(auto const& color : colors) {
+        colorSet.insert(color.second);
+    }
+    return ColorSet(colorSet, n);
 }
 
 void ColorManager::removeAllColors() {

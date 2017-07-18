@@ -36,6 +36,9 @@ class Bubble {
          */
         map<pair<int, int>, int> runNW();
 
+        /// Returns the paths of the bubble
+        vector<Path> getPaths();
+
     private:
         /// The paths that this bubble holds
         vector<Path> paths;

@@ -23,6 +23,9 @@ using std::set;
 class ColorSet {
 
     public:
+        /// This constructor sets ColorSet::n to be the size of the colors
+        ColorSet(set<Color*> colors);
+
         ColorSet(set<Color*> colors, unsigned int n);
 
         /// Returns true if all of the colors contain the kmer

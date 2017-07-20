@@ -6,7 +6,12 @@
 
 #include "bubble_builder.h"
 
-TEST_CASE("BubbleBuilder findEndKmer", "[bubble]") {
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+TEST_CASE("BubbleBuilder simple toy examples", "[bubble]") {
     BubbleBuilder bb = BubbleBuilder();
     string pathToToy1 = "./data/toy1.bwtdisk";
     string pathToToy2 = "./data/toy2.bwtdisk";
@@ -48,4 +53,45 @@ TEST_CASE("BubbleBuilder findEndKmer", "[bubble]") {
         REQUIRE(bb.extendPath(startKmer, endKmer, &toyColor4, 10) ==  path4);
     }
 
+}
+
+TEST_CASE("BubbleBuilder virus examples", "[bubble]") {
+    BubbleBuilder bb = BubbleBuilder();
+    string pathToEbola = "./data/ebola.bwtdisk";
+    string pathToFlu = "./data/flu.bwtdisk";
+    string pathToMarburg = "./data/marburg.bwtdisk";
+    string pathToZika = "./data/zika.bwtdisk";
+    Color ebolaColor = Color(1, "ebola", pathToEbola);
+    Color fluColor = Color(2, "flu", pathToFlu);
+    Color marburgColor = Color(3, "marburg", pathToMarburg);
+    Color zikaColor = Color(4, "zika", pathToZika);
+
+    ColorSet colors = ColorSet(set<Color*>({&ebolaColor, &fluColor, &marburgColor, &zikaColor}), 4);
+
+    SECTION("Finding an endKmer and extending a small path in the viruses") {
+        string startKmer = "ATTACA";
+        string endKmer = "TACAAA";
+        REQUIRE(bb.findEndKmer(startKmer, &ebolaColor, colors) == endKmer);
+        
+        unsigned int maxDepth = 5;
+        string path = "ATTACAAA";
+        REQUIRE(bb.extendPath(startKmer, endKmer, &ebolaColor, maxDepth) == path);
+        
+        REQUIRE(bb.extendPath(startKmer, endKmer, &fluColor, maxDepth) == path);
+
+        REQUIRE(bb.extendPath(startKmer, endKmer, &marburgColor, maxDepth) == path);
+
+        REQUIRE(bb.extendPath(startKmer, endKmer, &zikaColor, maxDepth) == path);
+    }
+
+    SECTION("Finding an endkmer and extending a longer path in the viruses") {
+        string startKmer = "ATGCC";
+        string endKmer = "GCCAA";
+        
+        REQUIRE(bb.findEndKmer(startKmer, &zikaColor, colors) == endKmer);
+
+        unsigned int maxDepth = 10;
+
+        cout << bb.extendPath(startKmer, endKmer, &marburgColor, maxDepth) << endl;
+    }
 }

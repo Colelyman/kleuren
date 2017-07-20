@@ -51,7 +51,7 @@ class Driver {
         ofstream* bubbleFile;
 
         /// The KmerBank provides a super set of kmers for each color
-        KmerBank kmerBank;
+        KmerBank* kmerBank;
 
         /// Builds bubbles!
         BubbleBuilder bubbleBuilder;

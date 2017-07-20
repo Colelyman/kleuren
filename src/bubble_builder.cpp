@@ -32,7 +32,7 @@ Bubble BubbleBuilder::build(string& startKmer, ColorSet colors, unsigned int max
     }
 
     // assert that an endKmer exists for this bubble
-    assert(!endKmer.empty());
+    //assert(!endKmer.empty());
 
     vector<string> paths;
     // extend the path from kmer to endKmer for each color in colors

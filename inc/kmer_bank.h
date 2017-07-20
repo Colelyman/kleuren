@@ -16,10 +16,13 @@
 #include <string>
 #include <fstream>
 #include <set>
+#include <iostream>
 
 using std::string;
 using std::ifstream;
 using std::set;
+using std::cerr;
+using std::endl;
 
 class KmerBank {
 
@@ -45,10 +48,10 @@ class KmerBank {
         size_t kmerLen;
 
         /// A buffer for holding the next kmer
-        char* buffer;
+        char* buffer = NULL;
 
         /// The set of visited kmers
-        set<string>* visited;
+        set<string>* visited = NULL;
 };
 
 #endif // KMER_BANK_H

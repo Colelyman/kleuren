@@ -17,7 +17,7 @@ Driver::Driver(Args args) {
     kmerFile = new ifstream();
     kmerFile->open(args.getKmerFilePath());
 
-    kmerBank = KmerBank(kmerFile);
+    kmerBank = new KmerBank(kmerFile);
     bubbleBuilder = BubbleBuilder();
 
     // create the output bubble file
@@ -33,6 +33,7 @@ Driver::~Driver() {
     delete colorFile;
     kmerFile->close();
     delete kmerFile;
+    delete kmerBank;
     if(!args.getBubbleFilePath().empty()) {
         bubbleFile->close();
         delete bubbleFile;
@@ -40,7 +41,7 @@ Driver::~Driver() {
 }
 
 void Driver::run() {
-    string kmer = kmerBank.getNextKmer();
+    string kmer = kmerBank->getNextKmer();
     ColorSet colors = colorManager.getColors(args.getN());
 
     // iterate over the kmers
@@ -55,7 +56,7 @@ void Driver::run() {
             }
         }
         // get the next kmer
-        kmer = kmerBank.getNextKmer();
+        kmer = kmerBank->getNextKmer();
     }
 
     return;

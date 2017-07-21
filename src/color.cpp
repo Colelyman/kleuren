@@ -52,6 +52,24 @@ vector<string> Color::getPrefixNeighbors(string& s) const {
     return neighbors;
 }
 
+bool Color::hasSuffixNeighbors(string& s) const {
+    if(DBGQuery::getSuffixNeighbors(fmIndex, s).length() == 0) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
+bool Color::hasPrefixNeighbors(string& s) const {
+    if(DBGQuery::getPrefixNeighbors(fmIndex, s).length() == 0) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
 pair<string, size_t> Color::extractSubstringAndIndex(size_t idx, size_t len) const {
     return DBGQuery::extractSubstringAndIndex(fmIndex, idx, len);
 }

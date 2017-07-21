@@ -51,6 +51,12 @@ class Color {
         /// Returns the incoming edges of s as a vector of kmers that are each incoming edge
         vector<string> getPrefixNeighbors(string& s) const;
 
+        /// Returns whether or not a node has suffix neighbors
+        bool hasSuffixNeighbors(string& s) const;
+
+        /// Returnes whether or not a node has prefix neighbors
+        bool hasPrefixNeighbors(string& s) const;
+
         /**
          * Get the substring and index of a substring in the color.
          * @param idx the position of where the substring begins

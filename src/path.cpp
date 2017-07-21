@@ -2,11 +2,7 @@
  * Implementation of path.h
  */
 
-#include <sstream>
-
 #include "path.h"
-
-using std::stringstream;
 
 Path::Path(const Path& p) {//: color(p.color) {
     this->colors = p.colors;
@@ -50,13 +46,18 @@ int Path::runNW(Path path) const {
     return 0;
 }
 
+/// @todo this doesn't need to account for reverse complement does it?
 unsigned int Path::runSharedKmerCount(Path path, unsigned int kmerLen) const {
     string seqA = getSequence();
     string seqB = path.getSequence();
 
-    unsigned int count;
+    if(seqA.length() == 0 || seqB.length() == 0) {
+        return 0;
+    }
+
+    unsigned int count = 0;
     string kmer;
-    for(unsigned int i = 0; i < seqA.length() - kmerLen; kmerLen++) {
+    for(unsigned int i = 0; i < seqA.length() - kmerLen + 1; i++) {
         kmer = seqA.substr(i, kmerLen);
         if(seqB.find(kmer) != string::npos) {
             count++;

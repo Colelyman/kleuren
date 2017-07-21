@@ -28,7 +28,7 @@ class Path {
     public:
         Path(const Path& p);
 
-        Path(const Color* color);
+        Path(Color* color);
 
         /// Returns the actual sequence of the path
         string getSequence() const;
@@ -36,8 +36,11 @@ class Path {
         /// Appends to the seq
         void append(string suffix);
 
-        /// Returns the ID of the Color that this path is associated with
-        int getColorID() const;
+        /// Returns the ID of the Colors that this path is associated with
+        vector<int> getColorIDs() const;
+
+        /// Returns the name of the Colors that this path is associated with
+        vector<string> getColorNames() const;
 
         /** 
          * Runs the Needleman-Wunsch alignment algorithm to compare with another 
@@ -47,9 +50,13 @@ class Path {
          */
         int runNW(Path path) const;
 
+        bool operator<(const Path& rhsPath) const {
+            return this->getSequence() < rhsPath.getSequence();
+        }
+
     private:
-        /// The color that the path represents
-        const Color* color;
+        /// The colors that the path represents
+        vector<Color*> colors;
 
         /**
          * seq is a stringstream that represents the sequence of the path. This is a 

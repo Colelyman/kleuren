@@ -12,7 +12,11 @@ BubbleManager::BubbleManager(ofstream* file) {
 void BubbleManager::writeBubble(Bubble bubble) {
     for(auto const& path : bubble.getPaths()) {
         // write the header
-        *bubbleFile << "> bubble " << n++ << " for " << path.getColorID() << endl;
+        *bubbleFile << "> bubble " << n++ << " for ";
+        for(auto const& colorName : path.getColorNames()) {
+            *bubbleFile << colorName << ", ";
+        }
+        *bubbleFile << endl;
         string seq = path.getSequence();
 
         // print out the sequence

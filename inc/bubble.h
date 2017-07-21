@@ -16,12 +16,14 @@
 #include <map>
 #include <utility>
 #include <vector>
+#include <set>
 
 #include "path.h"
 
 using std::map;
 using std::pair;
 using std::vector;
+using std::set;
 
 class Bubble {
     
@@ -37,11 +39,11 @@ class Bubble {
         map<pair<int, int>, int> runNW();
 
         /// Returns the paths of the bubble
-        vector<Path> getPaths();
+        set<Path> getPaths();
 
     private:
         /// The paths that this bubble holds
-        vector<Path> paths;
+        set<Path> paths;
 
 };
 

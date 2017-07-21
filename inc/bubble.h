@@ -15,14 +15,12 @@
 
 #include <map>
 #include <utility>
-#include <vector>
 #include <set>
 
 #include "path.h"
 
 using std::map;
 using std::pair;
-using std::vector;
 using std::set;
 
 class Bubble {

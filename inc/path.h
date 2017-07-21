@@ -50,6 +50,14 @@ class Path {
          */
         int runNW(Path path) const;
 
+        /**
+         * Counts the number of shared kmers of length kmerLen with another
+         * path.
+         * @param path the path to compare to
+         * @return the number of shared kmers
+         */
+        unsigned int runSharedKmerCount(Path path, unsigned int kmerLen) const;
+
         bool operator<(const Path& rhsPath) const {
             return this->getSequence() < rhsPath.getSequence();
         }

@@ -49,3 +49,19 @@ int Path::runNW(Path path) const {
     
     return 0;
 }
+
+unsigned int Path::runSharedKmerCount(Path path, unsigned int kmerLen) const {
+    string seqA = getSequence();
+    string seqB = path.getSequence();
+
+    unsigned int count;
+    string kmer;
+    for(unsigned int i = 0; i < seqA.length() - kmerLen; kmerLen++) {
+        kmer = seqA.substr(i, kmerLen);
+        if(seqB.find(kmer) != string::npos) {
+            count++;
+        }
+    }
+
+    return count;
+}

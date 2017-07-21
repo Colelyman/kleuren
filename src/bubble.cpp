@@ -11,7 +11,8 @@ Bubble::Bubble() {
 map<pair<int, int>, int> Bubble::runNW() {
     map<pair<int, int>, int> results;
     // iterate over each pair of paths in this->paths
-    for(unsigned int i = 0; i < paths.size() - 1; i++) {
+    /// @todo refactor runNW in Bubble
+    /*for(unsigned int i = 0; i < paths.size() - 1; i++) {
         for(unsigned int j = i + 1; j < paths.size(); j++) {
             pair<int, int> currentPair;
             currentPair.first = paths[i].getColorID();
@@ -21,9 +22,11 @@ map<pair<int, int>, int> Bubble::runNW() {
 
             results[currentPair] = score;
         }
-    }
+    }*/
+
+    return results;
 }
 
-vector<Path> Bubble::getPaths() {
+set<Path> Bubble::getPaths() {
     return paths;
 }

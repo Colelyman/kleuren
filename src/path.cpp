@@ -8,11 +8,14 @@
 
 using std::stringstream;
 
-Path::Path(const Path& p) : color(p.color) {
+Path::Path(const Path& p) {//: color(p.color) {
+    this->colors = p.colors;
     this->seq << p.seq.rdbuf();
 }
 
-Path::Path(const Color* color) : color(color) { }
+Path::Path(Color* color) {
+    colors.push_back(color);
+}
 
 string Path::getSequence() const {
     return seq.str();
@@ -22,8 +25,20 @@ void Path::append(string suffix) {
     seq << suffix;
 }
 
-int Path::getColorID() const {
-    return color->getID();
+vector<int> Path::getColorIDs() const {
+    vector<int> ids;
+    for(auto const& color : colors) {
+        ids.push_back(color->getID());
+    }
+    return ids;
+}
+
+vector<string> Path::getColorNames() const {
+    vector<string> names;
+    for(auto const& color : colors) {
+        names.push_back(color->getName());
+    }
+    return names;
 }
 
 int Path::runNW(Path path) const {

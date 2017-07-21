@@ -41,6 +41,23 @@ int ColorSet::numContainsKmer(string& kmer) const {
     return containsKmer(kmer).getColors().size();
 }
 
+bool ColorSet::hasPrefixNeighbors(string& kmer) const {
+    for(Color* color : colors) {
+        if(color->hasPrefixNeighbors(kmer)) {
+            return true;
+        }
+    }
+    return false;
+}
+bool ColorSet::hasSuffixNeighbors(string& kmer) const {
+    for(Color* color : colors) {
+        if(color->hasSuffixNeighbors(kmer)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /// @todo determine if this method should be deleted...
 ColorSet ColorSet::containsKmer(string& kmer) const {
     set<Color*> subColors;

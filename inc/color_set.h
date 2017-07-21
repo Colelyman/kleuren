@@ -37,6 +37,12 @@ class ColorSet {
         /// Returns the number of colors that contain the kmer
         int numContainsKmer(string& kmer) const;
 
+        /// Returns whether or not a color in colors has a prefix neighbor for kmer
+        bool hasPrefixNeighbors(string& kmer) const;
+
+        /// Returns whether or not a color in colors has a suffix neighbror for kmer
+        bool hasSuffixNeighbors(string& kmer) const;
+
         /// Returns the subset of colors that contain the kmer
         ColorSet containsKmer(string& kmer) const;
 

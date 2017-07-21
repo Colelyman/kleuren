@@ -47,9 +47,12 @@ void Driver::run() {
     // iterate over the kmers
     while(kmer != "") {
         // find a start kmer for a bubble
-        if(colors.nContainsKmer(kmer)) {
+        if(colors.hasSuffixNeighbors(kmer) && colors.nContainsKmer(kmer)) {
             // build the bubble
             Bubble bubble = bubbleBuilder.build(kmer, colors, 100);
+            if(bubble.getPaths().empty()) { // no bubble was found
+                continue;
+            }
             // write the bubble if there is a file to write to
             if(!args.getBubbleFilePath().empty()) {
                 bubbleManager.writeBubble(bubble);

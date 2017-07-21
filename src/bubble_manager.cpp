@@ -13,11 +13,11 @@ void BubbleManager::writeBubble(Bubble bubble) {
     for(auto const& path : bubble.getPaths()) {
         // write the header
         *bubbleFile << "> bubble " << n++ << " for ";
-        for(auto const& colorName : path.getColorNames()) {
+        for(auto const& colorName : bubble.getColorNames(path.first)) {
             *bubbleFile << colorName << ", ";
         }
         *bubbleFile << endl;
-        string seq = path.getSequence();
+        string seq = path.first.getSequence();
 
         // print out the sequence
         if(seq.length() <= 80) {

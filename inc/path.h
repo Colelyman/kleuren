@@ -28,6 +28,8 @@ using std::stringstream;
 class Path {
 
     public:
+        Path(string initialSeq);
+
         Path(const Path& p);
 
         /// Returns the actual sequence of the path

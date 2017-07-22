@@ -4,6 +4,10 @@
 
 #include "path.h"
 
+Path::Path(string initialSeq) {
+    seq << initialSeq;
+}
+
 Path::Path(const Path& p) {
     this->seq << p.seq.rdbuf();
 }

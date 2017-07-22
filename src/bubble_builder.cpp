@@ -36,11 +36,10 @@ Bubble BubbleBuilder::build(string& startKmer, ColorSet colors, unsigned int max
         return bubble;
     }
 
-    vector<string> paths;
     // extend the path from kmer to endKmer for each color in colors
     for(set<Color*>::iterator it = colors.getBeginIterator(); it != colors.getEndIterator(); ++it) {
-        string path = this->extendPath(startKmer, endKmer, *it, maxDepth);
-        paths.push_back(path);
+        Path path = Path(this->extendPath(startKmer, endKmer, *it, maxDepth));
+        bubble.addPath(path, *it);
     }
 
     return bubble;

@@ -14,19 +14,21 @@
 
 #include <string>
 #include <set>
+#include <memory>
 
 #include "color.h"
 
 using std::string;
 using std::set;
+using std::shared_ptr;
 
 class ColorSet {
 
     public:
         /// This constructor sets ColorSet::n to be the size of the colors
-        ColorSet(set<Color*> colors);
+        ColorSet(set<shared_ptr<Color> > colors);
 
-        ColorSet(set<Color*> colors, unsigned int n);
+        ColorSet(set<shared_ptr<Color> > colors, unsigned int n);
 
         /// Returns true if all of the colors contain the kmer
         bool allContainsKmer(string& kmer) const;
@@ -47,17 +49,17 @@ class ColorSet {
         ColorSet containsKmer(string& kmer) const;
 
         /// Returns the set of all colors
-        set<Color*> getColors() const;
+        set<shared_ptr<Color> > getColors() const;
 
         /// Returns a begin iterator over the set of colors
-        set<Color*>::iterator getBeginIterator() const;
+        set<shared_ptr<Color> >::iterator getBeginIterator() const;
 
         /// Returns an end iterator over the set of colors
-        set<Color*>::iterator getEndIterator() const;
+        set<shared_ptr<Color> >::iterator getEndIterator() const;
 
     private:
         /// The set of colors contained by this object
-        set<Color*> colors;
+        set<shared_ptr<Color> > colors;
 
         /// The number of colors needed to consider a building a bubble
         unsigned int n;

@@ -4,12 +4,12 @@
 
 #include "color_set.h"
 
-ColorSet::ColorSet(set<Color*> colors) {
+ColorSet::ColorSet(set<shared_ptr<Color> > colors) {
     this->colors = colors;
     this->n = colors.size();
 }
 
-ColorSet::ColorSet(set<Color*> colors, unsigned int n) {
+ColorSet::ColorSet(set<shared_ptr<Color> > colors, unsigned int n) {
     this->colors = colors;
     if(n > 0) {
         this->n = n;
@@ -42,7 +42,7 @@ int ColorSet::numContainsKmer(string& kmer) const {
 }
 
 bool ColorSet::hasPrefixNeighbors(string& kmer) const {
-    for(Color* color : colors) {
+    for(auto const& color : colors) {
         if(color->hasPrefixNeighbors(kmer)) {
             return true;
         }
@@ -50,7 +50,7 @@ bool ColorSet::hasPrefixNeighbors(string& kmer) const {
     return false;
 }
 bool ColorSet::hasSuffixNeighbors(string& kmer) const {
-    for(Color* color : colors) {
+    for(auto const& color : colors) {
         if(color->hasSuffixNeighbors(kmer)) {
             return true;
         }
@@ -60,9 +60,9 @@ bool ColorSet::hasSuffixNeighbors(string& kmer) const {
 
 /// @todo determine if this method should be deleted...
 ColorSet ColorSet::containsKmer(string& kmer) const {
-    set<Color*> subColors;
+    set<shared_ptr<Color> > subColors;
 
-    for(Color* color : colors) {
+    for(auto const& color : colors) {
         if(color->isVertex(kmer)) {
             subColors.insert(color);
         }
@@ -72,14 +72,14 @@ ColorSet ColorSet::containsKmer(string& kmer) const {
     return ColorSet(subColors, 0);
 }
 
-set<Color*> ColorSet::getColors() const {
+set<shared_ptr<Color> > ColorSet::getColors() const {
     return colors;
 }
 
-set<Color*>::iterator ColorSet::getBeginIterator() const {
+set<shared_ptr<Color> >::iterator ColorSet::getBeginIterator() const {
     return colors.begin();
 }
 
-set<Color*>::iterator ColorSet::getEndIterator() const {
+set<shared_ptr<Color> >::iterator ColorSet::getEndIterator() const {
     return colors.end();
 }

@@ -13,10 +13,7 @@ using std::set;
 ColorManager::ColorManager(ifstream* fileStream) {
     colorFile = fileStream;
     numColors = 0;
-}
-
-ColorManager::~ColorManager() {
-    removeAllColors();
+    addColors();
 }
 
 void ColorManager::addColors() {
@@ -31,27 +28,20 @@ void ColorManager::addColors() {
     }
 }
 
-Color* ColorManager::addColor(string& colorName, string& pathToBWT) {
-    colors[numColors] = new Color(numColors, colorName, pathToBWT);
+shared_ptr<Color> ColorManager::addColor(string colorName, string pathToBWT) {
+    colors[numColors] = shared_ptr<Color>(new Color(numColors, colorName, pathToBWT));
     return colors[numColors++];
 }
 
-Color* ColorManager::getColor(int colorID) {
+shared_ptr<Color> ColorManager::getColor(int colorID) {
     return colors[colorID];
 }
 
 ColorSet ColorManager::getColors(unsigned int n) {
-    set<Color*> colorSet;
+    set<shared_ptr<Color> > colorSet;
     for(auto const& color : colors) {
         colorSet.insert(color.second);
     }
     return ColorSet(colorSet, n);
 }
 
-void ColorManager::removeAllColors() {
-    // iterate over each color in colors
-    for(auto const& color : colors) {
-        // deallocate the color
-        delete color.second;
-    }
-}

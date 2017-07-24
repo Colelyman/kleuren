@@ -31,39 +31,39 @@ bool Bubble::pathExists(Path path) const {
     return paths.find(path) != paths.end();
 }
 
-void Bubble::addPath(Path path, Color* color) {
+void Bubble::addPath(Path path, shared_ptr<Color> color) {
     if(paths.find(path) == paths.end()) { // path is not found
-        paths[path] = set<Color*>({color});
+        paths[path] = set<shared_ptr<Color> >({color});
     }
     else { // path exists in paths, therefore add the color
         paths[path].insert(color);
     }
 }
 
-set<Color*> Bubble::getColors(Path path) const {
+set<shared_ptr<Color> > Bubble::getColors(Path path) const {
     if(pathExists(path)) {
         return paths.at(path);
     }
 }
 
 vector<string> Bubble::getColorNames(Path path) const {
-    set<Color*> colors = getColors(path);
+    set<shared_ptr<Color> > colors = getColors(path);
     vector<string> names;
-    for(Color* color : colors) {
+    for(auto const& color : colors) {
         names.push_back(color->getName());
     }
     return names;
 }
 
 vector<int> Bubble::getColorIDs(Path path) const {
-    set<Color*> colors = getColors(path);
+    set<shared_ptr<Color> > colors = getColors(path);
     vector<int> ids;
-    for(Color* color : colors) {
+    for(auto const& color : colors) {
         ids.push_back(color->getID());
     }
     return ids;
 }
 
-map<Path, set<Color*> > Bubble::getPaths() const {
+map<Path, set<shared_ptr<Color> > > Bubble::getPaths() const {
     return paths;
 }

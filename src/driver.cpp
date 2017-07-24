@@ -2,8 +2,14 @@
  * Implementation of driver.h
  */
 
+#include <iostream>
+#include <memory>
+
 #include "driver.h"
 #include "color_set.h"
+
+using std::cout;
+using std::endl;
 
 Driver::Driver(Args args) {
     this->args = args;
@@ -42,19 +48,24 @@ Driver::~Driver() {
 
 void Driver::run() {
     string kmer = kmerBank->getNextKmer();
+    shared_ptr<Color> color0 = colorManager.getColor(0);
     ColorSet colors = colorManager.getColors(args.getN());
 
     // iterate over the kmers
     while(kmer != "") {
         // find a start kmer for a bubble
-        if(colors.hasSuffixNeighbors(kmer) && colors.nContainsKmer(kmer)) {
+        if(colors.nContainsKmer(kmer)) {
+            cout << "startKmer: " << kmer << endl;
             // build the bubble
-            Bubble bubble = bubbleBuilder.build(kmer, colors, 100);
+            Bubble bubble = bubbleBuilder.build(kmer, colors, 200);
             if(bubble.getPaths().empty()) { // no bubble was found
+                cout << "no bubble: " << kmer << endl;
+                kmer = kmerBank->getNextKmer();
                 continue;
             }
             // write the bubble if there is a file to write to
             if(!args.getBubbleFilePath().empty()) {
+                cout << "bubble found: " << kmer << endl;
                 bubbleManager.writeBubble(bubble);
             }
         }

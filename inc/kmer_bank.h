@@ -16,13 +16,12 @@
 #include <string>
 #include <fstream>
 #include <set>
-#include <iostream>
+#include <memory>
 
 using std::string;
 using std::ifstream;
 using std::set;
-using std::cerr;
-using std::endl;
+using std::shared_ptr;
 
 class KmerBank {
 
@@ -31,8 +30,6 @@ class KmerBank {
 
         KmerBank(ifstream* fileStream);
 
-        ~KmerBank();
-
         /// Returns the next kmer in the file
         string getNextKmer();
 
@@ -40,18 +37,8 @@ class KmerBank {
         /// The pointer to the file handle to the file of kmers
         ifstream* kmerFile; 
 
-        /// The current line in kmerFile that, which is also equal to the number of kmers
-        /// that KmerBank has returned
-        unsigned int lineNum;
-
-        /// The kmer length found in kmerFile
-        size_t kmerLen;
-
-        /// A buffer for holding the next kmer
-        char* buffer = NULL;
-
         /// The set of visited kmers
-        set<string>* visited = NULL;
+        shared_ptr<set<string> > visited;
 };
 
 #endif // KMER_BANK_H

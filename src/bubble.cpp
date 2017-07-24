@@ -27,6 +27,43 @@ map<pair<int, int>, int> Bubble::runNW() {
     return results;
 }
 
-set<Path> Bubble::getPaths() {
+bool Bubble::pathExists(Path path) const {
+    return paths.find(path) != paths.end();
+}
+
+void Bubble::addPath(Path path, shared_ptr<Color> color) {
+    if(paths.find(path) == paths.end()) { // path is not found
+        paths[path] = set<shared_ptr<Color> >({color});
+    }
+    else { // path exists in paths, therefore add the color
+        paths[path].insert(color);
+    }
+}
+
+set<shared_ptr<Color> > Bubble::getColors(Path path) const {
+    if(pathExists(path)) {
+        return paths.at(path);
+    }
+}
+
+vector<string> Bubble::getColorNames(Path path) const {
+    set<shared_ptr<Color> > colors = getColors(path);
+    vector<string> names;
+    for(auto const& color : colors) {
+        names.push_back(color->getName());
+    }
+    return names;
+}
+
+vector<int> Bubble::getColorIDs(Path path) const {
+    set<shared_ptr<Color> > colors = getColors(path);
+    vector<int> ids;
+    for(auto const& color : colors) {
+        ids.push_back(color->getID());
+    }
+    return ids;
+}
+
+map<Path, set<shared_ptr<Color> > > Bubble::getPaths() const {
     return paths;
 }

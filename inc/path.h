@@ -15,32 +15,28 @@
 
 #include <string>
 #include <vector>
+#include <set>
 #include <sstream>
 
 #include "color.h"
 
 using std::string;
 using std::vector;
+using std::set;
 using std::stringstream;
 
 class Path {
 
     public:
-        Path(const Path& p);
+        Path(string initialSeq);
 
-        Path(Color* color);
+        Path(const Path& p);
 
         /// Returns the actual sequence of the path
         string getSequence() const;
 
         /// Appends to the seq
         void append(string suffix);
-
-        /// Returns the ID of the Colors that this path is associated with
-        vector<int> getColorIDs() const;
-
-        /// Returns the name of the Colors that this path is associated with
-        vector<string> getColorNames() const;
 
         /** 
          * Runs the Needleman-Wunsch alignment algorithm to compare with another 
@@ -63,9 +59,6 @@ class Path {
         }
 
     private:
-        /// The colors that the path represents
-        vector<Color*> colors;
-
         /**
          * seq is a stringstream that represents the sequence of the path. This is a 
          * stringstream because it makes the path easier to construct and get the sequence

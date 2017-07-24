@@ -16,12 +16,14 @@
 #include <map>
 #include <utility>
 #include <set>
+#include <memory>
 
 #include "path.h"
 
 using std::map;
 using std::pair;
 using std::set;
+using std::shared_ptr;
 
 class Bubble {
     
@@ -36,12 +38,32 @@ class Bubble {
          */
         map<pair<int, int>, int> runNW();
 
+        /// Checks if the path is present in the bubble
+        bool pathExists(Path path) const;
+
+        /** 
+         * Adds a path to paths, and appends the color to the corresponding path
+         * if the path is already contained in colors.
+         * @param path the path to add to paths
+         * @param color the color that is associated with the path
+         */
+        void addPath(Path path, shared_ptr<Color> color);
+
+        /// Returns the colors that are associated with path
+        set<shared_ptr<Color> > getColors(Path path) const;
+
+        /// Returns the name of the Colors that path is associated with
+        vector<string> getColorNames(Path path) const;
+
+        /// Returns the ID of the Colors that path is associated with
+        vector<int> getColorIDs(Path path) const;
+
         /// Returns the paths of the bubble
-        set<Path> getPaths();
+        map<Path, set<shared_ptr<Color> > > getPaths() const;
 
     private:
         /// The paths that this bubble holds
-        set<Path> paths;
+        map<Path, set<shared_ptr<Color> > > paths;
 
 };
 

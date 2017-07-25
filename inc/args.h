@@ -31,8 +31,14 @@ class Args {
         string getBubbleFilePath();
         void setBubbleFilePath(string path);
 
+        string getMatrixFilePath();
+        void setMatrixFilePath(string path);
+
         unsigned int getN();
         void setN(unsigned int n);
+
+        unsigned int getMaxDepth();
+        void setMaxDepth(unsigned int maxDepth);
 
     private:
         /**
@@ -70,9 +76,9 @@ class Args {
          * The path to the file that will be created that will hold the bubbles in FASTA format.
          * The outputted file will look something like this:
          *
-         *      > bubble 1 <color1 name>
+         *      > bubble 1 <color1 name>, <color2 name>
          *      ACTGT ...
-         *      > bubble 1 <color2 name>
+         *      > bubble 1 <color3 name>
          *      ACTGG ...
          *      ...
          *      > bubble 1 <colorn name>
@@ -82,11 +88,32 @@ class Args {
         string bubbleFilePath;
 
         /**
+         * The path to the file that will be created that will hold the distance matrix. The
+         * values will be based on the other parameters, such as kmer counting or Needleman-
+         * Wunsch alignment. An example of the matrix could be:
+         *
+         * <numer of colors>
+         * <color1 name>
+         * <color2 name> 5
+         * <color3 name> 6  10
+         * ...
+         * <colorn name> 3  15  ... 7
+         */
+        string matrixFilePath;
+
+        /**
          * The number of colors necessary in order to start a bubble formation. This parameter
          * is checked in the method ColorSet::nContainsKmer(). In essence, the higher the value
          * of n is, the less bubbles will be found, and the faster kleuren will run; and vice versa.
          */
         unsigned int n;
+
+        /**
+         * The maximum depth to recurse when extending the path to build the bubbles. The 
+         * larger the maxDepth the more paths the recursive function will explore, thereby
+         * the longer kleuren will take and the more bubbles it will find.
+         */
+        unsigned int maxDepth;
 
 };
 

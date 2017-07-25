@@ -54,6 +54,9 @@ class ColorManager {
          */
         ColorSet getColors(unsigned int n);
 
+        /// Returns the number of colors in the ColorManager
+        unsigned int getNumColors();
+
     private:
         /// The pointer to the file handle of the color file
         ifstream* colorFile;

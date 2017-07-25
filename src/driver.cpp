@@ -30,8 +30,15 @@ Driver::Driver(Args args) {
     if(!args.getBubbleFilePath().empty()) {
         bubbleFile = new ofstream();
         bubbleFile->open(args.getBubbleFilePath());
-        bubbleManager = BubbleManager(bubbleFile);
     }
+
+    // create the output matrix file
+    if(!args.getMatrixFilePath().empty()) {
+        matrixFile = new ofstream();
+        matrixFile->open(args.getMatrixFilePath());
+    }
+
+    bubbleManager = BubbleManager(bubbleFile, matrixFile);
 }
 
 Driver::~Driver() {
@@ -43,6 +50,10 @@ Driver::~Driver() {
     if(!args.getBubbleFilePath().empty()) {
         bubbleFile->close();
         delete bubbleFile;
+    }
+    if(!args.getMatrixFilePath().empty()) {
+        matrixFile->close();
+        delete matrixFile;
     }
 }
 
@@ -57,7 +68,7 @@ void Driver::run() {
         if(colors.nContainsKmer(kmer)) {
             cout << "startKmer: " << kmer << endl;
             // build the bubble
-            Bubble bubble = bubbleBuilder.build(kmer, colors, 200);
+            Bubble bubble = bubbleBuilder.build(kmer, colors, args.getMaxDepth());
             if(bubble.getPaths().empty()) { // no bubble was found, try next kmer
                 cout << "no bubble: " << kmer << endl;
                 kmer = kmerBank->getNextKmer();
@@ -72,9 +83,18 @@ void Driver::run() {
                 cout << "bubble found: " << kmer << endl;
                 bubbleManager.writeBubble(bubble);
             }
+            // construct matrix if there is a file 
+            if(!args.getMatrixFilePath().empty()) {
+                bubbleManager.countSharedKmers(bubble, kmer.length()); 
+            }
         }
         // get the next kmer
         kmer = kmerBank->getNextKmer();
+    }
+
+    // write the matirx to the file 
+    if(!args.getMatrixFilePath().empty()) {
+        bubbleManager.writeSharedKmerMatrix(bubbleManager.averageSharedKmerMatrix(), colorManager);
     }
 
     return;

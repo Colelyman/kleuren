@@ -32,10 +32,26 @@ void Args::setBubbleFilePath(string path) {
     bubbleFilePath = path;
 }
 
+string Args::getMatrixFilePath() {
+    return matrixFilePath;
+}
+
+void Args::setMatrixFilePath(string path) {
+    matrixFilePath = path;
+}
+
 unsigned int Args::getN() {
     return n;
 }
 
 void Args::setN(unsigned int n) {
     this->n = n;
+}
+
+unsigned int Args::getMaxDepth() {
+    return maxDepth;
+}
+
+void Args::setMaxDepth(unsigned int maxDepth) {
+    this->maxDepth = maxDepth;
 }

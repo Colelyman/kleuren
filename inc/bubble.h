@@ -38,6 +38,14 @@ class Bubble {
          */
         map<pair<int, int>, int> runNW();
 
+        /**
+         * Runs a shared kmer count for each pair in a pair-wise fasion.
+         * @return a map of key pair<int, int> where each int int the pair is the
+         * ID of the colors compared, and value unsigned int is the number of shared kmers
+         * between the pair of paths.
+         */
+        map<pair<int, int>, unsigned int> runSharedKmerCount(unsigned int kmerLen);
+
         /// Checks if the path is present in the bubble
         bool pathExists(Path path) const;
 
@@ -67,6 +75,9 @@ class Bubble {
         map<Path, set<shared_ptr<Color> > > getPaths() const;
 
     private:
+        /// Return all of the paths in a vector
+        vector<Path> pathsToVector() const;
+
         /// The paths that this bubble holds
         map<Path, set<shared_ptr<Color> > > paths;
 

@@ -32,6 +32,30 @@ map<pair<int, int>, int> Bubble::runNW() {
     return results;
 }
 
+map<pair<int, int>, unsigned int> Bubble::runSharedKmerCount(unsigned int kmerLen) {
+    // put the paths from the map into a vector
+    vector<Path> pathVector = pathsToVector();
+    map<pair<int, int>, unsigned int> results;
+    // iterate over each pair of paths
+    for(unsigned int i = 0; i < pathVector.size() - 1; i++) {
+        for(unsigned int j = i + 1; j < pathVector.size(); j++) {
+            unsigned int score = pathVector[i].runSharedKmerCount(pathVector[j], kmerLen);
+            set<shared_ptr<Color> > iColors = paths[pathVector[i]];
+            set<shared_ptr<Color> > jColors = paths[pathVector[j]];
+            // get the pairs of colors
+            for(auto const& iColor : iColors) {
+                for(auto const& jColor : jColors) {
+                    pair<int, int> currentPair = pair<int, int>(iColor->getID(), jColor->getID());
+
+                    results[currentPair] = score;
+                }
+            }
+        }
+    }
+
+    return results;
+}
+
 bool Bubble::pathExists(Path path) const {
     return paths.find(path) != paths.end();
 }
@@ -87,4 +111,12 @@ vector<int> Bubble::getColorIDs(Path path) const {
 
 map<Path, set<shared_ptr<Color> > > Bubble::getPaths() const {
     return paths;
+}
+
+vector<Path> Bubble::pathsToVector() const {
+    vector<Path> pathVector;
+    for(auto const& path : paths) {
+        pathVector.push_back(path.first);
+    }
+    return pathVector;
 }

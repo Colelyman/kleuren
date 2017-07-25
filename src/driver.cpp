@@ -57,7 +57,7 @@ void Driver::run() {
         if(colors.nContainsKmer(kmer)) {
             cout << "startKmer: " << kmer << endl;
             // build the bubble
-            Bubble bubble = bubbleBuilder.build(kmer, colors, 200);
+            Bubble bubble = bubbleBuilder.build(kmer, colors, args.getMaxDepth());
             if(bubble.getPaths().empty()) { // no bubble was found, try next kmer
                 cout << "no bubble: " << kmer << endl;
                 kmer = kmerBank->getNextKmer();
@@ -71,6 +71,10 @@ void Driver::run() {
             if(!args.getBubbleFilePath().empty()) {
                 cout << "bubble found: " << kmer << endl;
                 bubbleManager.writeBubble(bubble);
+            }
+            // construct matrix if there is a file 
+            if(!args.getMatrixFilePath().empty()) {
+                bubbleManager.countSharedKmers(bubble, kmer.length()); 
             }
         }
         // get the next kmer

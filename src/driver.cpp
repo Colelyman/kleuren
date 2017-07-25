@@ -58,8 +58,12 @@ void Driver::run() {
             cout << "startKmer: " << kmer << endl;
             // build the bubble
             Bubble bubble = bubbleBuilder.build(kmer, colors, 200);
-            if(bubble.getPaths().empty()) { // no bubble was found
+            if(bubble.getPaths().empty()) { // no bubble was found, try next kmer
                 cout << "no bubble: " << kmer << endl;
+                kmer = kmerBank->getNextKmer();
+                continue;
+            }
+            if(!bubble.isValid()) { // the bubble is not valid, try next kmer
                 kmer = kmerBank->getNextKmer();
                 continue;
             }

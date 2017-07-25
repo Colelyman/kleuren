@@ -45,3 +45,6 @@ ColorSet ColorManager::getColors(unsigned int n) {
     return ColorSet(colorSet, n);
 }
 
+unsigned int ColorManager::getNumColors() {
+    return numColors;
+}

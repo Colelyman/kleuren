@@ -30,8 +30,15 @@ Driver::Driver(Args args) {
     if(!args.getBubbleFilePath().empty()) {
         bubbleFile = new ofstream();
         bubbleFile->open(args.getBubbleFilePath());
-        bubbleManager = BubbleManager(bubbleFile);
     }
+
+    // create the output matrix file
+    if(!args.getMatrixFilePath().empty()) {
+        matrixFile = new ofstream();
+        matrixFile->open(args.getMatrixFilePath());
+    }
+
+    bubbleManager = BubbleManager(bubbleFile, matrixFile);
 }
 
 Driver::~Driver() {
@@ -43,6 +50,10 @@ Driver::~Driver() {
     if(!args.getBubbleFilePath().empty()) {
         bubbleFile->close();
         delete bubbleFile;
+    }
+    if(!args.getMatrixFilePath().empty()) {
+        matrixFile->close();
+        delete matrixFile;
     }
 }
 
@@ -79,6 +90,11 @@ void Driver::run() {
         }
         // get the next kmer
         kmer = kmerBank->getNextKmer();
+    }
+
+    // write the matirx to the file 
+    if(!args.getMatrixFilePath().empty()) {
+        bubbleManager.writeSharedKmerMatrix(bubbleManager.averageSharedKmerMatrix(), colorManager);
     }
 
     return;

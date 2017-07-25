@@ -9,8 +9,9 @@
 using std::cout;
 using std::endl;
 
-BubbleManager::BubbleManager(ofstream* file) {
-    bubbleFile = file;
+BubbleManager::BubbleManager(ofstream* bubbleFile, ofstream* matrixFile) {
+    this->bubbleFile = bubbleFile;
+    this->matrixFile = matrixFile;
     n = 0;
 }
 
@@ -78,5 +79,31 @@ void BubbleManager::countSharedKmers(Bubble bubble, unsigned int kmerLen) {
             // create a new entry with the number of shared kmers and 1 bubble present
             sharedKmerMatrix[result.first] = pair<unsigned int, unsigned int>(result.second, 1);
         }
+    }
+}
+
+map<int, map<int, float> > BubbleManager::averageSharedKmerMatrix() {
+    map<int, map<int, float> > averagedMatrix;
+    for(auto const& entry : sharedKmerMatrix) {
+        unsigned int numSharedKmers = entry.second.first;
+        unsigned int totalNumBubbles = entry.second.second;
+        averagedMatrix[entry.first.first][entry.first.second] = (float) numSharedKmers / (float) totalNumBubbles;
+    }
+    
+    return averagedMatrix;
+}
+
+void BubbleManager::writeSharedKmerMatrix(map<int, map<int, float> > matrix, ColorManager& colorManager) {
+    // write how many colors are present in the matrix on the first line
+    *matrixFile << colorManager.getNumColors() << endl;
+    for(unsigned int i = 0; i < colorManager.getNumColors() - 1; i++) {
+        // write the name of the color, essentiall the left-most column
+        *matrixFile << colorManager.getColor(i)->getName();
+        for(unsigned int j = 0; j < i; j++) {
+            // write the corresponding score
+            *matrixFile << " " << matrix[i][j];
+        }
+        // move to the next row
+        *matrixFile << endl;
     }
 }

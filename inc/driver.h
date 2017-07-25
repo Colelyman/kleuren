@@ -50,6 +50,9 @@ class Driver {
         /// The pointer to the file handle that will output the bubbles
         ofstream* bubbleFile;
 
+        /// The pointer to the file handle that will output the matrix
+        ofstream* matrixFile;
+
         /// The KmerBank provides a super set of kmers for each color
         KmerBank* kmerBank;
 

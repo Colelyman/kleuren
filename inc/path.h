@@ -30,7 +30,7 @@ class Path {
     public:
         Path(string initialSeq);
 
-        Path(const Path& p);
+        //Path(const Path& p);
 
         /// Returns the actual sequence of the path
         string getSequence() const;
@@ -64,7 +64,7 @@ class Path {
          * stringstream because it makes the path easier to construct and get the sequence
          * from.
          */
-        stringstream seq;
+        string seq;
 
 };
 

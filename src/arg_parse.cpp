@@ -16,7 +16,7 @@ using std::vector;
 using std::string;
 
 Args ArgParse::parseArgs(int argc, char* argv[]) {
-    Options options("kleuren", "A colored de Bruijn graph implementation using dbgfm.");
+    Options options("kleuren", "A colored de Bruijn graph implementation for phylogeny reconstruction using dbgfm.");
 
     this->args = Args();
 
@@ -24,10 +24,11 @@ Args ArgParse::parseArgs(int argc, char* argv[]) {
         // set up each argument
         options.add_options()
             ("c,colorsFilePath", "Path to the file that holds the paths to the individual colors.",
-                cxxopts::value<string>())
-            ("k,kmerFilePath", "Path to the file that contains the kmers", cxxopts::value<string>())
-            ("b,bubbleFilePath", "Path to the file in which to output the bubbles, if not provided bubbles will not be outputted", cxxopts::value<string>())
-            ("n,numMinKmers", "The number of colors a kmer must be present in for a bubble to be formed [Default: 0 (which means all colors must be present)]", cxxopts::value<unsigned int>())
+                cxxopts::value<string>(), "PATH")
+            ("k,kmerFilePath", "Path to the file that contains the kmers", cxxopts::value<string>(), "PATH")
+            ("b,bubbleFilePath", "Path to the file in which to output the bubbles, if not provided bubbles will not be outputted", cxxopts::value<string>(), "PATH")
+            ("n,numMinKmers", "The number of colors a kmer must be present in for a bubble to be formed. When set to 0, all colors must be present", cxxopts::value<unsigned int>()->default_value("0"), "INT")
+            ("d,maxDepth", "The maximum depth for which to recursively extend paths for a bubble", cxxopts::value<unsigned int>()->default_value("200"), "INT")
             ("h,help", "Print help")
         ;
 
@@ -68,4 +69,5 @@ void ArgParse::setArgs(Options options) {
         args.setBubbleFilePath("");
     }
     args.setN(options["numMinKmers"].as<unsigned int>());
+    args.setMaxDepth(options["maxDepth"].as<unsigned int>());
 }

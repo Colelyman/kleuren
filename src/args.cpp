@@ -39,3 +39,11 @@ unsigned int Args::getN() {
 void Args::setN(unsigned int n) {
     this->n = n;
 }
+
+unsigned int Args::getMaxDepth() {
+    return maxDepth;
+}
+
+void Args::setMaxDepth(unsigned int maxDepth) {
+    this->maxDepth = maxDepth;
+}

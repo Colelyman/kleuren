@@ -34,6 +34,9 @@ class Args {
         unsigned int getN();
         void setN(unsigned int n);
 
+        unsigned int getMaxDepth();
+        void setMaxDepth(unsigned int maxDepth);
+
     private:
         /**
          * The path to the file that specifies the colors.
@@ -87,6 +90,13 @@ class Args {
          * of n is, the less bubbles will be found, and the faster kleuren will run; and vice versa.
          */
         unsigned int n;
+
+        /**
+         * The maximum depth to recurse when extending the path to build the bubbles. The 
+         * larger the maxDepth the more paths the recursive function will explore, thereby
+         * the longer kleuren will take and the more bubbles it will find.
+         */
+        unsigned int maxDepth;
 
 };
 

@@ -41,6 +41,11 @@ class Bubble {
         /// Checks if the path is present in the bubble
         bool pathExists(Path path) const;
 
+        /// Checks if a bubble is valid, meaning it fits the following criteria:
+        /// * there is more than one path
+        /// * none of the paths are empty
+        bool isValid() const;
+
         /** 
          * Adds a path to paths, and appends the color to the corresponding path
          * if the path is already contained in colors.

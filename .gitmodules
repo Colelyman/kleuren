@@ -7,3 +7,6 @@
 [submodule "thirdparty/dsk"]
 	path = thirdparty/dsk
 	url = git@github.com:GATB/dsk.git
+[submodule "test/thirdparty/mutatrix"]
+	path = test/thirdparty/mutatrix
+	url = https://github.com/ekg/mutatrix

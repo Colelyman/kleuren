@@ -1,0 +1,36 @@
+##fileformat=VCFv4.1
+##fileDate=20170726
+##source=mutatrix population genome simulator
+##seed=1501105100
+##reference=sim/generation-3/generation-3.child-0.2:gi|226377833|ref|NC_012532.1|:0.fa
+##phasing=true
+##commandline=../thirdparty/mutatrix/mutatrix -n 2 -S generation-4.child-1. -P sim/generation-4/ sim/generation-3/generation-3.child-0.2:gi|226377833|ref|NC_012532.1|:0.fa
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Alternate allele count">
+##INFO=<ID=TYPE,Number=A,Type=String,Description="Type of each allele (snp, ins, del, mnp, complex)">
+##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of samples at the site">
+##INFO=<ID=NA,Number=1,Type=Integer,Description="Number of alternate alleles">
+##INFO=<ID=LEN,Number=A,Type=Integer,Description="Length of each alternate allele">
+##INFO=<ID=MICROSAT,Number=0,Type=Flag,Description="Generated at a sequence repeat loci">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	generation-4.child-1.1	generation-4.child-1.2
+gi|226377833|ref|NC_012532.1|	659	.	G	A	99	.	AC=2;LEN=1;NA=1;NS=2;TYPE=snp	GT	1	1
+gi|226377833|ref|NC_012532.1|	745	.	ACGGCGAT	A	99	.	AC=2;LEN=7;NA=1;NS=2;TYPE=del	GT	1	1
+gi|226377833|ref|NC_012532.1|	1077	.	T	C	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	1	0
+gi|226377833|ref|NC_012532.1|	1413	.	T	C	99	.	AC=2;LEN=1;NA=1;NS=2;TYPE=snp	GT	1	1
+gi|226377833|ref|NC_012532.1|	1589	.	A	G	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	1	0
+gi|226377833|ref|NC_012532.1|	2301	.	A	AGGG	99	.	AC=2;LEN=3;NA=1;NS=2;TYPE=ins;MICROSAT	GT	1	1
+gi|226377833|ref|NC_012532.1|	2546	.	A	G	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	0	1
+gi|226377833|ref|NC_012532.1|	2786	.	C	T	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	0	1
+gi|226377833|ref|NC_012532.1|	2938	.	A	G	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	1	0
+gi|226377833|ref|NC_012532.1|	4124	.	C	G	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	1	0
+gi|226377833|ref|NC_012532.1|	4603	.	G	A	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	0	1
+gi|226377833|ref|NC_012532.1|	5153	.	C	T	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	1	0
+gi|226377833|ref|NC_012532.1|	5764	.	A	G	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	0	1
+gi|226377833|ref|NC_012532.1|	7275	.	T	G	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	1	0
+gi|226377833|ref|NC_012532.1|	7689	.	T	G	99	.	AC=2;LEN=1;NA=1;NS=2;TYPE=snp	GT	1	1
+gi|226377833|ref|NC_012532.1|	7846	.	A	G	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	0	1
+gi|226377833|ref|NC_012532.1|	8270	.	C	T	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	0	1
+gi|226377833|ref|NC_012532.1|	8713	.	C	A	99	.	AC=2;LEN=1;NA=1;NS=2;TYPE=snp	GT	1	1
+gi|226377833|ref|NC_012532.1|	8871	.	A	C	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	0	1
+gi|226377833|ref|NC_012532.1|	9259	.	C	G	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	0	1
+gi|226377833|ref|NC_012532.1|	9819	.	A	C	99	.	AC=1;LEN=1;NA=1;NS=2;TYPE=snp	GT	1	0

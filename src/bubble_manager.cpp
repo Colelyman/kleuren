@@ -96,7 +96,7 @@ map<int, map<int, float> > BubbleManager::averageSharedKmerMatrix() {
 void BubbleManager::writeSharedKmerMatrix(map<int, map<int, float> > matrix, ColorManager& colorManager) {
     // write how many colors are present in the matrix on the first line
     *matrixFile << colorManager.getNumColors() << endl;
-    for(unsigned int i = 0; i < colorManager.getNumColors() - 1; i++) {
+    for(unsigned int i = 0; i < colorManager.getNumColors(); i++) {
         // write the name of the color, essentiall the left-most column
         *matrixFile << colorManager.getColor(i)->getName();
         for(unsigned int j = 0; j < i; j++) {

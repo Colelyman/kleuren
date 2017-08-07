@@ -56,6 +56,7 @@ m4
 dbgfm.lm
 dbgfm.sm
 dbgfm.str
+*.fai
 
 # bwtdisk
 thirdparty/bwtdisk/

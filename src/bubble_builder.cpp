@@ -30,7 +30,7 @@ Bubble BubbleBuilder::build(string& startKmer, ColorSet colors, unsigned int max
     string endKmer = "";
     while(endKmer.empty() && colorIt != colors.getEndIterator()) {
         // if the color doesn't have any suffix neighbors, return an empty bubble
-        if(!colorIt->hasSuffixNeighbors(startKmer)) {
+        if(!(*colorIt)->hasSuffixNeighbors(startKmer)) {
             return bubble;
         }
         endKmer = findEndKmer(startKmer, *colorIt++, colors);

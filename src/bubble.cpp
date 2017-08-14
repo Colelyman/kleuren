@@ -76,7 +76,7 @@ bool Bubble::isValid(size_t kmerLen) const {
 }
 
 void Bubble::addPath(Path path, shared_ptr<Color> color) {
-    cout << "Bubble::addPath, seq: " << path.getSequence() << endl;
+    //cout << "Bubble::addPath, seq: " << path.getSequence() << endl;
     if(paths.find(path) == paths.end()) { // path is not found
         paths[path] = set<shared_ptr<Color> >({color});
     }

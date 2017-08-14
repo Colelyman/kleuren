@@ -70,17 +70,18 @@ void Driver::run() {
             // build the bubble
             Bubble bubble = bubbleBuilder.build(kmer, colors, args.getMaxDepth());
             if(bubble.getPaths().empty()) { // no bubble was found, try next kmer
-                cout << "no bubble: " << kmer << endl;
+                cout << "\tno bubble" << endl;
                 kmer = kmerBank->getNextKmer();
                 continue;
             }
             if(!bubble.isValid(kmer.length())) { // the bubble is not valid, try next kmer
+                cout << "\tinvalid bubble" << endl;
                 kmer = kmerBank->getNextKmer();
                 continue;
             }
             // write the bubble if there is a file to write to
             if(!args.getBubbleFilePath().empty()) {
-                cout << "bubble found: " << kmer << endl;
+                cout << "\tbubble found" << endl;
                 bubbleManager.writeBubble(bubble);
             }
             // construct matrix if there is a file 

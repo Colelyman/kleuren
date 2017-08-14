@@ -52,7 +52,7 @@ class Bubble {
         /// Checks if a bubble is valid, meaning it fits the following criteria:
         /// * there is more than one path
         /// * none of the paths are empty
-        bool isValid() const;
+        bool isValid(size_t kmerLen) const;
 
         /** 
          * Adds a path to paths, and appends the color to the corresponding path

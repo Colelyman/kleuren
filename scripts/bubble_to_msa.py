@@ -43,6 +43,8 @@ def process_bubble(bubble, out_dir):
 def run_msa(fasta_path, out_dir, bubble_num):
     mafft_cline = MafftCommandline(input=fasta_path)
 
+    print('Performing MSA on bubble number', bubble_num)
+
     # run MAFFT
     stdout, stderr = mafft_cline()
 
@@ -71,24 +73,22 @@ def parse_bubble_file(bubble_path, out_dir):
                 bubble.add_path(taxon, record.seq)
 
 def concatenate_msa(out_dir):
-    with open(os.path.join(out_dir, 'supermatrix-msa.fasta'), 'w') as fh:
+    with open(os.path.join(out_dir, 'supermatrix-msa.phy'), 'w') as fh:
         # set the order of the taxa based on the first MSA file
         taxa = {}
         for record in SeqIO.parse(os.path.join(out_dir, 'msa-0.fasta'), 'fasta'):
             taxa[record.id] = Seq('', generic_dna)
         # get each MSA file and concatenate it to the supermatrix
         for msa_file in glob.glob(os.path.join(out_dir, 'msa-*.fasta')):
-            alignment = SeqIO.to_dict(SeqIO.parse(os.path.join(out_dir, msa_file), 'fasta'))
+            alignment = SeqIO.to_dict(SeqIO.parse(msa_file, 'fasta'))
             for taxon, seq in taxa.items():
                 taxa[taxon] += alignment[taxon].seq
                 #seq.append(str(alignment[taxon].seq))
         # write the supermatrix to the file
         msa = MultipleSeqAlignment([], alphabet=generic_dna)
         for taxon, seq in taxa.items():
-            print(type(seq))
             msa.append(SeqRecord(seq, id=taxon))
-        AlignIO.write(msa, fh, 'nexus')
-
+        AlignIO.write(msa, fh, 'phylip')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

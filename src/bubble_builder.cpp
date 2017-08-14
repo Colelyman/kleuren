@@ -25,9 +25,14 @@ Bubble BubbleBuilder::build(string& startKmer, ColorSet colors, unsigned int max
 
     // find the next kmer that occurs in all of the colors
     // loop until there is an endKmer, or all colors have been tried
+    // also, make sure that each color has a neighbor for startKmer
     /// @todo this loop could be optimized...
     string endKmer = "";
     while(endKmer.empty() && colorIt != colors.getEndIterator()) {
+        // if the color doesn't have any suffix neighbors, return an empty bubble
+        if(!colorIt->hasSuffixNeighbors(startKmer)) {
+            return bubble;
+        }
         endKmer = findEndKmer(startKmer, *colorIt++, colors);
         //cerr << "endKmer: " << endKmer << endl;
     }

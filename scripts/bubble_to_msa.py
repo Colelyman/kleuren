@@ -41,6 +41,9 @@ def run_msa(fasta_path, out_dir, bubble_num):
         fh.write(stdout)
 
 def parse_bubble_file(bubble_path, out_dir):
+    # make the out_dir if not exists
+    if not os.path.exists(out_dir):
+        os.mkdir(out_dir)
     with open(bubble_path) as fh:
         total_bubbles = 0
         # initialize the first bubble

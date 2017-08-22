@@ -16,23 +16,11 @@ from Bio.SeqRecord import SeqRecord
 # parse the arguments
 import argparse
 
+# geet the Bubble data structure
+from bubble import Bubble
+
 import os
 import glob
-
-class Bubble:
-    def __init__(self, bubble_num):
-        self.num = bubble_num
-        self.paths = {}
-
-    def add_path(self, taxon, path):
-        self.paths[taxon] = path
-
-    def __str__(self):
-        out = ''
-        for taxon, path in self.paths.items():
-            out += '> ' + taxon + '\n'
-            out += str(path) + '\n'
-        return out
 
 def process_bubble(bubble, out_dir):
     path = os.path.join(out_dir, 'bubble-' + str(bubble.num) + '.fasta')

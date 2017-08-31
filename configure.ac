@@ -1,4 +1,4 @@
-AC_INIT([kleuren], [0.0.1], [cole@colelyman.com])
+AC_INIT([kleuren], [1.0.0], [cole@colelyman.com])
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 LT_INIT
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])

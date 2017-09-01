@@ -1,4 +1,4 @@
-Ebola ./test/data/ebola.bwtdisk
-Flu ./test/data/flu.bwtdisk
-Marburg ./test/data/marburg.bwtdisk
-Zika ./test/data/zika.bwtdisk
+Ebola ./data/ebola.bwtdisk
+Flu ./data/flu.bwtdisk
+Marburg ./data/marburg.bwtdisk
+Zika ./data/zika.bwtdisk

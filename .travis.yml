@@ -1,0 +1,32 @@
+language: cpp
+
+# install a updated version of g++ for C++11 support
+matrix:
+    include:
+        - os: linux
+          addons:
+            apt:
+                sources:
+                    - ubuntu-toolchain-r-test
+                packages:
+                    - g++-4.9
+          env:
+            - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+
+# install the dbgfm thirdparty dependency
+before_install:
+    - eval "${MATRIX_EVAL}"
+    - cd thirdparty/dbgfm && make && cd -
+
+install:
+    - autoreconf --install
+    - ./configure
+    - make
+    - export PATH=$PATH:$PWD:$PWD/test/
+
+# install the test binary
+before_script:
+    - cd test && make && cd -
+
+script:
+    - kleuren-test

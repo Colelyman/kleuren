@@ -1,6 +1,8 @@
 # kleuren
 A colored de Bruijn graph implementation using the `dbgfm` library as the underlying de Bruijn graph structure.
 
+[![Build Status](https://travis-ci.org/Colelyman/kleuren.svg?branch=master)](https://travis-ci.org/Colelyman/kleuren)
+
 ## Installation
 
 ### Regular Use

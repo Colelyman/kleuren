@@ -12,10 +12,15 @@ matrix:
                     - g++-4.9
           env:
             - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+# pull the git submodules myself
+git:
+    submodules: false
 
 # install the dbgfm thirdparty dependency
 before_install:
     - eval "${MATRIX_EVAL}"
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+    - git submodule update --init --recursive
     - cd thirdparty/dbgfm && make && cd -
 
 install:

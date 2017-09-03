@@ -4,3 +4,9 @@
 [submodule "thirdparty/cxxopts"]
 	path = thirdparty/cxxopts
 	url = git@github.com:jarro2783/cxxopts.git
+[submodule "thirdparty/dsk"]
+	path = thirdparty/dsk
+	url = git@github.com:GATB/dsk.git
+[submodule "test/thirdparty/mutatrix"]
+	path = test/thirdparty/mutatrix
+	url = https://github.com/ekg/mutatrix

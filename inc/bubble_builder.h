@@ -13,6 +13,7 @@
 #define BUBBLE_BUILDER_H
 
 #include <string>
+#include <memory>
 
 #include "bubble.h"
 #include "color.h"
@@ -20,6 +21,7 @@
 #include "path.h"
 
 using std::string;
+using std::shared_ptr;
 
 class BubbleBuilder {
 
@@ -37,7 +39,7 @@ class BubbleBuilder {
          * if there is no kmer that is present in all of the colors of the ColorSet the function
          * will return null
          */
-        string findEndKmer(string& startKmer, const Color* color, const ColorSet colors);
+        string findEndKmer(string& startKmer, const shared_ptr<Color> color, const ColorSet colors);
 
         /**
          * Extends the path between startKmer and endKmer for a given color. The function will
@@ -49,7 +51,7 @@ class BubbleBuilder {
          * @param maxDepth the maxmimum recursive depth for the underlying recursive function
          * @return the path for color between startKmer and endKmer
          */
-        string extendPath(string startKmer, string endKmer, const Color* color, unsigned int maxDepth);
+        string extendPath(string startKmer, string endKmer, const shared_ptr<Color> color, unsigned int maxDepth);
 };
 
 #endif // BUBBLE_BUILDER_H

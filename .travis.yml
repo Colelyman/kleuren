@@ -1,0 +1,70 @@
+language: cpp
+
+# don't run on gh-pages branch
+branches:
+    except:
+        - gh-pages
+
+env:
+    global:
+        - GH_REPO_NAME: kleuren
+        - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
+        - GH_REPO_REF: github.com/Colelyman/kleuren.git
+
+# install a updated version of g++ for C++11 support and Doxygen
+matrix:
+    include:
+        - os: linux
+          addons:
+            apt:
+                sources:
+                    - ubuntu-toolchain-r-test
+                packages:
+                    - g++-4.9
+                    - doxygen
+                    - doxygen-doc
+                    - doxygen-latex
+                    - doxygen-gui
+                    - graphviz
+          env:
+            - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+
+# pull the git submodules myself
+git:
+    submodules: false
+
+# install the dbgfm thirdparty dependency
+before_install:
+    - eval "${MATRIX_EVAL}"
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+    - git submodule update --init --recursive
+    - cd thirdparty/dbgfm && make && cd -
+
+install:
+    - autoreconf --install
+    - ./configure
+    - make
+    - export PATH=$PATH:$PWD:$PWD/test/
+
+# install the test binary
+before_script:
+    - cd test && make && cd -
+
+# run the test cases
+script:
+    - cd test && kleuren-test && cd -
+
+# generate and deploy documentation
+after_success:
+    - doxygen Doxyfile
+
+# release the documentation to the gh-pages branch
+deploy:
+    provider: pages
+    skip_cleanup: true
+    fqdn: colelyman.com
+    project_name: kleuren
+    local_dir: $TRAVIS_BUILD_DIR/docs/html
+    github_token: $GITHUB_API_KEY
+    on:
+        branch: master

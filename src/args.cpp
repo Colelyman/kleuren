@@ -16,10 +16,42 @@ void Args::setColorsFilePath(string path) {
     colorsFilePath = path;
 }
 
-size_t Args::getKmerLen() {
-    return kmerLen;
+string Args::getKmerFilePath() {
+    return kmerFilePath;
 }
 
-void Args::setKmerLen(size_t len) {
-    kmerLen = len;
+void Args::setKmerFilePath(string path) {
+    kmerFilePath = path;
+}
+
+string Args::getBubbleFilePath() {
+    return bubbleFilePath;
+}
+
+void Args::setBubbleFilePath(string path) {
+    bubbleFilePath = path;
+}
+
+string Args::getMatrixFilePath() {
+    return matrixFilePath;
+}
+
+void Args::setMatrixFilePath(string path) {
+    matrixFilePath = path;
+}
+
+unsigned int Args::getN() {
+    return n;
+}
+
+void Args::setN(unsigned int n) {
+    this->n = n;
+}
+
+unsigned int Args::getMaxDepth() {
+    return maxDepth;
+}
+
+void Args::setMaxDepth(unsigned int maxDepth) {
+    this->maxDepth = maxDepth;
 }

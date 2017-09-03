@@ -2,29 +2,49 @@
  * Implementation of color_manager.h
  */
 
+#include <sstream>
+#include <set>
+
 #include "color_manager.h"
 
-ColorManager::ColorManager() {
+using std::stringstream;
+using std::set;
+
+ColorManager::ColorManager(ifstream* fileStream) {
+    colorFile = fileStream;
     numColors = 0;
+    addColors();
 }
 
-ColorManager::~ColorManager() {
-    removeAllColors();
+void ColorManager::addColors() {
+    string line, colorName, pathToBWT;
+    // iterate over each line in the file
+    while(getline(*colorFile, line)) {
+        // parse each line
+        stringstream sstream(line);
+        sstream >> colorName;
+        sstream >> pathToBWT;
+        addColor(colorName, pathToBWT);
+    }
 }
 
-Color* ColorManager::addColor(string& colorName, string& pathToBWT) {
-    colors[numColors] = new Color(numColors, colorName, pathToBWT);
-    numColors++;
+shared_ptr<Color> ColorManager::addColor(string colorName, string pathToBWT) {
+    colors[numColors] = shared_ptr<Color>(new Color(numColors, colorName, pathToBWT));
+    return colors[numColors++];
 }
 
-Color* ColorManager::getColor(int colorID) {
+shared_ptr<Color> ColorManager::getColor(int colorID) {
     return colors[colorID];
 }
 
-void ColorManager::removeAllColors() {
-    // iterate over each color in colors
+ColorSet ColorManager::getColors(unsigned int n) {
+    set<shared_ptr<Color> > colorSet;
     for(auto const& color : colors) {
-        // deallocate the color
-        delete color.second;
+        colorSet.insert(color.second);
     }
+    return ColorSet(colorSet, n);
+}
+
+unsigned int ColorManager::getNumColors() {
+    return numColors;
 }

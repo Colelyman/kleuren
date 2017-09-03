@@ -14,24 +14,31 @@
 #define KMER_BANK_H
 
 #include <string>
+#include <fstream>
+#include <set>
+#include <memory>
 
 using std::string;
+using std::ifstream;
+using std::set;
+using std::shared_ptr;
 
 class KmerBank {
 
     public:
-        KmerBank();
+        KmerBank() { }
 
-        /// Returns a random kmer 
-        string getRandomKmer();
+        KmerBank(ifstream* fileStream);
 
-        /// Returns an iterator over the kmers
-        /// @todo figure out what to return here...
-        void getIterator();
+        /// Returns the next kmer in the file
+        string getNextKmer();
 
     private:
-        /// @todo figure out what data members are needed for this
-    
+        /// The pointer to the file handle to the file of kmers
+        ifstream* kmerFile; 
+
+        /// The set of visited kmers
+        shared_ptr<set<string> > visited;
 };
 
 #endif // KMER_BANK_H

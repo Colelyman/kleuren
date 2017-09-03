@@ -14,13 +14,17 @@
 #define DRIVER_H
 
 #include <set>
+#include <fstream>
 
 #include "args.h"
 #include "color_manager.h"
 #include "kmer_bank.h"
 #include "bubble_builder.h"
+#include "bubble_manager.h"
 
 using std::set;
+using std::ifstream;
+using std::ofstream;
 
 class Driver {
 
@@ -37,15 +41,26 @@ class Driver {
         /// removal, and access of colors
         ColorManager colorManager;
 
+        /// The pointer to the file handle that contains the colors
+        ifstream* colorFile;
+
+        /// The pointer to the file handle that contains the kmers
+        ifstream* kmerFile;
+
+        /// The pointer to the file handle that will output the bubbles
+        ofstream* bubbleFile;
+
+        /// The pointer to the file handle that will output the matrix
+        ofstream* matrixFile;
+
         /// The KmerBank provides a super set of kmers for each color
-        KmerBank kmerBank;
+        KmerBank* kmerBank;
 
         /// Builds bubbles!
         BubbleBuilder bubbleBuilder;
 
-        /// Holds the kmers that have been visited already so that they are not repeated
-        /// @todo implement a bloom filter for efficiency instead of a set?
-        set<string>* visitedKmers;
+        /// Manages bubbles
+        BubbleManager bubbleManager;
 
         /// The arguments for the current run
         Args args;

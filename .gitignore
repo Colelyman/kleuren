@@ -53,9 +53,13 @@ autom4te.cache
 m4
 
 # dbgfm
-dbgfm.lm
-dbgfm.sm
-dbgfm.str
+*.lm
+*.sm
+*.str
+*.fai
 
 # bwtdisk
 thirdparty/bwtdisk/
+
+# iqtree
+thirdparty/iqtree-omp-1.5.5-Linux/

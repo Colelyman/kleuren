@@ -28,6 +28,7 @@ matrix:
                     - graphviz
           env:
             - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+
 # pull the git submodules myself
 git:
     submodules: false
@@ -55,9 +56,10 @@ script:
 
 # generate and deplot documentation
 after_success:
-    - cd $TRAVIS_BUILD_DIR
-    - chmod +x genDocs.sh
-    - ./genDocs.sh
+    - doxygen Doxyfile
+#    - cd $TRAVIS_BUILD_DIR
+#    - chmod +x genDocs.sh
+#    - ./genDocs.sh
 
 # release the documentation to the gh-pages branch
 deploy:

@@ -1,6 +1,17 @@
 language: cpp
 
-# install a updated version of g++ for C++11 support
+# don't run on gh-pages branch
+branches:
+    except:
+        - gh-pages
+
+env:
+    global:
+        - GH_REPO_NAME: kleuren
+        - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
+        - GH_REPO_REF: github.com/Colelyman/kleuren.git
+
+# install a updated version of g++ for C++11 support and Doxygen
 matrix:
     include:
         - os: linux
@@ -10,6 +21,11 @@ matrix:
                     - ubuntu-toolchain-r-test
                 packages:
                     - g++-4.9
+                    - doxygen
+                    - doxygen-doc
+                    - doxygen-latex
+                    - doxygen-gui
+                    -graphviz
           env:
             - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
 # pull the git submodules myself
@@ -35,3 +51,18 @@ before_script:
 
 script:
     - cd test && kleuren-test && cd -
+
+# generate and deplot documentation
+after_success:
+    - cd $TRAVIS_BUILD_DIR
+    - chmod +x genDoc.sh
+    - ./genDoc.sh
+
+# release the documentation to the gh-pages branch
+deploy:
+    provider: pages
+    skip_cleanup: true
+    local_dir: $TRAVIS_BUILD_DIR/docs/html
+    github_token: $GITHUB_API_KEY
+    on:
+        branch: master

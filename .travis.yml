@@ -54,12 +54,9 @@ before_script:
 script:
     - cd test && kleuren-test && cd -
 
-# generate and deplot documentation
+# generate and deploy documentation
 after_success:
     - doxygen Doxyfile
-#    - cd $TRAVIS_BUILD_DIR
-#    - chmod +x genDocs.sh
-#    - ./genDocs.sh
 
 # release the documentation to the gh-pages branch
 deploy:

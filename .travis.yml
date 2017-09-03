@@ -25,7 +25,7 @@ matrix:
                     - doxygen-doc
                     - doxygen-latex
                     - doxygen-gui
-                    -graphviz
+                    - graphviz
           env:
             - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
 # pull the git submodules myself

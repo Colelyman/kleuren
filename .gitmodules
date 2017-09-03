@@ -10,3 +10,6 @@
 [submodule "test/thirdparty/mutatrix"]
 	path = test/thirdparty/mutatrix
 	url = https://github.com/ekg/mutatrix
+[submodule "thirdparty/doxygen-bootstrapped"]
+	path = thirdparty/doxygen-bootstrapped
+	url = git@github.com:Velron/doxygen-bootstrapped.git

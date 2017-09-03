@@ -62,6 +62,8 @@ after_success:
 deploy:
     provider: pages
     skip_cleanup: true
+    fqdn: colelyman.com
+    project_name: kleuren
     local_dir: $TRAVIS_BUILD_DIR/docs/html
     github_token: $GITHUB_API_KEY
     on:

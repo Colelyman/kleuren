@@ -49,14 +49,15 @@ install:
 before_script:
     - cd test && make && cd -
 
+# run the test cases
 script:
     - cd test && kleuren-test && cd -
 
 # generate and deplot documentation
 after_success:
     - cd $TRAVIS_BUILD_DIR
-    - chmod +x genDoc.sh
-    - ./genDoc.sh
+    - chmod +x genDocs.sh
+    - ./genDocs.sh
 
 # release the documentation to the gh-pages branch
 deploy:

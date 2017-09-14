@@ -27,9 +27,9 @@ Args ArgParse::parseArgs(int argc, char* argv[]) {
                 cxxopts::value<string>(), "PATH")
             ("k,kmerFilePath", "Path to the file that contains the kmers", cxxopts::value<string>(), "PATH")
             ("b,bubbleFilePath", "Path to the file in which to output the bubbles, if not provided bubbles will not be outputted", cxxopts::value<string>(), "PATH")
-            ("m,matrixFilePath", "Path to the file in which to out the similarity matrix, if not provided the matrix will not be outputted", cxxopts::value<string>(), "PATH")
+            ("m,matrixFilePath", "Path to the file in which to output the similarity matrix, if not provided the matrix will not be outputted", cxxopts::value<string>(), "PATH")
             ("n,numMinKmers", "The number of colors a kmer must be present in for a bubble to be formed. When set to 0, all colors must be present", cxxopts::value<unsigned int>()->default_value("0"), "INT")
-            ("d,maxDepth", "The maximum depth for which to recursively extend paths for a bubble", cxxopts::value<unsigned int>()->default_value("200"), "INT")
+            ("d,maxDepth", "The maximum depth for which to recursively extend paths for a bubble", cxxopts::value<unsigned int>()->default_value("50"), "INT")
             ("h,help", "Print help")
         ;
 

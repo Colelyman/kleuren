@@ -39,7 +39,7 @@ before_install:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
     - git submodule update --init --recursive
     - cd thirdparty/dbgfm && make && cd -
-    - cd thirdparty/sdsl-lite && ./install.sh && cd -
+    - cd thirdparty/sdsl-lite && mkdir bin && ./install.sh bin && cd -
 
 install:
     - autoreconf --install

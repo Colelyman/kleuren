@@ -27,6 +27,12 @@ class Vertex {
 
         ~Vertex();
 
+        /// Returns the kmer that this Vertex represents
+        string getKmer() const;
+
+        /// Returns the colors as a bit_vector that contain this Vertex
+        bit_vector getColors() const;
+
     private:
         string kmer;
 

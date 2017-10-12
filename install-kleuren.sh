@@ -7,9 +7,9 @@ echo "Retrieve the thirdparty dependecies.\n"
 
 git submodule update --init --recursive
 
-echo "Build dbgfm.\n"
+echo "Build sdsl-lite.\n"
 
-cd thirdparty/dbgfm && make && cd -
+cd thirdparty/sdsl-lite && mkdir -p bin && ./install.sh bin && cd -
 
 echo "Create configure file by autoreconf --install.\n"
 

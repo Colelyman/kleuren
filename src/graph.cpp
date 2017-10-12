@@ -13,18 +13,28 @@ Graph::~Graph() {
 }
 
 bool Graph::isVertex(Vertex& v) const {
-    auto vertex = hashmap.find(v.getKmer());
-    if(vertex != hashmap.end()) {
-        /// TODO check if the bit_vectors match up...
-        return true;
+    auto vertexPair = hashmap.find(v.getKmer());
+    if(vertexPair != hashmap.end()) {
+        // check if the bit_vectors match up
+        bit_vector existingColors = vertexPair->second;
+        bit_vector andedColors = v.getColors();
+        andedColors &= existingColors;
+        andedColors ^= existingColors;
+
+        // perform a rank query to see if any of the bits are set in
+        // andedColors. If bits are set, then that means v is not a 
+        // vertex in the graph, otherwise v is a vertex.
+        rank_support_v<> rs(&andedColors);
+        bit_vector::size_type numSetBits = rs.rank(andedColors.size());
+        if(numSetBits == 0) {
+            return true;
+        }
     }
-    else {
-        return false;
-    }
+
+    return false;
 }
 
 Vertex Graph::getVertex(string& kmer) const {
-    /// TODO get the number of colors
     bit_vector colors(0, 0);
     Vertex v = Vertex("", colors);
     if(hashmap.find(kmer) != hashmap.end()) { // the kmer exists in the graph

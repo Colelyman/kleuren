@@ -18,12 +18,14 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <sdsl/rank_support.hpp>
 
 #include "vertex.h"
 
 using std::string;
 using std::vector;
 using std::map;
+using sdsl::rank_support_v;
 
 class Graph {
 
@@ -35,10 +37,11 @@ class Graph {
         /// Returns whether or not a vertex is contained
         bool isVertex(Vertex& v) const;
 
-        /// Returns the vertex of a kmer
+        /// Returns the vertex of a kmer. If it doesn't exist it will return
+        /// a Vertex object with "" as the kmer and a bit_vector of 0 length
         Vertex getVertex(string& kmer) const;
 
-        /// Adds a vertex s to the graph with color c associated
+        /// Adds a Vertex v to the graph
         void addVertex(Vertex& v);
 
         /// Returns a vector of all of the vertices that neighbor v on the suffix side
@@ -48,6 +51,8 @@ class Graph {
         vector<Vertex> getPrefixNeighbors(Vertex& v) const;
 
     private:
+        /// The underlying structure representing the graph. The keys are the kmers
+        /// and the value is a bit_vector that signifies which colors contain the kmer
         map<string, bit_vector> hashmap;
 
         /// nucleotides represents the supported IUPAC nucleotide codes

@@ -35,6 +35,9 @@ class Graph {
         /// Returns whether or not a vertex is contained
         bool isVertex(Vertex& v) const;
 
+        /// Returns the vertex of a kmer
+        Vertex getVertex(string& kmer) const;
+
         /// Adds a vertex s to the graph with color c associated
         void addVertex(Vertex& v);
 
@@ -46,6 +49,9 @@ class Graph {
 
     private:
         map<string, bit_vector> hashmap;
+
+        /// nucleotides represents the supported IUPAC nucleotide codes
+        vector<char> nucleotides = {'A', 'C', 'G', 'T', 'N'};
 
 };
 

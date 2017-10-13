@@ -67,7 +67,7 @@ vector<Vertex> Graph::getSuffixNeighbors(Vertex& v) const {
     // iterate over each nucleotide code and append it to the kmer
     for(const char nucleotide : nucleotides) {
         // append the nucleotide to the kmer
-        kmer.append(&nucleotide);
+        kmer.append(1, nucleotide);
         Vertex vertex = getVertex(kmer);
         if(vertex.getKmer() != "") { // check if the vertex exists
             vertices.push_back(vertex);
@@ -81,12 +81,13 @@ vector<Vertex> Graph::getSuffixNeighbors(Vertex& v) const {
 vector<Vertex> Graph::getPrefixNeighbors(Vertex& v) const {
     vector<Vertex> vertices;
     // strip off the last character from the kmer
-    string kmer = v.getKmer().substr(0, kmer.length() - 1);
+    string kmer = v.getKmer().substr(0, v.getKmer().length() - 1);
     // iterate over each nucleotide code and append it to the kmer
     for(char nucleotide : nucleotides) {
         // prepend the nucleotide to the kmer
         kmer.insert(0, 1, nucleotide);
         Vertex vertex = getVertex(kmer);
+        /// TODO check if the vertex's colors match up with the neighbors
         if(vertex.getKmer() != "") { // check if the vertex exists
             vertices.push_back(vertex);
         }

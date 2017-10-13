@@ -1,5 +1,5 @@
-INCLUDES=-I../inc -Ithirdparty/catch -I../thirdparty/dbgfm
-LIBS=-L../.libs -lkleuren -L../thirdparty/dbgfm -ldbgfm 
+INCLUDES=-I../inc -Ithirdparty/catch -I../thirdparty/dbgfm -I../thirdparty/sdsl-lite/bin/include
+LIBS=-L../.libs -lkleuren -L../thirdparty/dbgfm -ldbgfm  -L../thirdparty/sdsl-lite/bin/lib -lsdsl
 CXXFLAGS=-g -std=c++11 -Wall $(INCLUDES) $(LIBS)
 
 .PHONY: all clean install main kleuren-test

@@ -27,6 +27,8 @@ class Vertex {
 
         ~Vertex();
 
+        bool operator==(const Vertex& v) const;
+
         /// Returns the kmer that this Vertex represents
         string getKmer() const;
 

@@ -21,6 +21,7 @@
 #include "kmer_bank.h"
 #include "bubble_builder.h"
 #include "bubble_manager.h"
+#include "graph.h"
 
 using std::set;
 using std::ifstream;

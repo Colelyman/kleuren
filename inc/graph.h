@@ -30,10 +30,11 @@ using sdsl::rank_support_v;
 class Graph {
 
     public:
-        Graph();
 
-        ~Graph();
+       Graph();
 
+       ~Graph();
+       
         /// Returns whether or not a vertex is contained
         bool isVertex(Vertex& v) const;
 
@@ -51,6 +52,7 @@ class Graph {
         vector<Vertex> getPrefixNeighbors(Vertex& v) const;
 
     private:
+
         /// The underlying structure representing the graph. The keys are the kmers
         /// and the value is a bit_vector that signifies which colors contain the kmer
         map<string, bit_vector> hashmap;

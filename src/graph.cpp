@@ -69,6 +69,7 @@ vector<Vertex> Graph::getSuffixNeighbors(Vertex& v) const {
         // append the nucleotide to the kmer
         kmer.append(1, nucleotide);
         Vertex vertex = getVertex(kmer);
+        /// TODO check if the vertex's colors match up with the neighbors
         if(vertex.getKmer() != "") { // check if the vertex exists
             vertices.push_back(vertex);
         }

@@ -10,6 +10,14 @@ Color::Color(int id, string name, string pathToFMIndex) {
     fmIndex = new FMIndex(pathToFMIndex, 256);
 }
 
+Color::Color(int id, int numColors, string name, string pathToFMIndex) {
+    this->id = id;
+    this->name = name;
+    this->bitVector = bit_vector(numColors, 0);
+    bitVector[id] = 1;
+    fmIndex = new FMIndex(pathToFMIndex, 256);
+}
+
 Color::~Color() {
     delete fmIndex;
 }

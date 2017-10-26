@@ -4,6 +4,11 @@
 
 #include "vertex.h"
 
+Vertex::Vertex(string kmer) {
+    this->kmer = kmer;
+    this->colors = bit_vector();
+}
+
 Vertex::Vertex(string kmer, bit_vector colors) {
     this->kmer = kmer;
     this->colors = colors;

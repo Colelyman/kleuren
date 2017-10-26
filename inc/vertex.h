@@ -23,6 +23,8 @@ using sdsl::bit_vector;
 class Vertex {
 
     public:
+	Vertex(string kmer);
+  
         Vertex(string kmer, bit_vector colors);
 
         ~Vertex();

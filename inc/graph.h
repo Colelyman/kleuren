@@ -48,8 +48,14 @@ class Graph {
         /// Returns a vector of all of the vertices that neighbor v on the suffix side
         vector<Vertex> getSuffixNeighbors(Vertex& v) const;
 
+	/// Returns the boolean value according to if the vertex has suffix neighbors
+	bool hasSuffixNeighbors(Vertex& v) const;
+
         /// Returns a vector of all of the vertices that neighbor v on the prefix side
         vector<Vertex> getPrefixNeighbors(Vertex& v) const;
+
+	/// Returns the boolean value according to if the vertex has prefix neighbors
+	bool hasPrefixNeighbors(Vertex& v) const;
 
     private:
 

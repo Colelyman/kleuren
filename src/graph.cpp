@@ -79,6 +79,15 @@ vector<Vertex> Graph::getSuffixNeighbors(Vertex& v) const {
     return vertices;
 }
 
+bool Graph::hasSuffixNeighbors(Vertex& v) const {
+  if(getSuffixNeighbors(v).size() > 0) {
+      return true;
+  }
+  else {
+      return false;
+  }
+}
+
 vector<Vertex> Graph::getPrefixNeighbors(Vertex& v) const {
     vector<Vertex> vertices;
     // strip off the last character from the kmer
@@ -98,3 +107,11 @@ vector<Vertex> Graph::getPrefixNeighbors(Vertex& v) const {
     return vertices;
 }
 
+bool Graph::hasPrefixNeighbors(Vertex& v) const {
+  if(getPrefixNeighbors(v).size() > 0) {
+      return true;
+  }
+  else {
+      return false;
+  }
+}

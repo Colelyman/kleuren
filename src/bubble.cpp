@@ -32,7 +32,7 @@ map<pair<int, int>, int> Bubble::runNW() {
     return results;
 }
 
-map<pair<int, int>, unsigned int> Bubble::runSharedKmerCount(unsigned int kmerLen) {
+/*map<pair<int, int>, unsigned int> Bubble::runSharedKmerCount(unsigned int kmerLen) {
     // put the paths from the map into a vector
     vector<Path> pathVector = pathsToVector();
     map<pair<int, int>, unsigned int> results;
@@ -54,7 +54,7 @@ map<pair<int, int>, unsigned int> Bubble::runSharedKmerCount(unsigned int kmerLe
     }
 
     return results;
-}
+}*/
 
 bool Bubble::pathExists(Path path) const {
     return paths.find(path) != paths.end();
@@ -75,27 +75,23 @@ bool Bubble::isValid(size_t kmerLen) const {
     return true;
 }
 
-void Bubble::addPath(Path path, shared_ptr<Color> color) {
-    //cout << "Bubble::addPath, seq: " << path.getSequence() << endl;
-    if(paths.find(path) == paths.end()) { // path is not found
-        paths[path] = set<shared_ptr<Color> >({color});
-    }
-    else { // path exists in paths, therefore add the color
-        paths[path].insert(color);
-    }
+void Bubble::addPath(Path path, bit_vector colors) {
+	paths[path] = colors;
 }
 
-set<shared_ptr<Color> > Bubble::getColors(Path path) const {
+bit_vector Bubble::getColors(Path path) const {
     if(pathExists(path)) {
         return paths.at(path);
     }
 }
 
-vector<string> Bubble::getColorNames(Path path) const {
-    set<shared_ptr<Color> > colors = getColors(path);
+/*vector<string> Bubble::getColorNames(Path path) const {
+	bit_vector colors = getColors(path);
     vector<string> names;
-    for(auto const& color : colors) {
-        names.push_back(color->getName());
+    for(unsigned int i = 0; i < colors.size(); i++) {
+		if(colors[i]) {
+			names.push_back(color->getName());
+		}
     }
     return names;
 }
@@ -107,9 +103,9 @@ vector<int> Bubble::getColorIDs(Path path) const {
         ids.push_back(color->getID());
     }
     return ids;
-}
+}*/
 
-map<Path, set<shared_ptr<Color> > > Bubble::getPaths() const {
+map<Path, bit_vector> Bubble::getPaths() const {
     return paths;
 }
 

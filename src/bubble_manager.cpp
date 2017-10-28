@@ -9,9 +9,10 @@
 using std::cout;
 using std::endl;
 
-BubbleManager::BubbleManager(ofstream* bubbleFile, ofstream* matrixFile) {
+BubbleManager::BubbleManager(ofstream* bubbleFile, ofstream* matrixFile, ColorManager* colorManager) {
     this->bubbleFile = bubbleFile;
     this->matrixFile = matrixFile;
+	this->colorManager = colorManager;
     n = 0;
 }
 
@@ -20,7 +21,7 @@ void BubbleManager::writeBubble(Bubble bubble) {
     for(auto const& path : bubble.getPaths()) {
         // write the header
         *bubbleFile << "> bubble " << n << " for ";
-        vector<string> colorNames = bubble.getColorNames(path.first);
+        vector<string> colorNames = colorManager->getColorNames(bubble.getColors(path.first));
         *bubbleFile << colorNames.at(0);
         colorNames.erase(colorNames.begin());
         for(auto const& colorName : colorNames) {
@@ -57,7 +58,7 @@ pair<int, int> flipPair(pair<int, int> p) {
 
 void BubbleManager::countSharedKmers(Bubble bubble, unsigned int kmerLen) {
     // count the shared kmers in the bubble
-    map<pair<int, int>, unsigned int> results = bubble.runSharedKmerCount(kmerLen);
+    /*map<pair<int, int>, unsigned int> results = bubble.runSharedKmerCount(kmerLen);
 
     // insert the results into the matrix
     for(auto const& result : results) {
@@ -79,7 +80,7 @@ void BubbleManager::countSharedKmers(Bubble bubble, unsigned int kmerLen) {
             // create a new entry with the number of shared kmers and 1 bubble present
             sharedKmerMatrix[result.first] = pair<unsigned int, unsigned int>(result.second, 1);
         }
-    }
+	}*/
 }
 
 map<int, map<int, float> > BubbleManager::averageSharedKmerMatrix() {
@@ -93,12 +94,12 @@ map<int, map<int, float> > BubbleManager::averageSharedKmerMatrix() {
     return averagedMatrix;
 }
 
-void BubbleManager::writeSharedKmerMatrix(map<int, map<int, float> > matrix, ColorManager& colorManager) {
+void BubbleManager::writeSharedKmerMatrix(map<int, map<int, float> > matrix) {
     // write how many colors are present in the matrix on the first line
-    *matrixFile << colorManager.getNumColors() << endl;
-    for(unsigned int i = 0; i < colorManager.getNumColors(); i++) {
+    *matrixFile << colorManager->getNumColors() << endl;
+    for(unsigned int i = 0; i < colorManager->getNumColors(); i++) {
         // write the name of the color, essentiall the left-most column
-        *matrixFile << colorManager.getColor(i)->getName();
+        *matrixFile << colorManager->getColor(i)->getName();
         for(unsigned int j = 0; j < i; j++) {
             // write the corresponding score
             *matrixFile << " " << matrix[i][j];

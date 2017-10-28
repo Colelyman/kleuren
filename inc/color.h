@@ -32,7 +32,7 @@ class Color {
     public:
         Color(int id, string name, string pathToFMIndex);
 
-	Color(int id, int numColors, string name, string pathToFMIndex);
+		Color(int id, int numColors, string name, string pathToFMIndex);
 
         ~Color();
 

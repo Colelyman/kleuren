@@ -17,6 +17,7 @@
 #include <map>
 #include <fstream>
 #include <memory>
+#include <vector>
 
 #include "color.h"
 #include "color_set.h"
@@ -25,6 +26,7 @@ using std::string;
 using std::map;
 using std::ifstream;
 using std::shared_ptr;
+using std::vector;
 
 class ColorManager {
 
@@ -53,6 +55,13 @@ class ColorManager {
          * @returns a ColorSet with the colors, and with the provided n
          */
         ColorSet getColors(unsigned int n);
+
+		/**
+		 * Parses through colors and returns the subsequent color names.
+		 * @param colors the bit_vector of colors to parse through.
+		 * @returns a vector of color names.
+		 */
+		vector<string> getColorNames(bit_vector colors);
 
         /// Returns the number of colors in the ColorManager
         unsigned int getNumColors();

@@ -45,6 +45,15 @@ ColorSet ColorManager::getColors(unsigned int n) {
     return ColorSet(colorSet, n);
 }
 
+vector<string> ColorManager::getColorNames(bit_vector colorVector) {
+	vector<string> names;
+	for(unsigned int i = 0; i < colorVector.size(); i++) {
+		if(colorVector[i]) {
+			names.push_back(colors[i]->getName());
+		}
+	}
+}
+
 unsigned int ColorManager::getNumColors() {
     return numColors;
 }

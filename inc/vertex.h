@@ -16,9 +16,11 @@
 
 #include <string>
 #include <sdsl/bit_vectors.hpp>
+#include <sdsl/rank_support.hpp>
 
 using std::string;
 using sdsl::bit_vector;
+using sdsl::rank_support_v;
 
 class Vertex {
 
@@ -31,11 +33,16 @@ class Vertex {
 
         bool operator==(const Vertex& v) const;
 
+		bool operator<(const Vertex& v) const;
+
         /// Returns the kmer that this Vertex represents
         string getKmer() const;
 
         /// Returns the colors as a bit_vector that contain this Vertex
         bit_vector getColors() const;
+
+		/// Returns the number of colors that contain this Vertex
+		unsigned int getNumColors() const;
 
     private:
         string kmer;

@@ -27,10 +27,19 @@ bool Vertex::operator==(const Vertex& v) const {
     }
 }
 
+bool Vertex::operator<(const Vertex& v) const {
+	return this->kmer < v.kmer;
+}
+
 string Vertex::getKmer() const {
     return this->kmer;
 }
 
 bit_vector Vertex::getColors() const {
     return this->colors;
+}
+
+unsigned int Vertex::getNumColors() const {
+	rank_support_v<> rs(&colors);
+	return rs.rank(colors.size());
 }

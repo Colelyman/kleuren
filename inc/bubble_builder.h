@@ -14,32 +14,36 @@
 
 #include <string>
 #include <memory>
+#include <map>
 
 #include "bubble.h"
+#include "graph.h"
 #include "color.h"
 #include "color_set.h"
 #include "path.h"
 
 using std::string;
 using std::shared_ptr;
+using std::map;
 
 class BubbleBuilder {
 
     public:
-        /// Returns the Bubble built starting at startKmer for colors
-        Bubble build(string& startKmer, ColorSet colors, unsigned int maxDepth);
+
+	BubbleBuilder(Graph* graph);
+
+        /// Returns the Bubble built starting at startVertex
+        Bubble build(Vertex& startVertex, unsigned int numColors, unsigned int maxDepth);
 
         /** 
          * Finds the index of the ending kmer, which is the next kmer 
          * that contains all of the colors.
          * @param startKmer the kmer to start searching for
-         * @param color the Color to find the endKmer in
-         * @param colors the ColorSet to check against
-         * @return the next kmer that is present in all of the colors of the ColorSet, but
-         * if there is no kmer that is present in all of the colors of the ColorSet the function
-         * will return null
+	 * @param numColors the number of colors necessary in order for a vertex to be considered.
+         * @return the next kmer that is present in numColors (or more) colors, but if there is no kmer 
+	 * that is present in numColors (or more) it will return null 
          */
-        string findEndKmer(string& startKmer, const shared_ptr<Color> color, const ColorSet colors);
+        Vertex findEndVertex(Vertex& startVertex, unsigned int numColors);
 
         /**
          * Extends the path between startKmer and endKmer for a given color. The function will
@@ -51,7 +55,15 @@ class BubbleBuilder {
          * @param maxDepth the maxmimum recursive depth for the underlying recursive function
          * @return the path for color between startKmer and endKmer
          */
-        string extendPath(string startKmer, string endKmer, const shared_ptr<Color> color, unsigned int maxDepth);
+        map<bit_vector, string> extendPaths(Vertex& startVertex, Vertex& endVertex, unsigned int maxDepth);
+
+    private:
+
+	vector<Vertex> getNeighbors(vector<Vertex> vertices);
+
+	bool recursiveExtend(Vertex& currentVertex, Vertex& endVertex, map<bit_vector, string>& paths, set<Vertex>& visited, unsigned int depth, unsigned int maxDepth);
+
+	Graph* graph;
 };
 
 #endif // BUBBLE_BUILDER_H

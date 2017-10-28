@@ -19,46 +19,44 @@ using std::cerr;
 using std::endl;
 using std::random_shuffle;
 
-Bubble BubbleBuilder::build(string& startKmer, ColorSet colors, unsigned int maxDepth) {
-    Bubble bubble = Bubble();
-    // get the first color in ColorSet
-    set<shared_ptr<Color> >::iterator colorIt = colors.getBeginIterator();
+BubbleBuilder::BubbleBuilder(Graph* graph) {
+    this->graph = graph;
+}
 
-    // find the next kmer that occurs in all of the colors
-    // loop until there is an endKmer, or all colors have been tried
-    // also, make sure that each color has a neighbor for startKmer
-    string endKmer = "";
-    while(endKmer.empty() && colorIt != colors.getEndIterator()) {
-        // if the color doesn't have any suffix neighbors, return an empty bubble
-        if(!(*colorIt)->hasSuffixNeighbors(startKmer)) {
-            return bubble;
-        }
-        endKmer = findEndKmer(startKmer, *colorIt++, colors);
-    }
+Bubble BubbleBuilder::build(Vertex& startVertex, unsigned int numColors, unsigned int maxDepth) {
+    Bubble bubble = Bubble();
+
+	// if the color doesn't have any suffix neighbors, return an empty bubble
+	if(!graph->hasSuffixNeighbors(startVertex)) {
+		return bubble;
+	}
+
+	// find the next kmer that occurs in all of the colors
+    Vertex endVertex = findEndVertex(startVertex, numColors);
 
     // if there is no endKmer, return an empty bubble
-    if(endKmer.empty()) {
+    if(endVertex.getKmer().empty()) {
         return bubble;
     }
 
-    // extend the path from kmer to endKmer for each color in colors
-    for(set<shared_ptr<Color> >::iterator it = colors.getBeginIterator(); it != colors.getEndIterator(); ++it) {
-        Path path = Path(this->extendPath(startKmer, endKmer, *it, maxDepth));
-        bubble.addPath(path, *it);
-    }
+	map<bit_vector, string> paths = this->extendPaths(startVertex, endVertex, maxDepth);
+	for(const auto& element : paths) {
+		Path path = Path(element.second);
+		bubble.addPath(path, element.first);
+	}
 
     return bubble;
 }
 
 /**
- * Helper function to get the neighbors in color of kmers.
- * @param kmers the kmers to get the neighbors from
- * @return a vector of type string with all of the neighbors of the kmers
+ * Helper function to get the neighbors of vertices
+ * @param vertices the kmers to get the neighbors from
+ * @return a vector of type Vertex with all of the neighbors of the vertices 
  */
-vector<string> getNeighbors(vector<string> kmers, const shared_ptr<Color> color) {
-    vector<string> neighbors;
-    for(string kmer : kmers) {
-        for(string neighbor : color->getSuffixNeighbors(kmer)) {
+vector<Vertex> BubbleBuilder::getNeighbors(vector<Vertex> vertices) {
+    vector<Vertex> neighbors;
+    for(Vertex vertex : vertices) {
+        for(Vertex neighbor : graph->getSuffixNeighbors(vertex)) {
             neighbors.push_back(neighbor);
         }
     }
@@ -66,56 +64,55 @@ vector<string> getNeighbors(vector<string> kmers, const shared_ptr<Color> color)
     return neighbors;
 }
 
-string BubbleBuilder::findEndKmer(string& startKmer, const shared_ptr<Color> color, const ColorSet colors) {
-    string revComp = reverseComplement(startKmer);
-    vector<string> neighbors = color->getSuffixNeighbors(startKmer);
+Vertex BubbleBuilder::findEndVertex(Vertex& startVertex, unsigned int numColors) {
+    vector<Vertex> neighbors = graph->getSuffixNeighbors(startVertex);
 
     // loop until a kmer is found or there are no more neighbors to check
     while(true) {
-        neighbors = getNeighbors(neighbors, color);
+        neighbors = getNeighbors(neighbors);
         if(neighbors.size() == 0) { // there are no neighbors to check, so break out of the loop
             break;
         }
 
-        for(string neighbor : neighbors) {
-            if(colors.nContainsKmer(neighbor) && strcmp(neighbor.c_str(), revComp.c_str())) {
+        for(Vertex neighbor : neighbors) {
+            if(neighbor.getNumColors() >= numColors) {
                 return neighbor;
             }
         }
     }
 
     // there is no kmer in color that is present in all colors
-    return "";
+    return Vertex("");
 }
 
-bool recursiveExtend(const string& currentKmer, const string& endKmer, string& path, const shared_ptr<Color> color, set<string>& visited, unsigned int depth, unsigned int maxDepth) {
-    // mark the currentKmer as visited
-    visited.insert(currentKmer);
+bool BubbleBuilder::recursiveExtend(Vertex& currentVertex, Vertex& endVertex, map<bit_vector, string>& paths, set<Vertex>& visited, unsigned int depth, unsigned int maxDepth) {
+    // mark the currentVertex as visited
+    visited.insert(currentVertex);
     // the maxDepth has been reached, therefore return an empty path 
     if(depth >= maxDepth) {
-        path = "";
+		// clear out paths?
+        paths.clear();
         return false;
     }
 
     // the base case is reached when the currentKmer is the same as the endKmer
-    if(strcmp(currentKmer.c_str(), endKmer.c_str()) == 0) {
+    if(currentVertex == endVertex) {
         return true;
     }
 
-    vector<string> neighbors = color->getSuffixNeighbors(currentKmer);
+    vector<Vertex> neighbors = graph->getSuffixNeighbors(currentVertex);
     // shuffle the neighbors vector so that there is no bias towards A
     random_shuffle(neighbors.begin(), neighbors.end());
-    // randomly shuffle the neighbors of currentKmer
-    for(string neighbor : neighbors) {
+    for(Vertex neighbor : neighbors) {
         if(visited.find(neighbor) != visited.end()) { // the kmer has already been visited, thus skip it
             continue;
         }
-        string neighborSuffix = neighbor.substr(neighbor.length() - 1, 1);
-        string oldPath = path;
-        path += neighborSuffix;
+        string neighborSuffix = neighbor.getKmer().substr(neighbor.getKmer().length() - 1, 1);
+        string oldPath = paths[neighbor.getColors()];
+        paths[neighbor.getColors()] += neighborSuffix;
         depth += 1;
-        if(!recursiveExtend(neighbor, endKmer, path, color, visited, depth, maxDepth)) {
-            path = oldPath;
+        if(!recursiveExtend(neighbor, endVertex, paths, visited, depth, maxDepth)) {
+            paths[neighbor.getColors()] = oldPath;
         }
         else {
             return true;
@@ -123,12 +120,12 @@ bool recursiveExtend(const string& currentKmer, const string& endKmer, string& p
     }
 }
 
-string BubbleBuilder::extendPath(string startKmer, string endKmer, const shared_ptr<Color> color, unsigned int maxDepth) {
-    string path = startKmer;
+map<bit_vector, string> BubbleBuilder::extendPaths(Vertex& startVertex, Vertex& endVertex, unsigned int maxDepth) {
+	map<bit_vector, string> paths;
 
-    set<string> visited;
+    set<Vertex> visited;
 
-    recursiveExtend(startKmer, endKmer, path, color, visited, 0, maxDepth);
+    recursiveExtend(startVertex, endVertex, paths, visited, 0, maxDepth);
 
-    return path;
+    return paths;
 }

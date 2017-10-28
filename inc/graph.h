@@ -18,14 +18,12 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <sdsl/rank_support.hpp>
 
 #include "vertex.h"
 
 using std::string;
 using std::vector;
 using std::map;
-using sdsl::rank_support_v;
 
 class Graph {
 

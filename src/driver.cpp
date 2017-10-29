@@ -17,7 +17,9 @@ Driver::Driver(Args args) {
     // open the color file
     colorFile = new ifstream();
     colorFile->open(args.getColorsFilePath());
-    colorManager = ColorManager(colorFile);
+	graph = new Graph();
+    graphBuilder = new GraphBuilder(graph, args.getKmerLen());
+    colorManager = ColorManager(colorFile, graphBuilder);
 
     // open the kmer file
     kmerFile = new ifstream();
@@ -25,7 +27,6 @@ Driver::Driver(Args args) {
 
     kmerBank = new KmerBank(kmerFile);
 
-	graph = new Graph();
     bubbleBuilder = new BubbleBuilder(graph);
 
     // create the output bubble file
@@ -50,6 +51,7 @@ Driver::~Driver() {
     delete kmerFile;
     delete kmerBank;
 	delete graph;
+    delete graphBuilder;
 	delete bubbleBuilder;
     if(!args.getBubbleFilePath().empty()) {
         bubbleFile->close();

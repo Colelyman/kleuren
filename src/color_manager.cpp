@@ -10,9 +10,10 @@
 using std::stringstream;
 using std::set;
 
-ColorManager::ColorManager(ifstream* fileStream) {
+ColorManager::ColorManager(ifstream* fileStream, GraphBuilder* graphBuilder) {
     colorFile = fileStream;
     numColors = 0;
+    this->graphBuilder = graphBuilder;
     addColors();
 }
 

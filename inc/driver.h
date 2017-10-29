@@ -22,6 +22,7 @@
 #include "bubble_builder.h"
 #include "bubble_manager.h"
 #include "graph.h"
+#include "graph_builder.h"
 
 using std::set;
 using std::ifstream;
@@ -59,6 +60,9 @@ class Driver {
 
 		/// The Graph underlying structure to represent the Colored de Bruijn graph
 		Graph* graph;
+
+        /// The pointer to the object that builds the graph
+        GraphBuilder* graphBuilder;
 
         /// Builds bubbles!
         BubbleBuilder* bubbleBuilder;

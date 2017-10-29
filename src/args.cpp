@@ -55,3 +55,11 @@ unsigned int Args::getMaxDepth() {
 void Args::setMaxDepth(unsigned int maxDepth) {
     this->maxDepth = maxDepth;
 }
+
+unsigned int Args::getKmerLen() {
+    return kmerLen;
+}
+
+void Args::setKmerLen(unsigned int kmerLen) {
+    this->kmerLen = kmerLen;
+}

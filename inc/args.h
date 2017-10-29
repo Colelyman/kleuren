@@ -40,6 +40,9 @@ class Args {
         unsigned int getMaxDepth();
         void setMaxDepth(unsigned int maxDepth);
 
+        unsigned int getKmerLen();
+        void setKmerLen(unsigned int kmerLen);
+
     private:
         /**
          * The path to the file that specifies the colors.
@@ -114,6 +117,9 @@ class Args {
          * the longer kleuren will take and the more bubbles it will find.
          */
         unsigned int maxDepth;
+
+        /// The size of kmer to use to construct the Colored de Bruijn Graph.
+        unsigned int kmerLen;
 
 };
 

@@ -30,9 +30,9 @@ using sdsl::bit_vector;
 class Color {
 
     public:
-        Color(int id, string name, string pathToFMIndex);
+        Color(int id, string name, string pathToSequence);
 
-		Color(int id, int numColors, string name, string pathToFMIndex);
+		Color(int id, int numColors, string name, string pathToSequence);
 
         ~Color();
 
@@ -41,7 +41,7 @@ class Color {
          */
         
         /// Returns whether or not s is a vertex of the color 
-        bool isVertex(string& s) const;
+        /*bool isVertex(string& s) const;
 
         /// Returns whether or not there is an outgoing edge, b, present for node s
         bool isPrefixNeighbor(string& s, char b) const;
@@ -68,10 +68,10 @@ class Color {
          * @return a pair, where first is the substring at idx of length len, and second is 
          * the index of the substring
          */
-        pair<string, size_t> extractSubstringAndIndex(size_t idx, size_t len) const;
+        /*pair<string, size_t> extractSubstringAndIndex(size_t idx, size_t len) const;
 
         /// Returns the substring at index for a certain length
-        string extractSubstring(size_t idx, size_t len) const;
+        string extractSubstring(size_t idx, size_t len) const;*/
 
         /*
          * Getters
@@ -87,7 +87,7 @@ class Color {
         bit_vector getBitVector() const;
 
         /// Return the FMIndex of the color
-        FMIndex* getFMIndex() const;
+        //FMIndex* getFMIndex() const;
 
     private:
         /// The name of the color
@@ -100,6 +100,9 @@ class Color {
 
         /// Represents what the bit_vector for only this color would be.
         bit_vector bitVector;
+
+        /// The path to the sequence file
+        string pathToSequence;
 
         /**
          * The pointer to the instance of the FMIndex. This is where

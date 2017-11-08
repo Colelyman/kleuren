@@ -4,25 +4,27 @@
 
 #include "color.h"
 
-Color::Color(int id, string name, string pathToFMIndex) {
+Color::Color(int id, string name, string pathToSequence) {
     this->id = id;
     this->name = name;
-    fmIndex = new FMIndex(pathToFMIndex, 256);
+    this->pathToSequence = pathToSequence;
+    //fmIndex = new FMIndex(pathToSequence, 256);
 }
 
-Color::Color(int id, int numColors, string name, string pathToFMIndex) {
+Color::Color(int id, int numColors, string name, string pathToSequence) {
     this->id = id;
     this->name = name;
+    this->pathToSequence = pathToSequence;
     this->bitVector = bit_vector(numColors, 0);
     bitVector[id] = 1;
-    fmIndex = new FMIndex(pathToFMIndex, 256);
+    //fmIndex = new FMIndex(pathToSequence, 256);
 }
 
 Color::~Color() {
-    delete fmIndex;
+    //delete fmIndex;
 }
 
-bool Color::isVertex(string& s) const {
+/*bool Color::isVertex(string& s) const {
     return DBGQuery::isVertex(fmIndex, s);
 }
 
@@ -84,7 +86,7 @@ pair<string, size_t> Color::extractSubstringAndIndex(size_t idx, size_t len) con
 
 string Color::extractSubstring(size_t idx, size_t len) const {
     return DBGQuery::extractSubstring(fmIndex, idx, len);
-}
+}*/
 
 string Color::getName() const {
     return name;
@@ -94,6 +96,10 @@ int Color::getID() const {
     return id;
 }
 
-FMIndex* Color::getFMIndex() const {
-    return fmIndex;
+bit_vector Color::getBitVector() const {
+    return bitVector;
 }
+
+/*FMIndex* Color::getFMIndex() const {
+    return fmIndex;
+}*/

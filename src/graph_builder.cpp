@@ -18,7 +18,7 @@ GraphBuilder::GraphBuilder(Graph* graph, unsigned int kmerLen) {
 void GraphBuilder::addColor(string filePath, bit_vector color) {
     string suffix = filePath.substr(filePath.rfind("."));
     // check if the file format is supported
-    if(suffix == "fa" || suffix == "fasta" || suffix == "fna") {
+    if(suffix == ".fa" || suffix == ".fasta" || suffix == ".fna") {
         parseFasta(filePath, color);
     }
     else {
@@ -26,17 +26,25 @@ void GraphBuilder::addColor(string filePath, bit_vector color) {
         cerr << "Supported file types are: fa, fasta, and fna." << endl;
         exit(1);
     }
+    cerr << "end addColor" << endl;
 }
 
 void GraphBuilder::parseFasta(string filePath, bit_vector color) {
+    cerr << "begin parseFasta" << endl;
     ifstream fh;
     // open the fasta file
     fh.open(filePath);
 
+    if(!fh.is_open()) {
+        cerr << "There was a problem opening file: " << filePath << endl;
+        exit(1);
+    }
+
     string seq, line;
-    while(getline(fh, line)) {
+    while(getline(fh, line) && !line.empty()) {
+        cerr << "line: " << line << endl;
         // check if current line is a header, if so then add the sequence to the graph
-        if(line[0] == '>') {
+        if(line[0] == '>' && !seq.empty()) {
             addSequence(seq, color);
             seq.clear();
             continue;

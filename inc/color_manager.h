@@ -20,7 +20,7 @@
 #include <vector>
 
 #include "color.h"
-#include "color_set.h"
+//#include "color_set.h"
 #include "graph_builder.h"
 
 using std::string;
@@ -55,7 +55,7 @@ class ColorManager {
          * @param n the parameter to pass to the newly formed ColorSet.
          * @returns a ColorSet with the colors, and with the provided n
          */
-        ColorSet getColors(unsigned int n);
+        //ColorSet getColors(unsigned int n);
 
 		/**
 		 * Parses through colors and returns the subsequent color names.

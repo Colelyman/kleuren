@@ -6,7 +6,6 @@
 #include <memory>
 
 #include "driver.h"
-#include "color_set.h"
 
 using std::cout;
 using std::endl;
@@ -66,12 +65,12 @@ Driver::~Driver() {
 void Driver::run() {
     string kmer = kmerBank->getNextKmer();
     shared_ptr<Color> color0 = colorManager.getColor(0);
-    ColorSet colors = colorManager.getColors(args.getN());
+    //ColorSet colors = colorManager.getColors(args.getN());
 
     // iterate over the kmers
     while(kmer != "") {
         // find a start kmer for a bubble
-        if(colors.nContainsKmer(kmer)) {
+        if(graph->isKmer(kmer)) {
             cout << "startKmer: " << kmer << endl;
             // build the bubble
 			Vertex v = Vertex(kmer);

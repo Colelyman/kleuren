@@ -19,7 +19,7 @@
 #include "bubble.h"
 #include "graph.h"
 #include "color.h"
-#include "color_set.h"
+//#include "color_set.h"
 #include "path.h"
 
 using std::string;
@@ -39,9 +39,9 @@ class BubbleBuilder {
          * Finds the index of the ending kmer, which is the next kmer 
          * that contains all of the colors.
          * @param startKmer the kmer to start searching for
-	 * @param numColors the number of colors necessary in order for a vertex to be considered.
+         * @param numColors the number of colors necessary in order for a vertex to be considered.
          * @return the next kmer that is present in numColors (or more) colors, but if there is no kmer 
-	 * that is present in numColors (or more) it will return null 
+         * that is present in numColors (or more) it will return null 
          */
         Vertex findEndVertex(Vertex& startVertex, unsigned int numColors);
 

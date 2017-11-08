@@ -18,19 +18,20 @@ ColorManager::ColorManager(ifstream* fileStream, GraphBuilder* graphBuilder) {
 }
 
 void ColorManager::addColors() {
-    string line, colorName, pathToBWT;
+    string line, colorName, pathToSequence;
     // iterate over each line in the file
     while(getline(*colorFile, line)) {
         // parse each line
         stringstream sstream(line);
         sstream >> colorName;
-        sstream >> pathToBWT;
-        addColor(colorName, pathToBWT);
+        sstream >> pathToSequence;
+        shared_ptr<Color> color = addColor(colorName, pathToSequence);
+        graphBuilder->addColor(pathToSequence, color->getBitVector());
     }
 }
 
-shared_ptr<Color> ColorManager::addColor(string colorName, string pathToBWT) {
-    colors[numColors] = shared_ptr<Color>(new Color(numColors, colorName, pathToBWT));
+shared_ptr<Color> ColorManager::addColor(string colorName, string pathToSequence) {
+    colors[numColors] = shared_ptr<Color>(new Color(numColors, colorName, pathToSequence));
     return colors[numColors++];
 }
 
@@ -38,6 +39,7 @@ shared_ptr<Color> ColorManager::getColor(int colorID) {
     return colors[colorID];
 }
 
+/*
 ColorSet ColorManager::getColors(unsigned int n) {
     set<shared_ptr<Color> > colorSet;
     for(auto const& color : colors) {
@@ -45,6 +47,7 @@ ColorSet ColorManager::getColors(unsigned int n) {
     }
     return ColorSet(colorSet, n);
 }
+*/
 
 vector<string> ColorManager::getColorNames(bit_vector colorVector) {
 	vector<string> names;

@@ -34,6 +34,10 @@ bool Graph::isVertex(Vertex& v) const {
     return false;
 }
 
+bool Graph::isKmer(string& kmer) const {
+    return !(hashmap.find(kmer) == hashmap.end());
+}
+
 Vertex Graph::getVertex(string& kmer) const {
     bit_vector colors(0, 0);
     Vertex v = Vertex("", colors);

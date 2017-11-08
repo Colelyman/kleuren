@@ -36,6 +36,9 @@ class Graph {
         /// Returns whether or not a vertex is contained
         bool isVertex(Vertex& v) const;
 
+        /// Returns whether or not a kmer is contained in the graph
+        bool isKmer(string& kmer) const;
+
         /// Returns the vertex of a kmer. If it doesn't exist it will return
         /// a Vertex object with "" as the kmer and a bit_vector of 0 length
         Vertex getVertex(string& kmer) const;

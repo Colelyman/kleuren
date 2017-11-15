@@ -58,6 +58,8 @@ class Graph {
 	/// Returns the boolean value according to if the vertex has prefix neighbors
 	bool hasPrefixNeighbors(Vertex& v) const;
 
+    size_t getSize() const;
+
     private:
 
         /// The underlying structure representing the graph. The keys are the kmers

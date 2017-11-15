@@ -119,3 +119,7 @@ bool Graph::hasPrefixNeighbors(Vertex& v) const {
       return false;
   }
 }
+
+size_t Graph::getSize() const {
+    return hashmap.size();
+}

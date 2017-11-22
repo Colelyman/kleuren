@@ -43,11 +43,7 @@ void GraphBuilder::parseFasta(string filePath, bit_vector color) {
     }
 
     string line, prev;
-    // get the first header line
-    getline(fh, line);
-    // get the first sequence line
-    getline(fh, prev);
-    while(getline(fh, line) && !line.empty()) {
+    while(getline(fh, line)) {
         // check if current line is a header, if so then move to the next line
         if(line[0] == '>') {
             prev = "";

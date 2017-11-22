@@ -45,13 +45,18 @@ bool Vertex::operator<(const Vertex& v) const {
 	return this->kmer < v.kmer;
 }
 
-string Vertex::bitsToString(bit_vector kmerBits, size_t kmerSize) {
+string Vertex::getKmer() const {
+    return kmer;
+}
+
+string Vertex::bitsToString(const unsigned char* kmerBits, size_t kmerSize) {
     string kmer;
-    unsigned char* baseBits = (unsigned char*) malloc(sizeof(char));
+    unsigned char* baseBits = new unsigned char;
     for(int i = 0; i < kmerSize; i++) {
-        int bitIndex = i * 2;
+        size_t shift = 6 - 2 * (i % 4);
+        unsigned char mask = BASE_MASK << shift;
         memset(baseBits, 0, sizeof(unsigned char));
-        *baseBits = (unsigned char) (kmerBits[bitIndex] << 1) | kmerBits[bitIndex + 1];
+        *baseBits = (unsigned char) (kmerBits[i / 4] & mask) >> shift;
         switch(*baseBits) {
         case BASE_A:
             kmer.append("A");
@@ -67,130 +72,126 @@ string Vertex::bitsToString(bit_vector kmerBits, size_t kmerSize) {
             break;
         }
     }
-    free(baseBits);
+    delete baseBits;
 
     return kmer;
 }
 
-string Vertex::getKmer() const {
-    return kmer;
-}
-
-bit_vector Vertex::getKmerBits() {
-    kmerBits = bit_vector(kmer.length() * 2, 0);
-    if(!bitsSet) {
-        int r;
-        // convert each nucleotide to bit encoding
-        for(int i = 0; i < kmer.length(); i++) {
-            int bitIndex = i * 2;
-            switch(kmer.at(i)) {
-            case 'A':
-            case 'a':
-                kmerBits[bitIndex++] = 1;
-                kmerBits[bitIndex] = 0;
-                break;
-            case 'C':
-            case 'c':
-                kmerBits[bitIndex++] = 0;
-                kmerBits[bitIndex] = 1;
-                break;
-            case 'G':
-            case 'g':
-                kmerBits[bitIndex++] = 1;
-                kmerBits[bitIndex] = 1;
-                break;
-            case 'T':
-            case 't':
-                kmerBits[bitIndex++] = 0;
-                kmerBits[bitIndex] = 0;
-                break;
-                /*
-            case 'N':
-            case 'n':
-                kmerBits |= static_cast<BASES>(rand() % 4) << shift;
-                break;
-            case 'R': // A or G
-            case 'r':
-                kmerBits |= (rand() % 2 == 1) ? BASE_A << shift : BASE_G << shift;
-                break;
-            case 'Y': // C or T
-            case 'y':
-                kmerBits |= (rand() % 2 == 1) ? BASE_C << shift : BASE_T << shift;
-                break;
-            case 'S': // G or C
-            case 's':
-                kmerBits |= (rand() % 2 == 1) ? BASE_C << shift : BASE_G << shift;
-                break;
-            case 'W': // A or T
-            case 'w':
-                kmerBits |= (rand() % 2 == 1) ? BASE_A << shift : BASE_T << shift;
-                break;
-            case 'K': // G or T
-            case 'k':
-                kmerBits |= (rand() % 2 == 1) ? BASE_G << shift : BASE_T << shift;
-                break;
-            case 'M': // A or C
-            case 'm':
-                kmerBits |= (rand() % 2 == 1) ? BASE_C << shift : BASE_A << shift;
-                break;
-            case 'B': // C or G or T
-            case 'b':
-                r = rand() % 3;
-                if(r == 1) {
-                    kmerBits |= BASE_C << shift;
-                }
-                else if(r == 2) {
-                    kmerBits |= BASE_G << shift;
-                }
-                else {
-                    kmerBits |= BASE_T << shift;
-                }
-                break;
-            case 'D': // A or G or T
-            case 'd':
-                r = rand() % 3;
-                if(r == 1) {
-                    kmerBits |= BASE_A << shift;
-                }
-                else if(r == 2) {
-                    kmerBits |= BASE_G << shift;
-                }
-                else {
-                    kmerBits |= BASE_T << shift;
-                }
-                break;
-            case 'H': // A or C or T
-            case 'h':
-                r = rand() % 3;
-                if(r == 1) {
-                    kmerBits |= BASE_C << shift;
-                }
-                else if(r == 2) {
-                    kmerBits |= BASE_A << shift;
-                }
-                else {
-                    kmerBits |= BASE_T << shift;
-                }
-                break;
-            case 'V': // A or C or G
-            case 'v':
-                r = rand() % 3;
-                if(r == 1) {
-                    kmerBits |= BASE_C << shift;
-                }
-                else if(r == 2) {
-                    kmerBits |= BASE_G << shift;
-                }
-                else {
-                    kmerBits |= BASE_A << shift;
-                }
-                break;
-                */
+const unsigned char* Vertex::getKmerBits(string kmer) {
+    size_t numBytes = (kmer.length() / 4) + (kmer.length() % 4 != 0);
+    unsigned char* bits = new unsigned char[numBytes];
+    memset(bits, 0, numBytes);
+    int r;
+    // convert each nucleotide to bit encoding
+    for(int i = 0; i < kmer.length(); i++) {
+        size_t shift = 6 - 2 * (i % 4);
+        switch(kmer.at(i)) {
+        case 'A':
+        case 'a':
+            bits[i / 4] |= BASE_A << shift;
+            break;
+        case 'C':
+        case 'c':
+            bits[i / 4] |= BASE_C << shift;
+            break;
+        case 'G':
+        case 'g':
+            bits[i / 4] |= BASE_G << shift;
+            break;
+        case 'T':
+        case 't':
+            bits[i / 4] |= BASE_T << shift;
+            break;
+        case 'N':
+        case 'n':
+            bits[i / 4] |= static_cast<BASES>(rand() % 4) << shift;
+            break;
+        case 'R': // A or G
+        case 'r':
+            bits[i / 4] |= (rand() % 2 == 1) ? BASE_A << shift : BASE_G << shift;
+            break;
+        case 'Y': // C or T
+        case 'y':
+            bits[i / 4] |= (rand() % 2 == 1) ? BASE_C << shift : BASE_T << shift;
+            break;
+        case 'S': // G or C
+        case 's':
+            bits[i / 4] |= (rand() % 2 == 1) ? BASE_C << shift : BASE_G << shift;
+            break;
+        case 'W': // A or T
+        case 'w':
+            bits[i / 4] |= (rand() % 2 == 1) ? BASE_A << shift : BASE_T << shift;
+            break;
+        case 'K': // G or T
+        case 'k':
+            bits[i / 4] |= (rand() % 2 == 1) ? BASE_G << shift : BASE_T << shift;
+            break;
+        case 'M': // A or C
+        case 'm':
+            bits[i / 4] |= (rand() % 2 == 1) ? BASE_C << shift : BASE_A << shift;
+            break;
+        case 'B': // C or G or T
+        case 'b':
+            r = rand() % 3;
+            if(r == 1) {
+                bits[i / 4] |= BASE_C << shift;
             }
+            else if(r == 2) {
+                bits[i / 4] |= BASE_G << shift;
+            }
+            else {
+                bits[i / 4] |= BASE_T << shift;
+            }
+            break;
+        case 'D': // A or G or T
+        case 'd':
+            r = rand() % 3;
+            if(r == 1) {
+                bits[i / 4] |= BASE_A << shift;
+            }
+            else if(r == 2) {
+                bits[i / 4] |= BASE_G << shift;
+            }
+            else {
+                bits[i / 4] |= BASE_T << shift;
+            }
+            break;
+        case 'H': // A or C or T
+        case 'h':
+            r = rand() % 3;
+            if(r == 1) {
+                bits[i / 4] |= BASE_C << shift;
+            }
+            else if(r == 2) {
+                bits[i / 4] |= BASE_A << shift;
+            }
+            else {
+                bits[i / 4] |= BASE_T << shift;
+            }
+            break;
+        case 'V': // A or C or G
+        case 'v':
+            r = rand() % 3;
+            if(r == 1) {
+                bits[i / 4] |= BASE_C << shift;
+            }
+            else if(r == 2) {
+                bits[i / 4] |= BASE_G << shift;
+            }
+            else {
+                bits[i / 4] |= BASE_A << shift;
+            }
+            break;
         }
-        bitsSet = true;
     }
     
+    return bits;
+}
+
+const unsigned char* Vertex::getKmerBits() {
+    if(!bitsSet) {
+        kmerBits = getKmerBits(kmer);
+    }
     return kmerBits;
 }
 

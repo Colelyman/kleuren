@@ -13,7 +13,7 @@ Graph::~Graph() {
 }
 
 bool Graph::isVertex(Vertex& v) const {
-    auto vertexPair = hashmap.find(v.getKmer());
+    auto vertexPair = hashmap.find(v.getKmerBits());
     if(vertexPair != hashmap.end()) {
         // check if the bit_vectors match up
         bit_vector existingColors = vertexPair->second;
@@ -35,14 +35,15 @@ bool Graph::isVertex(Vertex& v) const {
 }
 
 bool Graph::isKmer(string& kmer) const {
-    return !(hashmap.find(kmer) == hashmap.end());
+    return !(hashmap.find(Vertex::getKmerBits(kmer)) == hashmap.end());
 }
 
 Vertex Graph::getVertex(string& kmer) const {
     bit_vector colors(0, 0);
     Vertex v = Vertex("", colors);
-    if(hashmap.find(kmer) != hashmap.end()) { // the kmer exists in the graph
-        v = Vertex(kmer, hashmap.at(kmer));
+    const unsigned char* kmerBits = Vertex::getKmerBits(kmer);
+    if(hashmap.find(kmerBits) != hashmap.end()) { // the kmer exists in the graph
+        v = Vertex(kmer, hashmap.at(kmerBits));
     }
 
     return v;
@@ -50,17 +51,17 @@ Vertex Graph::getVertex(string& kmer) const {
 
 void Graph::addVertex(Vertex& v) {
     // check if the vertex already exists
-    auto vertex = hashmap.find(v.getKmer());
+    auto vertex = hashmap.find(v.getKmerBits());
     if(vertex != hashmap.end()) { // vertex exists
         // bitwise AND the existing bit_vector with the new bit_vector
         bit_vector andedColors = vertex->second;
         andedColors &= v.getColors();
 
         // reassign the new bit_vector to the kmer in the graph
-        hashmap[v.getKmer()] = andedColors;
+        hashmap[v.getKmerBits()] = andedColors;
     }
     else { // vertex doesn't exist, thus add it to the graph
-        hashmap[v.getKmer()] = v.getColors();
+        hashmap[v.getKmerBits()] = v.getColors();
     }
 }
 

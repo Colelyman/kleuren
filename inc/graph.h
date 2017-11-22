@@ -49,22 +49,28 @@ class Graph {
         /// Returns a vector of all of the vertices that neighbor v on the suffix side
         vector<Vertex> getSuffixNeighbors(Vertex& v) const;
 
-	/// Returns the boolean value according to if the vertex has suffix neighbors
-	bool hasSuffixNeighbors(Vertex& v) const;
+        /// Returns the boolean value according to if the vertex has suffix neighbors
+        bool hasSuffixNeighbors(Vertex& v) const;
 
         /// Returns a vector of all of the vertices that neighbor v on the prefix side
         vector<Vertex> getPrefixNeighbors(Vertex& v) const;
 
-	/// Returns the boolean value according to if the vertex has prefix neighbors
-	bool hasPrefixNeighbors(Vertex& v) const;
+        /// Returns the boolean value according to if the vertex has prefix neighbors
+        bool hasPrefixNeighbors(Vertex& v) const;
 
-    size_t getSize() const;
+        size_t getSize() const;
 
     private:
 
+        struct kmer_cmp {
+            bool operator () (const unsigned char* a, const unsigned char* b) const {
+                return strcmp((const char*) a, (const char*) b) < 0;
+            }
+        };
+        
         /// The underlying structure representing the graph. The keys are the kmers
         /// and the value is a bit_vector that signifies which colors contain the kmer
-        map<string, bit_vector> hashmap;
+        map<const unsigned char*, bit_vector, kmer_cmp> hashmap;
 
         /// nucleotides represents the supported IUPAC nucleotide codes
         vector<char> nucleotides = {'A', 'C', 'G', 'T', 'N'};

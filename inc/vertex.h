@@ -35,12 +35,15 @@ class Vertex {
 
 		bool operator<(const Vertex& v) const;
 
-        static string bitsToString(bit_vector kmerBits, size_t kmerSize);
-
         /// Returns the kmer that this Vertex represents
         string getKmer() const;
 
-        bit_vector getKmerBits();
+        static string bitsToString(const unsigned char* kmerBits, size_t kmerSize);
+
+        /// Converts the kmer of type string to a bit-packed unsigned char*.
+        static const unsigned char* getKmerBits(string kmer);
+
+        const unsigned char* getKmerBits();
 
         /// Returns the colors as a bit_vector that contain this Vertex
         bit_vector getColors() const;
@@ -55,7 +58,7 @@ class Vertex {
         /// set to true.
         bool bitsSet;
         
-        bit_vector kmerBits;
+        const unsigned char* kmerBits;
 
         bit_vector colors;
 

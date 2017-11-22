@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include <time.h>
 
 #include "graph_builder.h"
 
@@ -16,6 +17,7 @@ GraphBuilder::GraphBuilder(Graph* graph, unsigned int kmerLen) {
 }
 
 void GraphBuilder::addColor(string filePath, bit_vector color) {
+    clock_t start = clock();
     string suffix = filePath.substr(filePath.rfind("."));
     // check if the file format is supported
     if(suffix == ".fa" || suffix == ".fasta" || suffix == ".fna") {
@@ -26,11 +28,11 @@ void GraphBuilder::addColor(string filePath, bit_vector color) {
         cerr << "Supported file types are: fa, fasta, and fna." << endl;
         exit(1);
     }
-    cerr << "end addColor" << endl;
+    cerr << "Added color " << filePath << " in: " << (double)(clock() - start)/CLOCKS_PER_SEC << " seconds" << endl;
 }
 
 void GraphBuilder::parseFasta(string filePath, bit_vector color) {
-    cerr << "begin parseFasta" << endl;
+    std::ios::sync_with_stdio(false);
     ifstream fh;
     // open the fasta file
     fh.open(filePath);
@@ -40,9 +42,12 @@ void GraphBuilder::parseFasta(string filePath, bit_vector color) {
         exit(1);
     }
 
-    string seq, line;
+    string seq, line, prev;
+    // get the first header line
+    getline(fh, line);
+    // get the first sequence line
+    getline(fh, prev);
     while(getline(fh, line) && !line.empty()) {
-        cerr << "line: " << line << endl;
         // check if current line is a header, if so then add the sequence to the graph
         if(line[0] == '>' && !seq.empty()) {
             addSequence(seq, color);
@@ -67,6 +72,7 @@ void GraphBuilder::addSequence(string seq, bit_vector color) {
         Vertex v = Vertex(seq.substr(i, kmerLen), color);
         graph->addVertex(v);
     }
+    cerr << "Graph size: " << graph->getSize() << endl;
 
     return;
 }

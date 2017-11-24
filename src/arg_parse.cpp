@@ -77,6 +77,6 @@ void ArgParse::setArgs(Options options) {
         args.setMatrixFilePath("");
     }
     args.setKmerLen(options["kmerLen"].as<unsigned int>());
-    args.setN(options["numMinKmers"].as<unsigned int>());
+    args.setN(options["numMinColors"].as<unsigned int>());
     args.setMaxDepth(options["maxDepth"].as<unsigned int>());
 }

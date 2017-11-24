@@ -32,7 +32,7 @@ class GraphBuilder {
 
        void parseFasta(string filePath, bit_vector color);
 
-       void addSequence(string prev, string line, bit_vector color);
+       void addSequence(string seq, bit_vector color);
        
        /// Pointer to the graph object.
        Graph* graph;

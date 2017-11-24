@@ -42,19 +42,20 @@ void GraphBuilder::parseFasta(string filePath, bit_vector color) {
         exit(1);
     }
 
-    string line, prev;
+    string seq, line;
+    seq.reserve(1000000);
     while(getline(fh, line)) {
         // check if current line is a header, if so then move to the next line
-        if(line[0] == '>') {
-            prev = "";
+        if(line[0] == '>' && !seq.empty()) {
+            addSequence(seq, color);
+            seq.clear();
             continue;
         }
         // append line to sequence
-        addSequence(prev, line, color);
-        prev = line;
+        seq.append(line);
     }
-    // add the final line of the file to the graph
-    addSequence(prev, line, color);
+    // add the final sequence of the file to the graph
+    addSequence(seq, color);
 
     // close the file
     fh.close();
@@ -62,26 +63,11 @@ void GraphBuilder::parseFasta(string filePath, bit_vector color) {
     return;
 }
 
-void GraphBuilder::addSequence(string prev, string line, bit_vector color) {
-    if(line.length() > 0 && prev.length() >= kmerLen) {
-        for(int i = prev.length() - kmerLen + 1;
-                i < prev.length() && i > 0 && kmerLen - (prev.length() - i) <= line.length();
-                i++) {
-            string kmer = prev.substr(i, prev.length() - i) + line.substr(0, kmerLen - (prev.length() - i));
-            if(kmer.length() < kmerLen) {
-                break;
-            }
-            Vertex v = Vertex(kmer, color);
-            graph->addVertex(v);
-        }
-    
-        if(line.length() > kmerLen) {
-            // break up the sequence into kmers of length kmerLen
-            for(unsigned int i = 0; i < line.length() - kmerLen; i++) {
-                Vertex v = Vertex(line.substr(i, kmerLen), color);
-                graph->addVertex(v);
-            }
-        }
+void GraphBuilder::addSequence(string seq, bit_vector color) {
+    // break up the sequence into kmers of length kmerLen
+    for(unsigned int i = 0; i < seq.length() - kmerLen; i++) {
+        Vertex v = Vertex(seq.substr(i, kmerLen), color);
+        graph->addVertex(v);
     }
 
     return;

@@ -9,7 +9,14 @@ Graph::Graph() {
 }
 
 Graph::~Graph() {
-
+    // deallocate all of the keys in hashmap
+    while(hashmap.size() > 0) {
+        auto element = hashmap.begin();
+        if(element->first != NULL) {
+            free((unsigned char*) element->first);
+        }
+        hashmap.erase(element);
+    }
 }
 
 bool Graph::isVertex(Vertex& v) const {
@@ -35,7 +42,10 @@ bool Graph::isVertex(Vertex& v) const {
 }
 
 bool Graph::isKmer(string& kmer) const {
-    return !(hashmap.find(Vertex::getKmerBits(kmer)) == hashmap.end());
+    const unsigned char* kmerBits = Vertex::getKmerBits(kmer);
+    bool exists = !(hashmap.find(kmerBits) == hashmap.end());
+    free((unsigned char*) kmerBits);
+    return exists;
 }
 
 Vertex Graph::getVertex(string& kmer) const {
@@ -45,6 +55,7 @@ Vertex Graph::getVertex(string& kmer) const {
     if(hashmap.find(kmerBits) != hashmap.end()) { // the kmer exists in the graph
         v = Vertex(kmer, hashmap.at(kmerBits));
     }
+    free((unsigned char*) kmerBits);
 
     return v;
 }

@@ -79,7 +79,7 @@ string Vertex::bitsToString(const unsigned char* kmerBits, size_t kmerSize) {
 
 const unsigned char* Vertex::getKmerBits(string kmer) {
     size_t numBytes = (kmer.length() / 4) + (kmer.length() % 4 != 0);
-    unsigned char* bits = new unsigned char[numBytes];
+    unsigned char* bits = (unsigned char*) malloc(sizeof(unsigned char) * numBytes);
     memset(bits, 0, numBytes);
     int r;
     // convert each nucleotide to bit encoding

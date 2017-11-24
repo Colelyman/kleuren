@@ -65,7 +65,7 @@ class ColorManager {
 		vector<string> getColorNames(bit_vector colors);
 
         /// Returns the number of colors in the ColorManager
-        unsigned int getNumColors();
+        size_t getNumColors();
 
     private:
         /// The pointer to the file handle of the color file
@@ -80,7 +80,7 @@ class ColorManager {
 
         /// numColors is the total number of colors added.
         /// It also determines the ID of each Color.
-        unsigned int numColors;
+        size_t numColors;
 
 };
 

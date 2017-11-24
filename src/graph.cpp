@@ -5,7 +5,7 @@
 #include "graph.h"
 
 Graph::Graph() {
-
+    numColors = 0;
 }
 
 Graph::~Graph() {
@@ -69,17 +69,17 @@ vector<Vertex> Graph::getSuffixNeighbors(Vertex& v) const {
     vector<Vertex> vertices;
     // strip off the first character from the kmer
     string kmer = v.getKmer().substr(1);
+    size_t index = kmer.length();
+    kmer.append('\0');
     // iterate over each nucleotide code and append it to the kmer
     for(const char nucleotide : nucleotides) {
         // append the nucleotide to the kmer
-        kmer.append(1, nucleotide);
+        kmer[index] = nucleotide;
         Vertex vertex = getVertex(kmer);
         /// TODO check if the vertex's colors match up with the neighbors
         if(vertex.getKmer() != "") { // check if the vertex exists
             vertices.push_back(vertex);
         }
-        // strip off the last character from the kmer
-        kmer = kmer.substr(0, kmer.length() - 1);
     }
     return vertices;
 }
@@ -97,17 +97,16 @@ vector<Vertex> Graph::getPrefixNeighbors(Vertex& v) const {
     vector<Vertex> vertices;
     // strip off the last character from the kmer
     string kmer = v.getKmer().substr(0, v.getKmer().length() - 1);
+    kmer.insert(0, "N");
     // iterate over each nucleotide code and append it to the kmer
     for(char nucleotide : nucleotides) {
         // prepend the nucleotide to the kmer
-        kmer.insert(0, 1, nucleotide);
+        kmer[0] = nucleotide;
         Vertex vertex = getVertex(kmer);
         /// TODO check if the vertex's colors match up with the neighbors
         if(vertex.getKmer() != "") { // check if the vertex exists
             vertices.push_back(vertex);
         }
-        // strip off the first character from the kmer
-        kmer = kmer.substr(1, kmer.length() - 1);
     }
     return vertices;
 }
@@ -123,4 +122,8 @@ bool Graph::hasPrefixNeighbors(Vertex& v) const {
 
 size_t Graph::getSize() const {
     return hashmap.size();
+}
+
+void Graph::setNumColors(size_t numColors) {
+    this->numColors = numColors;
 }

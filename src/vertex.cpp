@@ -16,10 +16,10 @@ enum BASES {
     BASE_MASK = 0x3 // binary: 11
 };
 
-Vertex::Vertex(string kmer) {
+Vertex::Vertex(string kmer, size_t numColors) {
     this->kmer = kmer;
     this->bitsSet = false;
-    this->colors = bit_vector();
+    this->colors = bit_vector(numColors, 1);
 }
 
 Vertex::Vertex(string kmer, bit_vector colors) {

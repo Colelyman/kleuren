@@ -29,7 +29,7 @@ Args ArgParse::parseArgs(int argc, char* argv[]) {
             ("b,bubbleFilePath", "Path to the file in which to output the bubbles, if not provided bubbles will not be outputted", cxxopts::value<string>(), "PATH")
             ("m,matrixFilePath", "Path to the file in which to out the similarity matrix, if not provided the matrix will not be outputted", cxxopts::value<string>(), "PATH")
             ("l,kmerLen", "The length of kmer to use in order to construct the Colored de Bruijn Graph", cxxopts::value<unsigned int>()->default_value("17"), "INT") 
-            ("n,numMinKmers", "The number of colors a kmer must be present in for a bubble to be formed. When set to 0, all colors must be present", cxxopts::value<unsigned int>()->default_value("0"), "INT")
+            ("n,numMinColors", "The number of colors a kmer must be present in for a bubble to be formed. When set to 0, all colors must be present", cxxopts::value<unsigned int>()->default_value("0"), "INT")
             ("d,maxDepth", "The maximum depth for which to recursively extend paths for a bubble", cxxopts::value<unsigned int>()->default_value("30"), "INT")
             ("h,help", "Print help")
         ;

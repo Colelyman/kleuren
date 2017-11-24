@@ -82,7 +82,7 @@ Vertex BubbleBuilder::findEndVertex(Vertex& startVertex, unsigned int numColors)
     }
 
     // there is no kmer in color that is present in all colors
-    return Vertex("");
+    return Vertex("", 0);
 }
 
 bool BubbleBuilder::recursiveExtend(Vertex& currentVertex, Vertex& endVertex, map<bit_vector, string>& paths, set<Vertex>& visited, unsigned int depth, unsigned int maxDepth) {

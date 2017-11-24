@@ -58,6 +58,6 @@ vector<string> ColorManager::getColorNames(bit_vector colorVector) {
 	}
 }
 
-unsigned int ColorManager::getNumColors() {
+size_t ColorManager::getNumColors() {
     return numColors;
 }

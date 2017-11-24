@@ -60,6 +60,8 @@ class Graph {
 
         size_t getSize() const;
 
+        void setNumColors(size_t numColors);
+
     private:
 
         struct kmer_cmp {
@@ -71,6 +73,8 @@ class Graph {
         /// The underlying structure representing the graph. The keys are the kmers
         /// and the value is a bit_vector that signifies which colors contain the kmer
         map<const unsigned char*, bit_vector, kmer_cmp> hashmap;
+
+        size_t numColors;
 
         /// nucleotides represents the supported IUPAC nucleotide codes
         vector<char> nucleotides = {'A', 'C', 'G', 'T', 'N'};

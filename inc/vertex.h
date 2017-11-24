@@ -25,7 +25,7 @@ using sdsl::rank_support_v;
 class Vertex {
 
     public:
-        Vertex(string kmer);
+        Vertex(string kmer, size_t numColors);
   
         Vertex(string kmer, bit_vector colors);
 

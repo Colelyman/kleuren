@@ -19,6 +19,7 @@ Driver::Driver(Args args) {
 	graph = new Graph();
     graphBuilder = new GraphBuilder(graph, args.getKmerLen());
     colorManager = ColorManager(colorFile, graphBuilder);
+    graph->setNumColors(colorManager.getNumColors());
 
     // open the kmer file
     kmerFile = new ifstream();
@@ -73,7 +74,7 @@ void Driver::run() {
         if(graph->isKmer(kmer)) {
             cout << "startKmer: " << kmer << endl;
             // build the bubble
-			Vertex v = Vertex(kmer);
+			Vertex v = Vertex(kmer, colorManager.getNumColors());
             const unsigned char* bits = v.getKmerBits();
             string bitString = Vertex::bitsToString(bits, kmer.length());
             Bubble bubble = bubbleBuilder->build(v, args.getN(), args.getMaxDepth());

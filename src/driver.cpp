@@ -10,12 +10,15 @@
 using std::cout;
 using std::endl;
 
+unsigned int Graph::kmerLen;
+
 Driver::Driver(Args args) {
     this->args = args;
 
     // open the color file
     colorFile = new ifstream();
     colorFile->open(args.getColorsFilePath());
+    Graph::kmerLen = args.getKmerLen();
 	graph = new Graph();
     graphBuilder = new GraphBuilder(graph, args.getKmerLen());
     colorManager = ColorManager(colorFile, graphBuilder);

@@ -28,9 +28,7 @@ Vertex::Vertex(string kmer, bit_vector colors) {
     this->colors = colors;
 }
 
-Vertex::~Vertex() {
-
-}
+Vertex::~Vertex() { }
 
 bool Vertex::operator==(const Vertex& v) const {
     if(this->kmer == v.kmer && this->colors == v.colors) {
@@ -79,8 +77,9 @@ string Vertex::bitsToString(const unsigned char* kmerBits, size_t kmerSize) {
 
 const unsigned char* Vertex::getKmerBits(string kmer) {
     size_t numBytes = (kmer.length() / 4) + (kmer.length() % 4 != 0);
-    unsigned char* bits = (unsigned char*) malloc(sizeof(unsigned char) * numBytes);
-    memset(bits, 0, numBytes);
+    unsigned char* bits = (unsigned char*) malloc(sizeof *bits * numBytes);
+    memset(bits, 0, sizeof *bits * numBytes);
+    //printf("kmer is: %s at: %p\n", kmer.c_str(), bits);
     int r;
     // convert each nucleotide to bit encoding
     for(int i = 0; i < kmer.length(); i++) {
@@ -191,6 +190,7 @@ const unsigned char* Vertex::getKmerBits(string kmer) {
 const unsigned char* Vertex::getKmerBits() {
     if(!bitsSet) {
         kmerBits = getKmerBits(kmer);
+        bitsSet = true;
     }
     return kmerBits;
 }

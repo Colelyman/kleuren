@@ -18,12 +18,15 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iostream>
 
 #include "vertex.h"
 
 using std::string;
 using std::vector;
 using std::map;
+using std::cout;
+using std::endl;
 
 class Graph {
 
@@ -62,11 +65,21 @@ class Graph {
 
         void setNumColors(size_t numColors);
 
+        static unsigned int kmerLen;
+
     private:
 
         struct kmer_cmp {
             bool operator () (const unsigned char* a, const unsigned char* b) const {
-                return strcmp((const char*) a, (const char*) b) < 0;
+                for(unsigned int i = 0; i < (kmerLen / 4) + (kmerLen % 4 != 0); i++) {
+                    if(a[i] < b[i]) {
+                        return false;
+                    }
+                    else if(a[i] > b[i]) {
+                        return true;
+                    }
+                }
+                return false;
             }
         };
         

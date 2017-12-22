@@ -10,17 +10,24 @@ Graph::Graph() {
 
 Graph::~Graph() {
     // deallocate all of the keys in hashmap
+    for(auto const& element : hashmap) {
+        printf("kmer is: %s at: %p\n", Vertex::bitsToString(element.first, kmerLen).c_str(), element.first);
+    }
+    /*int countElements = 0;
     while(hashmap.size() > 0) {
         auto element = hashmap.begin();
         if(element->first != NULL) {
-            free((unsigned char*) element->first);
+            countElements++;
+            cout << "kmer is: " << Vertex::bitsToString(element->first, kmerLen) << " at: " << element->first << endl;
+            //free(const_cast<unsigned char*>(element->first));
         }
         hashmap.erase(element);
-    }
+        }*/
 }
 
 bool Graph::isVertex(Vertex& v) const {
     auto vertexPair = hashmap.find(v.getKmerBits());
+    free(const_cast<unsigned char*>(v.getKmerBits()));
     if(vertexPair != hashmap.end()) {
         // check if the bit_vectors match up
         bit_vector existingColors = vertexPair->second;
@@ -44,7 +51,7 @@ bool Graph::isVertex(Vertex& v) const {
 bool Graph::isKmer(string& kmer) const {
     const unsigned char* kmerBits = Vertex::getKmerBits(kmer);
     bool exists = !(hashmap.find(kmerBits) == hashmap.end());
-    free((unsigned char*) kmerBits);
+    free(const_cast<unsigned char*>(kmerBits));
     return exists;
 }
 
@@ -55,7 +62,7 @@ Vertex Graph::getVertex(string& kmer) const {
     if(hashmap.find(kmerBits) != hashmap.end()) { // the kmer exists in the graph
         v = Vertex(kmer, hashmap.at(kmerBits));
     }
-    free((unsigned char*) kmerBits);
+    free(const_cast<unsigned char*>(kmerBits));
 
     return v;
 }
@@ -63,6 +70,7 @@ Vertex Graph::getVertex(string& kmer) const {
 void Graph::addVertex(Vertex& v) {
     // check if the vertex already exists
     auto vertex = hashmap.find(v.getKmerBits());
+    //printf("kmer is: %s at: %p\n", Vertex::bitsToString(v.getKmerBits(), kmerLen).c_str(), v.getKmerBits());
     if(vertex != hashmap.end()) { // vertex exists
         // bitwise AND the existing bit_vector with the new bit_vector
         bit_vector andedColors = vertex->second;
@@ -74,6 +82,7 @@ void Graph::addVertex(Vertex& v) {
     else { // vertex doesn't exist, thus add it to the graph
         hashmap[v.getKmerBits()] = v.getColors();
     }
+    free(const_cast<unsigned char*>(v.getKmerBits()));
 }
 
 vector<Vertex> Graph::getSuffixNeighbors(Vertex& v) const {

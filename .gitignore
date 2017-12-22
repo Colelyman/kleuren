@@ -63,3 +63,6 @@ thirdparty/bwtdisk/
 
 # iqtree
 thirdparty/iqtree-omp-1.5.5-Linux/
+
+# backup files
+*~

@@ -20,7 +20,6 @@
 #include <vector>
 
 #include "color.h"
-//#include "color_set.h"
 #include "graph_builder.h"
 
 using std::string;
@@ -49,13 +48,6 @@ class ColorManager {
 
         /// Returns the color given a colorID
         shared_ptr<Color> getColor(int colorID);
-
-        /** 
-         * Returns colors as a ColorSet, with n provided.
-         * @param n the parameter to pass to the newly formed ColorSet.
-         * @returns a ColorSet with the colors, and with the provided n
-         */
-        //ColorSet getColors(unsigned int n);
 
 		/**
 		 * Parses through colors and returns the subsequent color names.

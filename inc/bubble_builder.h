@@ -19,7 +19,6 @@
 #include "bubble.h"
 #include "graph.h"
 #include "color.h"
-//#include "color_set.h"
 #include "path.h"
 
 using std::string;

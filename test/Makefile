@@ -4,17 +4,17 @@ CXXFLAGS=-g -std=c++11 -Wall $(INCLUDES) $(LIBS)
 
 .PHONY: all clean install main kleuren-test
 
-TESTS_CPP:=$(filter-out src/main.cpp, $(wildcard src/*.cpp))
-TESTS_O:=$(wildcard src/*.o)
+TESTS_CPP=src/bubble_builder.cpp src/color_manager.cpp src/graph.cpp src/kmer_bank.cpp src/path.cpp
+TESTS_O=src/main.o src/bubble_builder.o src/color_manager.o src/graph.o src/kmer_bank.o src/path.o
 
-kleuren-test: src/main.o $(TESTS_CPP)
+kleuren-test: src/main.o ../.libs/libkleuren.a $(TESTS_O)
 	$(CXX) $^ -o $@ $(CPPFLAGS) $(CXXFLAGS)
 
 clean:
-	rm -f kleuren-test ./src/$(TESTS_O) 
+	rm -f kleuren-test $(TESTS_O) 
 
 src/main.o: src/main.cpp
 	$(CXX) -c -Ithirdparty/catch -o $@ $^
 
 src/%.o: src/%.cpp
-	$(CXX) $^ -o $@ $(CPPFLAGS) $(CXXFLAGS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@ 

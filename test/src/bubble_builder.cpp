@@ -24,13 +24,13 @@ TEST_CASE("BubbleBuilder simple toy examples", "[bubble]") {
     shared_ptr<Color> toyColor3(new Color(3, "toyColor3", pathToToy3));
     shared_ptr<Color> toyColor4(new Color(4, "toyColor4", pathToToy4));
 
+    /*
     SECTION("Finding a simple endKmer of two colors with a single SNP, that turns out to be a loop") {
         Vertex startVertex = Vertex("AAA", toyColor1->getBitVector());
         Vertex endVertex = Vertex("AAA", toyColor1->getBitVector());
         REQUIRE(bb.findEndVertex(startVertex, 4) == endVertex);
     }
 
-    /*
     SECTION("Finding the endKmer between toy 3 and toy 4 colors") {
         string startKmer = "CTG";
         string endKmer = "AAT";

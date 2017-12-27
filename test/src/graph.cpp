@@ -10,9 +10,13 @@
 using std::cout;
 using std::endl;
 
+unsigned int Graph::kmerLen;
+
 TEST_CASE("Graph simple vertex additions", "[graph]") {
     SECTION("Testing isVertex() method") {
-	Graph g = Graph(); 
+        Graph::kmerLen = 5;
+        
+        Graph g = Graph();
         bit_vector b1 = {0, 1, 0, 0};
         Vertex v1 = Vertex("ACTGT", b1);
         g.addVertex(v1);
@@ -31,7 +35,7 @@ TEST_CASE("Graph simple vertex additions", "[graph]") {
     }
 
     SECTION("Testing getSuffixNeighbors() method") {
-	Graph g = Graph(); 
+        Graph g = Graph();
         bit_vector b1 = {0, 0, 0, 1};
         Vertex v1 = Vertex("AACCT", b1);
         g.addVertex(v1);
@@ -53,7 +57,9 @@ TEST_CASE("Graph simple vertex additions", "[graph]") {
     }
 
     SECTION("Testing getPrefixNeighbors() method") {
-	Graph g = Graph(); 
+        Graph::kmerLen = 6;
+
+        Graph g = Graph();
         bit_vector b1 = {0, 1, 0, 0};
         Vertex v1 = Vertex("TTACTN", b1);
         g.addVertex(v1);

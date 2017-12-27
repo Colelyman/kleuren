@@ -65,6 +65,8 @@ class Graph {
 
         void setNumColors(size_t numColors);
 
+        string toString();
+
         static unsigned int kmerLen;
 
     private:
@@ -90,7 +92,7 @@ class Graph {
         size_t numColors;
 
         /// nucleotides represents the supported IUPAC nucleotide codes
-        vector<char> nucleotides = {'A', 'C', 'G', 'T', 'N'};
+        vector<char> nucleotides = {'A', 'C', 'G', 'T'};
 
 };
 

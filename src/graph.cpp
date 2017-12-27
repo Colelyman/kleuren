@@ -10,24 +10,19 @@ Graph::Graph() {
 
 Graph::~Graph() {
     // deallocate all of the keys in hashmap
-    for(auto const& element : hashmap) {
-        printf("kmer is: %s at: %p\n", Vertex::bitsToString(element.first, kmerLen).c_str(), element.first);
-    }
-    /*int countElements = 0;
+    int countElements = 0;
     while(hashmap.size() > 0) {
         auto element = hashmap.begin();
         if(element->first != NULL) {
             countElements++;
-            cout << "kmer is: " << Vertex::bitsToString(element->first, kmerLen) << " at: " << element->first << endl;
-            //free(const_cast<unsigned char*>(element->first));
+            free(const_cast<unsigned char*>(element->first));
         }
         hashmap.erase(element);
-        }*/
+    }
 }
 
 bool Graph::isVertex(Vertex& v) const {
     auto vertexPair = hashmap.find(v.getKmerBits());
-    free(const_cast<unsigned char*>(v.getKmerBits()));
     if(vertexPair != hashmap.end()) {
         // check if the bit_vectors match up
         bit_vector existingColors = vertexPair->second;
@@ -70,7 +65,6 @@ Vertex Graph::getVertex(string& kmer) const {
 void Graph::addVertex(Vertex& v) {
     // check if the vertex already exists
     auto vertex = hashmap.find(v.getKmerBits());
-    //printf("kmer is: %s at: %p\n", Vertex::bitsToString(v.getKmerBits(), kmerLen).c_str(), v.getKmerBits());
     if(vertex != hashmap.end()) { // vertex exists
         // bitwise AND the existing bit_vector with the new bit_vector
         bit_vector andedColors = vertex->second;
@@ -78,29 +72,33 @@ void Graph::addVertex(Vertex& v) {
 
         // reassign the new bit_vector to the kmer in the graph
         hashmap[v.getKmerBits()] = andedColors;
+        free(const_cast<unsigned char*>(v.getKmerBits()));
     }
     else { // vertex doesn't exist, thus add it to the graph
         hashmap[v.getKmerBits()] = v.getColors();
     }
-    free(const_cast<unsigned char*>(v.getKmerBits()));
 }
 
 vector<Vertex> Graph::getSuffixNeighbors(Vertex& v) const {
     vector<Vertex> vertices;
     // strip off the first character from the kmer
-    string kmer = v.getKmer().substr(1);
-    size_t index = kmer.length();
-    kmer.append('\0');
+    const char* kmer = v.getKmer().substr(1).c_str();
+    char* prefix = (char*) malloc(strlen(kmer) + 1);
+    strcpy(prefix, kmer);
+    size_t index = strlen(prefix);
+    prefix[index + 1] = '\0';
     // iterate over each nucleotide code and append it to the kmer
     for(const char nucleotide : nucleotides) {
         // append the nucleotide to the kmer
-        kmer[index] = nucleotide;
-        Vertex vertex = getVertex(kmer);
-        /// TODO check if the vertex's colors match up with the neighbors
-        if(vertex.getKmer() != "") { // check if the vertex exists
+        prefix[index] = nucleotide;
+        // TODO optimize to just use c-strings
+        string prefixString = string(prefix);
+        Vertex vertex = Vertex(prefixString, v.getColors());
+        if(this->isVertex(vertex)) { // check if the vertex exists
             vertices.push_back(vertex);
         }
     }
+    free(prefix);
     return vertices;
 }
 
@@ -146,4 +144,11 @@ size_t Graph::getSize() const {
 
 void Graph::setNumColors(size_t numColors) {
     this->numColors = numColors;
+}
+
+string Graph::toString() {
+    for(auto const& element : hashmap) {
+        printf("kmer is: %s at: %p\n", Vertex::bitsToString(element.first, kmerLen).c_str(), element.first);
+    }
+    return "";
 }

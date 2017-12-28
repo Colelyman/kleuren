@@ -4,6 +4,7 @@
 
 #include <sstream>
 #include <set>
+#include <map>
 
 #include "color_manager.h"
 
@@ -19,20 +20,27 @@ ColorManager::ColorManager(ifstream* fileStream, GraphBuilder* graphBuilder) {
 
 void ColorManager::addColors() {
     string line, colorName, pathToSequence;
-    // iterate over each line in the file
+    map<string, string> colorValues;
+    // iterate over each line in the file and store it in colorValues
     while(getline(*colorFile, line)) {
         // parse each line
         stringstream sstream(line);
         sstream >> colorName;
         sstream >> pathToSequence;
-        shared_ptr<Color> color = addColor(colorName, pathToSequence);
-        graphBuilder->addColor(pathToSequence, color->getBitVector());
+        colorValues[colorName] = pathToSequence;
+    }
+    numColors = colorValues.size();
+    // add each color from colorValues
+    int id = 0;
+    for(auto const& element : colorValues) {
+        shared_ptr<Color> color = addColor(element.first, element.second, id++);
+        graphBuilder->addColor(element.second, color->getBitVector());
     }
 }
 
-shared_ptr<Color> ColorManager::addColor(string colorName, string pathToSequence) {
-    colors[numColors] = shared_ptr<Color>(new Color(numColors, colorName, pathToSequence));
-    return colors[numColors++];
+shared_ptr<Color> ColorManager::addColor(string colorName, string pathToSequence, int id) {
+    colors[id] = shared_ptr<Color>(new Color(id, numColors, colorName, pathToSequence));
+    return colors[id];
 }
 
 shared_ptr<Color> ColorManager::getColor(int colorID) {

@@ -44,7 +44,7 @@ class ColorManager {
          * @param the path to the BWT file to load into the FMIndex
          * @returns the instance of the color after it is added
          */
-        shared_ptr<Color> addColor(string colorName, string pathToBWT);
+        shared_ptr<Color> addColor(string colorName, string pathToBWT, int id);
 
         /// Returns the color given a colorID
         shared_ptr<Color> getColor(int colorID);
@@ -71,7 +71,6 @@ class ColorManager {
         map<int, shared_ptr<Color> > colors;
 
         /// numColors is the total number of colors added.
-        /// It also determines the ID of each Color.
         size_t numColors;
 
 };

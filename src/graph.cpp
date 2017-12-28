@@ -82,7 +82,8 @@ void Graph::addVertex(Vertex& v) {
 vector<Vertex> Graph::getSuffixNeighbors(Vertex& v) const {
     vector<Vertex> vertices;
     // strip off the first character from the kmer
-    const char* kmer = v.getKmer().substr(1).c_str();
+    string kmerString = v.getKmer().substr(1, kmerLen - 1);
+    const char* kmer = kmerString.c_str();
     char* prefix = (char*) malloc(strlen(kmer) + 1);
     strcpy(prefix, kmer);
     size_t index = strlen(prefix);

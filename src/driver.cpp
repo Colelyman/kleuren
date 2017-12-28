@@ -78,8 +78,6 @@ void Driver::run() {
             cout << "startKmer: " << kmer << endl;
             // build the bubble
 			Vertex v = Vertex(kmer, colorManager.getNumColors());
-            const unsigned char* bits = v.getKmerBits();
-            string bitString = Vertex::bitsToString(bits, kmer.length());
             Bubble bubble = bubbleBuilder->build(v, args.getN(), args.getMaxDepth());
             if(bubble.getPaths().empty()) { // no bubble was found, try next kmer
                 cout << "\tno bubble" << endl;

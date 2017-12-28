@@ -30,22 +30,6 @@ class Bubble {
     public:
         Bubble();
 
-        /** 
-         * Runs Needleman-Wunsch algorithm on each pair in a pair-wise fashion.
-         * @return a map of key pair<int, int> where each int in the pair is the
-         * ID of the colors compared, and value int which is the score for that 
-         * pair of paths.
-         */
-        map<pair<int, int>, int> runNW();
-
-        /**
-         * Runs a shared kmer count for each pair in a pair-wise fasion.
-         * @return a map of key pair<int, int> where each int int the pair is the
-         * ID of the colors compared, and value unsigned int is the number of shared kmers
-         * between the pair of paths.
-         */
-        //map<pair<int, int>, unsigned int> runSharedKmerCount(unsigned int kmerLen);
-
         /// Checks if the path is present in the bubble
         bool pathExists(Path path) const;
 
@@ -64,12 +48,6 @@ class Bubble {
 
         /// Returns the colors that are associated with path
         bit_vector getColors(Path path) const;
-
-        /// Returns the name of the Colors that path is associated with
-        //vector<string> getColorNames(Path path) const;
-
-        /// Returns the ID of the Colors that path is associated with
-        //vector<int> getColorIDs(Path path) const;
 
         /// Returns the paths of the bubble
         map<Path, bit_vector> getPaths() const;

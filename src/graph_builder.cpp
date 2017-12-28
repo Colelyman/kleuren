@@ -28,7 +28,7 @@ void GraphBuilder::addColor(string filePath, bit_vector color) {
         cerr << "Supported file types are: fa, fasta, and fna." << endl;
         exit(1);
     }
-    //cerr << "Added color " << filePath << " in: " << (double)(clock() - start)/CLOCKS_PER_SEC << " seconds" << endl;
+    cerr << "Added color " << filePath << " in: " << (double)(clock() - start)/CLOCKS_PER_SEC << " seconds" << endl;
 }
 
 void GraphBuilder::parseFasta(string filePath, bit_vector color) {

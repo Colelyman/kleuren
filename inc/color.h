@@ -19,9 +19,6 @@
 #include <vector>
 #include <sdsl/bit_vectors.hpp>
 
-#include "fm_index.h"
-#include "dbg_query.h"
-
 using std::string;
 using std::pair;
 using std::vector;

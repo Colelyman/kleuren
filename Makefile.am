@@ -16,10 +16,10 @@ kleuren_SOURCES = src/args.cpp src/arg_parse.cpp src/driver.cpp src/main.cpp \
 				  inc/kmer_bank.h inc/graph.h inc/vertex.h inc/graph_builder.h
 
 # add the extra files for the distribution
-EXTRA_DIST = thirdparty/cxxopts/include/cxxopts.hpp thirdparty/dbgfm/*
+EXTRA_DIST = thirdparty/cxxopts/include/cxxopts.hpp thirdparty/BloomFilterTrie/*
 
-# Link dbgfm library to kleuren 
-kleuren_LDADD = thirdparty/dbgfm/libdbgfm.a thirdparty/sdsl-lite/bin/lib/libsdsl.a
+# Link bft and sdsl libraries to kleuren 
+kleuren_LDADD = thirdparty/BloomFilterTrie/lib/libbft.so thirdparty/sdsl-lite/bin/lib/libsdsl.a
 
 # Create the kleuren static library
 noinst_LTLIBRARIES = libkleuren.la

@@ -33,34 +33,6 @@
 kleuren
 kleuren-test
 
-# Automake
-Makefile
-Makefile.in
-.deps
-.dirstamp
-
-# Autoconf
-config*
-install-sh
-depcomp
-missing
-ar-lib
-compile
-libtool
-ltmain.sh
-aclocal.m4
-autom4te.cache
-m4
-
-# dbgfm
-*.lm
-*.sm
-*.str
-*.fai
-
-# bwtdisk
-thirdparty/bwtdisk/
-
 # iqtree
 thirdparty/iqtree-omp-1.5.5-Linux/
 

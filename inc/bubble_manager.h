@@ -36,7 +36,7 @@ class BubbleManager {
         void writeBubble(Bubble bubble);
 
         /// Count the number of shared kmers in the bubble and add it to the matrix
-        void countSharedKmers(Bubble bubble, unsigned int kmerLen);
+        void countSharedKmers(Bubble bubble, uint32_t kmerLen);
 
         /// Averages the sharedKmerMatrix so that the values are normalized
         /// @return the sharedKmerMatrix normalized
@@ -59,16 +59,16 @@ class BubbleManager {
         /** 
          * The matrix showing the similarity between colors based on shared kmers.
          * The key is a pair of ints that represent the color's ID, and the value is
-         * also a pair, but of unsigned int's representing the number of shared kmers
+         * also a pair, but of uint32_t's representing the number of shared kmers
          * between the two colors, and the number of bubbles the colors are found in.
          *
          * The number of bubbles that the colors are found in are kept so that the 
          * average number of shared kmers can more accurately be calculated.
          */
-        map<pair<int, int>, pair<unsigned int, unsigned int> > sharedKmerMatrix;
+        map<pair<int, int>, pair<uint32_t, uint32_t> > sharedKmerMatrix;
 
         /// The number of bubbles that have been processed
-        unsigned int n;
+        uint32_t n;
 
 };
 

@@ -36,7 +36,7 @@ int Path::runNW(Path path) const {
 }
 
 /// @todo this doesn't need to account for reverse complement does it?
-unsigned int Path::runSharedKmerCount(Path path, unsigned int kmerLen) const {
+uint32_t Path::runSharedKmerCount(Path path, uint32_t kmerLen) const {
     string seqA = getSequence();
     string seqB = path.getSequence();
 
@@ -44,9 +44,9 @@ unsigned int Path::runSharedKmerCount(Path path, unsigned int kmerLen) const {
         return 0;
     }
 
-    unsigned int count = 0;
+    uint32_t count = 0;
     string kmer;
-    for(unsigned int i = 0; i < seqA.length() - kmerLen + 1; i++) {
+    for(uint32_t i = 0; i < seqA.length() - kmerLen + 1; i++) {
         kmer = seqA.substr(i, kmerLen);
         if(seqB.find(kmer) != string::npos) {
             count++;

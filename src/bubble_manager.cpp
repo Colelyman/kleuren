@@ -36,7 +36,7 @@ void BubbleManager::writeBubble(Bubble bubble) {
             *bubbleFile << seq << endl;
         }
         else {
-            unsigned int count = 1;
+            uint32_t count = 1;
             while(count < seq.length()) {
                 *bubbleFile << seq.at(count);
                 if(!(count % 80)) {
@@ -56,9 +56,9 @@ pair<int, int> flipPair(pair<int, int> p) {
     return flippedPair;
 }
 
-void BubbleManager::countSharedKmers(Bubble bubble, unsigned int kmerLen) {
+void BubbleManager::countSharedKmers(Bubble bubble, uint32_t kmerLen) {
     // count the shared kmers in the bubble
-    /*map<pair<int, int>, unsigned int> results = bubble.runSharedKmerCount(kmerLen);
+    /*map<pair<int, int>, uint32_t> results = bubble.runSharedKmerCount(kmerLen);
 
     // insert the results into the matrix
     for(auto const& result : results) {
@@ -78,7 +78,7 @@ void BubbleManager::countSharedKmers(Bubble bubble, unsigned int kmerLen) {
         }
         else { // the pair and the flipped pair are not found in sharedKmerMatrix
             // create a new entry with the number of shared kmers and 1 bubble present
-            sharedKmerMatrix[result.first] = pair<unsigned int, unsigned int>(result.second, 1);
+            sharedKmerMatrix[result.first] = pair<uint32_t, uint32_t>(result.second, 1);
         }
 	}*/
 }
@@ -86,8 +86,8 @@ void BubbleManager::countSharedKmers(Bubble bubble, unsigned int kmerLen) {
 map<int, map<int, float> > BubbleManager::averageSharedKmerMatrix() {
     map<int, map<int, float> > averagedMatrix;
     for(auto const& entry : sharedKmerMatrix) {
-        unsigned int numSharedKmers = entry.second.first;
-        unsigned int totalNumBubbles = entry.second.second;
+        uint32_t numSharedKmers = entry.second.first;
+        uint32_t totalNumBubbles = entry.second.second;
         averagedMatrix[entry.first.first][entry.first.second] = (float) numSharedKmers / (float) totalNumBubbles;
     }
     
@@ -97,10 +97,10 @@ map<int, map<int, float> > BubbleManager::averageSharedKmerMatrix() {
 void BubbleManager::writeSharedKmerMatrix(map<int, map<int, float> > matrix) {
     // write how many colors are present in the matrix on the first line
     *matrixFile << colorManager->getNumColors() << endl;
-    for(unsigned int i = 0; i < colorManager->getNumColors(); i++) {
+    for(uint32_t i = 0; i < colorManager->getNumColors(); i++) {
         // write the name of the color, essentiall the left-most column
         *matrixFile << colorManager->getColor(i)->getName();
-        for(unsigned int j = 0; j < i; j++) {
+        for(uint32_t j = 0; j < i; j++) {
             // write the corresponding score
             *matrixFile << " " << matrix[i][j];
         }

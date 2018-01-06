@@ -20,7 +20,6 @@
 #include <vector>
 
 #include "color.h"
-#include "graph_builder.h"
 
 using std::string;
 using std::map;
@@ -33,7 +32,7 @@ class ColorManager {
     public:
         ColorManager() { }
 
-        ColorManager(ifstream* fileStream, GraphBuilder* graphBuilder);
+        ColorManager(ifstream* fileStream);
 
         /// Adds all of the colors from the color file
         void addColors();
@@ -62,8 +61,6 @@ class ColorManager {
     private:
         /// The pointer to the file handle of the color file
         ifstream* colorFile;
-
-        GraphBuilder* graphBuilder;
 
         /// colors is where each Color is located.
         /// @key is of type int and represents the id of the Color.

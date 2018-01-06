@@ -52,7 +52,7 @@ class Path {
          * @param path the path to compare to
          * @return the number of shared kmers
          */
-        unsigned int runSharedKmerCount(Path path, unsigned int kmerLen) const;
+        uint32_t runSharedKmerCount(Path path, uint32_t kmerLen) const;
 
         bool operator<(const Path& rhsPath) const {
             return this->getSequence() < rhsPath.getSequence();

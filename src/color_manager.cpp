@@ -11,10 +11,9 @@
 using std::stringstream;
 using std::set;
 
-ColorManager::ColorManager(ifstream* fileStream, GraphBuilder* graphBuilder) {
+ColorManager::ColorManager(ifstream* fileStream) {
     colorFile = fileStream;
     numColors = 0;
-    this->graphBuilder = graphBuilder;
     addColors();
 }
 
@@ -34,7 +33,7 @@ void ColorManager::addColors() {
     int id = 0;
     for(auto const& element : colorValues) {
         shared_ptr<Color> color = addColor(element.first, element.second, id++);
-        graphBuilder->addColor(element.second, color->getBitVector());
+        //graphBuilder->addColor(element.second, color->getBitVector());
     }
 }
 
@@ -48,7 +47,7 @@ shared_ptr<Color> ColorManager::getColor(int colorID) {
 }
 
 /*
-ColorSet ColorManager::getColors(unsigned int n) {
+ColorSet ColorManager::getColors(uint32_t n) {
     set<shared_ptr<Color> > colorSet;
     for(auto const& color : colors) {
         colorSet.insert(color.second);
@@ -59,7 +58,7 @@ ColorSet ColorManager::getColors(unsigned int n) {
 
 vector<string> ColorManager::getColorNames(bit_vector colorVector) {
 	vector<string> names;
-	for(unsigned int i = 0; i < colorVector.size(); i++) {
+	for(uint32_t i = 0; i < colorVector.size(); i++) {
 		if(colorVector[i]) {
 			names.push_back(colors[i]->getName());
 		}

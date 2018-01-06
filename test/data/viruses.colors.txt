@@ -1,4 +1,8 @@
-Ebola ./data/ebola.fa
-Flu ./data/flu.fa
-Marburg ./data/marburg.fa
-Zika ./data/zika.fa
+/home/cole/Code/csl/kleuren/test/data/ebola.fa
+/home/cole/Code/csl/kleuren/test/data/flu.fa
+/home/cole/Code/csl/kleuren/test/data/marburg.fa
+/home/cole/Code/csl/kleuren/test/data/toy1.fa
+/home/cole/Code/csl/kleuren/test/data/toy2.fa
+/home/cole/Code/csl/kleuren/test/data/toy3.fa
+/home/cole/Code/csl/kleuren/test/data/toy4.fa
+/home/cole/Code/csl/kleuren/test/data/zika.fa

@@ -22,7 +22,6 @@
 #include "bubble_builder.h"
 #include "bubble_manager.h"
 #include "graph.h"
-#include "graph_builder.h"
 
 using std::set;
 using std::ifstream;
@@ -43,26 +42,17 @@ class Driver {
         /// removal, and access of colors
         ColorManager colorManager;
 
-        /// The pointer to the file handle that contains the colors
-        ifstream* colorFile;
-
         /// The pointer to the file handle that contains the kmers
         ifstream* kmerFile;
 
         /// The pointer to the file handle that will output the bubbles
         ofstream* bubbleFile;
 
-        /// The pointer to the file handle that will output the matrix
-        ofstream* matrixFile;
-
         /// The KmerBank provides a super set of kmers for each color
         KmerBank* kmerBank;
 
 		/// The Graph underlying structure to represent the Colored de Bruijn graph
 		Graph* graph;
-
-        /// The pointer to the object that builds the graph
-        GraphBuilder* graphBuilder;
 
         /// Builds bubbles!
         BubbleBuilder* bubbleBuilder;

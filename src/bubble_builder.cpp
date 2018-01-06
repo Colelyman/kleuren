@@ -23,23 +23,23 @@ BubbleBuilder::BubbleBuilder(Graph* graph) {
     this->graph = graph;
 }
 
-Bubble BubbleBuilder::build(Vertex& startVertex, unsigned int numColors, unsigned int maxDepth) {
+Bubble BubbleBuilder::build(BFT_kmer* startBftKmer, uint32_t numColors, uint32_t maxDepth) {
     Bubble bubble = Bubble();
 
 	// if the color doesn't have any suffix neighbors, return an empty bubble
-	if(!graph->hasSuffixNeighbors(startVertex)) {
+	if(!graph->hasSuffixNeighbors(startBftKmer)) {
 		return bubble;
 	}
 
 	// find the next kmer that occurs in all of the colors
-    Vertex endVertex = findEndVertex(startVertex, numColors);
+    BFT_kmer* endBftKmer = findEndBftKmer(startBftKmer, numColors);
 
     // if there is no endKmer, return an empty bubble
-    if(endVertex.getKmer().empty()) {
+    if(!graph->isValidBFTKmer(endBftKmer)) {
         return bubble;
     }
 
-	map<bit_vector, string> paths = this->extendPaths(startVertex, endVertex, maxDepth);
+	map<bit_vector, string> paths = this->extendPaths(startBftKmer, endBftKmer, maxDepth);
 	for(const auto& element : paths) {
 		Path path = Path(element.second);
 		bubble.addPath(path, element.first);
@@ -53,19 +53,30 @@ Bubble BubbleBuilder::build(Vertex& startVertex, unsigned int numColors, unsigne
  * @param vertices the kmers to get the neighbors from
  * @return a vector of type Vertex with all of the neighbors of the vertices 
  */
-vector<Vertex> BubbleBuilder::getNeighbors(vector<Vertex> vertices) {
-    vector<Vertex> neighbors;
-    for(Vertex vertex : vertices) {
-        for(Vertex neighbor : graph->getSuffixNeighbors(vertex)) {
-            neighbors.push_back(neighbor);
+vector<BFT_kmer*> BubbleBuilder::getNeighbors(vector<BFT_kmer*> bftKmers) {
+    vector<BFT_kmer*> neighbors;
+    for(BFT_kmer* bftKmer : bftKmers) {
+        for(BFT_kmer* neighbor : arrayToVector(graph->getSuffixNeighbors(bftKmer))) {
+            if(graph->isValidBFTKmer(neighbor)) {
+                neighbors.push_back(neighbor);
+            }
         }
     }
 
     return neighbors;
 }
 
-Vertex BubbleBuilder::findEndVertex(Vertex& startVertex, unsigned int numColors) {
-    vector<Vertex> neighbors = graph->getSuffixNeighbors(startVertex);
+vector<BFT_kmer*> BubbleBuilder::arrayToVector(BFT_kmer* neighborPtrs) {
+    vector<BFT_kmer*> neighbors;
+    for(size_t i = 0; i < 4; i++) {
+        neighbors.push_back(neighborPtrs + i);
+    }
+
+    return neighbors;
+}
+
+BFT_kmer* BubbleBuilder::findEndBftKmer(BFT_kmer* startBftKmer, uint32_t numColors) {
+    vector<BFT_kmer*> neighbors = arrayToVector(graph->getSuffixNeighbors(startBftKmer));
 
     // loop until a kmer is found or there are no more neighbors to check
     while(true) {
@@ -74,20 +85,31 @@ Vertex BubbleBuilder::findEndVertex(Vertex& startVertex, unsigned int numColors)
             break;
         }
 
-        for(Vertex neighbor : neighbors) {
-            if(neighbor.getNumColors() >= numColors) {
+        for(BFT_kmer* neighbor : neighbors) {
+            if(graph->getNumColors(neighbor) >= numColors) {
                 return neighbor;
             }
         }
     }
 
     // there is no kmer in color that is present in all colors
-    return Vertex("", 0);
+    return NULL; 
 }
 
-bool BubbleBuilder::recursiveExtend(Vertex& currentVertex, Vertex& endVertex, map<bit_vector, string>& paths, set<Vertex>& visited, unsigned int depth, unsigned int maxDepth) {
-    // mark the currentVertex as visited
-    visited.insert(currentVertex);
+bit_vector BubbleBuilder::getBitvector(BFT_kmer* bftKmer) {
+    uint32_t* colorArray = graph->getColors(bftKmer);
+    bit_vector colors(graph->getNumColors(), 0);
+    for(size_t i = 1; i <= colorArray[0]; i++) {
+        colors[colorArray[i] - 1] = 1;
+    }
+
+    return colors;
+}
+
+bool BubbleBuilder::recursiveExtend(BFT_kmer* currentBftKmer, BFT_kmer* endBftKmer, map<bit_vector, string>& paths, set<BFT_kmer*>& visited, uint32_t depth, uint32_t maxDepth) {
+    // mark the currentBftKmer as visited
+    // TODO perhaps convert to marking the BFT_kmers in the BFT
+    visited.insert(currentBftKmer);
     // the maxDepth has been reached, therefore return an empty path 
     if(depth >= maxDepth) {
 		// clear out paths?
@@ -96,23 +118,26 @@ bool BubbleBuilder::recursiveExtend(Vertex& currentVertex, Vertex& endVertex, ma
     }
 
     // the base case is reached when the currentKmer is the same as the endKmer
-    if(currentVertex == endVertex) {
+    if(currentBftKmer->kmer == endBftKmer->kmer) {
         return true;
     }
 
-    vector<Vertex> neighbors = graph->getSuffixNeighbors(currentVertex);
+    vector<BFT_kmer*> neighbors = arrayToVector(graph->getSuffixNeighbors(currentBftKmer));
     // shuffle the neighbors vector so that there is no bias towards A
     random_shuffle(neighbors.begin(), neighbors.end());
-    for(Vertex neighbor : neighbors) {
+    for(BFT_kmer* neighbor : neighbors) {
         if(visited.find(neighbor) != visited.end()) { // the kmer has already been visited, thus skip it
             continue;
         }
-        string neighborSuffix = neighbor.getKmer().substr(neighbor.getKmer().length() - 1, 1);
-        string oldPath = paths[neighbor.getColors()];
-        paths[neighbor.getColors()] += neighborSuffix;
+        size_t neighborLen = strlen(neighbor->kmer);
+        char neighborSuffix;
+        strncpy(neighborSuffix, neighbor->kmer + neighborLen - 1, 1);
+        bit_vector colors = getBitvector(neighbor);
+        string oldPath = paths[colors];
+        paths[colors].append(1, neighborSuffix);
         depth += 1;
-        if(!recursiveExtend(neighbor, endVertex, paths, visited, depth, maxDepth)) {
-            paths[neighbor.getColors()] = oldPath;
+        if(!recursiveExtend(neighbor, endBftKmer, paths, visited, depth, maxDepth)) {
+            paths[colors] = oldPath;
         }
         else {
             return true;
@@ -120,12 +145,12 @@ bool BubbleBuilder::recursiveExtend(Vertex& currentVertex, Vertex& endVertex, ma
     }
 }
 
-map<bit_vector, string> BubbleBuilder::extendPaths(Vertex& startVertex, Vertex& endVertex, unsigned int maxDepth) {
+map<bit_vector, string> BubbleBuilder::extendPaths(BFT_kmer* startBftKmer, BFT_kmer* endBftKmer, uint32_t maxDepth) {
 	map<bit_vector, string> paths;
 
-    set<Vertex> visited;
+    set<BFT_kmer*> visited;
 
-    recursiveExtend(startVertex, endVertex, paths, visited, 0, maxDepth);
+    recursiveExtend(startBftKmer, endBftKmer, paths, visited, 0, maxDepth);
 
     return paths;
 }

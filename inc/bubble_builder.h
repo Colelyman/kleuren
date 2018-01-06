@@ -29,10 +29,10 @@ class BubbleBuilder {
 
     public:
 
-	BubbleBuilder(Graph* graph);
+        BubbleBuilder(Graph* graph);
 
-        /// Returns the Bubble built starting at startVertex
-        Bubble build(Vertex& startVertex, unsigned int numColors, unsigned int maxDepth);
+        /// Returns the Bubble built starting at startBftKmer
+        Bubble build(BFT_kmer* startBftKmer, uint32_t numColors, uint32_t maxDepth);
 
         /** 
          * Finds the index of the ending kmer, which is the next kmer 
@@ -42,7 +42,7 @@ class BubbleBuilder {
          * @return the next kmer that is present in numColors (or more) colors, but if there is no kmer 
          * that is present in numColors (or more) it will return null 
          */
-        Vertex findEndVertex(Vertex& startVertex, unsigned int numColors);
+        BFT_kmer* findEndBftKmer(BFT_kmer* startBftKmer, uint32_t numColors);
 
         /**
          * Extends the path between startKmer and endKmer for a given color. The function will
@@ -54,15 +54,19 @@ class BubbleBuilder {
          * @param maxDepth the maxmimum recursive depth for the underlying recursive function
          * @return the path for color between startKmer and endKmer
          */
-        map<bit_vector, string> extendPaths(Vertex& startVertex, Vertex& endVertex, unsigned int maxDepth);
+        map<bit_vector, string> extendPaths(BFT_kmer* startBftKmer, BFT_kmer* endVertex, uint32_t maxDepth);
 
     private:
 
-	vector<Vertex> getNeighbors(vector<Vertex> vertices);
+        vector<BFT_kmer*> getNeighbors(vector<BFT_kmer*> bftKmers);
 
-	bool recursiveExtend(Vertex& currentVertex, Vertex& endVertex, map<bit_vector, string>& paths, set<Vertex>& visited, unsigned int depth, unsigned int maxDepth);
+        vector<BFT_kmer*> arrayToVector(BFT_kmer* neighborPtrs);
 
-	Graph* graph;
+        bit_vector getBitvector(BFT_kmer* bftKmer);
+
+        bool recursiveExtend(BFT_kmer* currentBftKmer, BFT_kmer* endBftKmer, map<bit_vector, string>& paths, set<BFT_kmer*>& visited, uint32_t depth, uint32_t maxDepth);
+
+        Graph* graph;
 };
 
 #endif // BUBBLE_BUILDER_H

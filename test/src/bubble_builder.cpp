@@ -28,15 +28,15 @@ TEST_CASE("BubbleBuilder simple toy examples", "[bubble]") {
     SECTION("Finding a simple endKmer of two colors with a single SNP, that turns out to be a loop") {
         Vertex startVertex = Vertex("AAA", toyColor1->getBitVector());
         Vertex endVertex = Vertex("AAA", toyColor1->getBitVector());
-        REQUIRE(bb.findEndVertex(startVertex, 4) == endVertex);
+        REQUIRE(bb.findEndBftKmer(startVertex, 4) == endVertex);
     }
 
     SECTION("Finding the endKmer between toy 3 and toy 4 colors") {
         string startKmer = "CTG";
         string endKmer = "AAT";
         ColorSet colors = ColorSet(set<shared_ptr<Color> >({toyColor3, toyColor4}));
-        REQUIRE(bb.findEndVertex(startKmer, toyColor3, colors) == endKmer);
-        REQUIRE(bb.findEndVertex(startKmer, toyColor4, colors) == endKmer);
+        REQUIRE(bb.findEndBftKmer(startKmer, toyColor3, colors) == endKmer);
+        REQUIRE(bb.findEndBftKmer(startKmer, toyColor4, colors) == endKmer);
     }
 
     SECTION("Extending a simple linear path") {
@@ -72,9 +72,9 @@ TEST_CASE("BubbleBuilder virus examples", "[bubble]") {
     /*SECTION("Finding an endKmer and extending a small path in the viruses") {
         string startKmer = "ATTACA";
         string endKmer = "TACAAA";
-        REQUIRE(bb.findEndVertex(startKmer, ebolaColor, colors) == endKmer);
+        REQUIRE(bb.findEndBftKmer(startKmer, ebolaColor, colors) == endKmer);
         
-        unsigned int maxDepth = 5;
+        uint32_t maxDepth = 5;
         string path = "ATTACAAA";
         CHECK(bb.extendPath(startKmer, endKmer, ebolaColor, maxDepth) == path);
         
@@ -89,9 +89,9 @@ TEST_CASE("BubbleBuilder virus examples", "[bubble]") {
         string startKmer = "ATGCC";
         string endKmer = "GCCAA";
         
-        REQUIRE(bb.findEndVertex(startKmer, zikaColor, colors) == endKmer);
+        REQUIRE(bb.findEndBftKmer(startKmer, zikaColor, colors) == endKmer);
 
-        unsigned int maxDepth = 10;
+        uint32_t maxDepth = 10;
 
         cout << bb.extendPath(startKmer, endKmer, marburgColor, maxDepth) << endl;
     }*/

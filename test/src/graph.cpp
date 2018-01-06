@@ -10,7 +10,7 @@
 using std::cout;
 using std::endl;
 
-unsigned int Graph::kmerLen;
+uint32_t Graph::kmerLen;
 
 TEST_CASE("Graph simple vertex additions", "[graph]") {
     SECTION("Testing isVertex() method") {

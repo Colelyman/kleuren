@@ -20,7 +20,9 @@
 #include <map>
 #include <iostream>
 
-#include "vertex.h"
+extern "C" {
+    #include <bft/bft.h>
+}
 
 using std::string;
 using std::vector;
@@ -32,67 +34,41 @@ class Graph {
 
     public:
 
-       Graph();
+       Graph(char* bftFileName);
 
        ~Graph();
        
-        /// Returns whether or not a vertex is contained
-        bool isVertex(Vertex& v) const;
+       bool isBFTKmer(char* strKmer) const;
 
-        /// Returns whether or not a kmer is contained in the graph
-        bool isKmer(string& kmer) const;
+       BFT_kmer* getBFTKmer(char* strKmer) const;
 
-        /// Returns the vertex of a kmer. If it doesn't exist it will return
-        /// a Vertex object with "" as the kmer and a bit_vector of 0 length
-        Vertex getVertex(string& kmer) const;
+       bool isValidBFTKmer(BFT_kmer* bftKmer) const;
 
-        /// Adds a Vertex v to the graph
-        void addVertex(Vertex& v);
+       uint32_t getNumColors(BFT_kmer* bftKmer) const;
 
-        /// Returns a vector of all of the vertices that neighbor v on the suffix side
-        vector<Vertex> getSuffixNeighbors(Vertex& v) const;
+       int getNumColors() const;
 
-        /// Returns the boolean value according to if the vertex has suffix neighbors
-        bool hasSuffixNeighbors(Vertex& v) const;
+       uint32_t* getColors(BFT_kmer* bftKmer) const;
 
-        /// Returns a vector of all of the vertices that neighbor v on the prefix side
-        vector<Vertex> getPrefixNeighbors(Vertex& v) const;
+       /// Returns a vector of all of the vertices that neighbor v on the suffix side
+       BFT_kmer* getSuffixNeighbors(BFT_kmer* bftKmer) const;
 
-        /// Returns the boolean value according to if the vertex has prefix neighbors
-        bool hasPrefixNeighbors(Vertex& v) const;
+       /// Returns the boolean value according to if the vertex has suffix neighbors
+       bool hasSuffixNeighbors(BFT_kmer* bftKmer) const;
 
-        size_t getSize() const;
+       /// Returns a vector of all of the vertices that neighbor v on the prefix side
+       BFT_kmer* getPrefixNeighbors(BFT_kmer* bftKmer) const;
 
-        void setNumColors(size_t numColors);
-
-        string toString();
-
-        static unsigned int kmerLen;
+       /// Returns the boolean value according to if the vertex has prefix neighbors
+       bool hasPrefixNeighbors(BFT_kmer* bftKmer) const;
 
     private:
 
-        struct kmer_cmp {
-            bool operator () (const unsigned char* a, const unsigned char* b) const {
-                for(unsigned int i = 0; i < (kmerLen / 4) + (kmerLen % 4 != 0); i++) {
-                    if(a[i] < b[i]) {
-                        return false;
-                    }
-                    else if(a[i] > b[i]) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        };
-        
-        /// The underlying structure representing the graph. The keys are the kmers
-        /// and the value is a bit_vector that signifies which colors contain the kmer
-        map<const unsigned char*, bit_vector, kmer_cmp> hashmap;
+        bool checkIfEmpty(BFT_kmer* bftKmers) const;
 
-        size_t numColors;
-
-        /// nucleotides represents the supported IUPAC nucleotide codes
-        vector<char> nucleotides = {'A', 'C', 'G', 'T'};
+        /// The underlying structure representing the Colored de Bruijn Graph as a
+        /// BloomFilterTrie.
+        BFT* bft;
 
 };
 

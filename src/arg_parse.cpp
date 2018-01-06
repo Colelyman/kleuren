@@ -16,27 +16,26 @@ using std::vector;
 using std::string;
 
 Args ArgParse::parseArgs(int argc, char* argv[]) {
-    Options options("kleuren", "A colored de Bruijn graph implementation for phylogeny reconstruction using dbgfm.");
+    Options options("kleuren", "A colored de Bruijn graph implementation for phylogeny tree reconstruction.");
 
     this->args = Args();
 
     try {
         // set up each argument
         options.add_options()
-            ("c,colorsFilePath", "Path to the file that holds the paths to the individual colors.",
+            ("f,bftFilePath", "Path to the BloomFilterTrie generated file.",
                 cxxopts::value<string>(), "PATH")
             ("k,kmerFilePath", "Path to the file that contains the kmers", cxxopts::value<string>(), "PATH")
             ("b,bubbleFilePath", "Path to the file in which to output the bubbles, if not provided bubbles will not be outputted", cxxopts::value<string>(), "PATH")
-            ("m,matrixFilePath", "Path to the file in which to out the similarity matrix, if not provided the matrix will not be outputted", cxxopts::value<string>(), "PATH")
-            ("l,kmerLen", "The length of kmer to use in order to construct the Colored de Bruijn Graph", cxxopts::value<unsigned int>()->default_value("17"), "INT") 
-            ("n,numMinColors", "The number of colors a kmer must be present in for a bubble to be formed. When set to 0, all colors must be present", cxxopts::value<unsigned int>()->default_value("0"), "INT")
-            ("d,maxDepth", "The maximum depth for which to recursively extend paths for a bubble", cxxopts::value<unsigned int>()->default_value("30"), "INT")
+            ("l,kmerLen", "The length of kmer to use in order to construct the Colored de Bruijn Graph", cxxopts::value<uint32_t>()->default_value("18"), "INT") 
+            ("n,numMinColors", "The number of colors a kmer must be present in for a bubble to be formed. When set to 0, all colors must be present", cxxopts::value<uint32_t>()->default_value("0"), "INT")
+            ("d,maxDepth", "The maximum depth for which to recursively extend paths for a bubble", cxxopts::value<uint32_t>()->default_value("30"), "INT")
             ("h,help", "Print help")
         ;
 
         // specify required arguments
         vector<string> required;
-        required.push_back("colorsFilePath");
+        required.push_back("bftFilePath");
         required.push_back("kmerFilePath");
 
         // parse the arguments
@@ -62,7 +61,7 @@ Args ArgParse::parseArgs(int argc, char* argv[]) {
 }
 
 void ArgParse::setArgs(Options options) {
-    args.setColorsFilePath(options["colorsFilePath"].as<string>());
+    args.setBFTFilePath(options["bftFilePath"].as<string>());
     args.setKmerFilePath(options["kmerFilePath"].as<string>());
     if(options.count("bubbleFilePath") || options.count("b")) { // check if the bubbleFilePath parameter is present
         args.setBubbleFilePath(options["bubbleFilePath"].as<string>());
@@ -70,13 +69,7 @@ void ArgParse::setArgs(Options options) {
     else {
         args.setBubbleFilePath("");
     }
-    if(options.count("matrixFilePath") || options.count("m")) { // check if the matrixFilePath parameter is present
-        args.setMatrixFilePath(options["matrixFilePath"].as<string>());
-    }
-    else {
-        args.setMatrixFilePath("");
-    }
-    args.setKmerLen(options["kmerLen"].as<unsigned int>());
-    args.setN(options["numMinColors"].as<unsigned int>());
-    args.setMaxDepth(options["maxDepth"].as<unsigned int>());
+    args.setKmerLen(options["kmerLen"].as<uint32_t>());
+    args.setN(options["numMinColors"].as<uint32_t>());
+    args.setMaxDepth(options["maxDepth"].as<uint32_t>());
 }

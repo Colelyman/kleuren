@@ -1,0 +1,4 @@
+/home/cole/Code/csl/kleuren/test/data/ebola.kmers.txt
+/home/cole/Code/csl/kleuren/test/data/zika.kmers.txt
+/home/cole/Code/csl/kleuren/test/data/flu.kmers.txt
+/home/cole/Code/csl/kleuren/test/data/marburg.kmers.txt

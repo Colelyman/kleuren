@@ -6,11 +6,10 @@ EXEC = kleuren
 LIB = libkleuren.a
 OBJS = src/args.o src/arg_parse.o src/driver.o src/main.o \
 	src/color.o src/color_manager.o src/bubble_manager.o \
-	src/path.o src/bubble.o src/bubble_builder.o src/kmer_bank.o src/graph.o \
-	src/vertex.o src/graph_builder.o
+	src/path.o src/bubble.o src/bubble_builder.o src/kmer_bank.o src/graph.o 
 HDR = inc/args.h inc/arg_parse.h inc/driver.h inc/color.h inc/color_manager.h \
 	inc/bubble_manager.h inc/path.h inc/bubble_builder.h inc/bubble.h \
-	inc/kmer_bank.h inc/graph.h inc/vertex.h inc/graph_builder.h
+	inc/kmer_bank.h inc/graph.h
 
 all: $(EXEC) $(LIB)
 

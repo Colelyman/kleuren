@@ -56,7 +56,11 @@ Bubble BubbleBuilder::build(BFT_kmer* startBftKmer, uint32_t numColors, uint32_t
 vector<BFT_kmer*> BubbleBuilder::getNeighbors(vector<BFT_kmer*> bftKmers) {
     vector<BFT_kmer*> neighbors;
     for(BFT_kmer* bftKmer : bftKmers) {
-        for(BFT_kmer* neighbor : arrayToVector(graph->getSuffixNeighbors(bftKmer))) {
+        BFT_kmer* neighborArray = graph->getSuffixNeighbors(bftKmer);
+        if(neighborArray == NULL) {
+            continue;
+        }
+        for(BFT_kmer* neighbor : arrayToVector(neighborArray)) {
             if(graph->isValidBFTKmer(neighbor)) {
                 neighbors.push_back(neighbor);
             }

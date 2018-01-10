@@ -18,7 +18,7 @@ Driver::Driver(Args args) {
     this->args = args;
 
     char* bftFilePath = (char*) malloc(args.getBFTFilePath().length());
-    bftFilePath = args.getBFTFilePath().c_str();
+    strcpy(bftFilePath, args.getBFTFilePath().c_str());
 	graph = new Graph(bftFilePath);
     //colorManager = ColorManager(colorFile);
     //graph->setNumColors(colorManager.getNumColors());

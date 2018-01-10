@@ -28,8 +28,10 @@ BFT_kmer* Graph::getBFTKmer(char* strKmer) const {
 }
 
 bool Graph::isValidBFTKmer(BFT_kmer* bftKmer) const {
-    if(bftKmer != NULL && is_kmer_in_cdbg(bftKmer)) {
-        return true;
+    if(bftKmer != NULL) {
+        if(is_kmer_in_cdbg(bftKmer)) {
+            return true;
+        }
     }
     return false;
 }
@@ -56,7 +58,10 @@ uint32_t* Graph::getColors(BFT_kmer* bftKmer) const {
 }
 
 BFT_kmer* Graph::getSuffixNeighbors(BFT_kmer* bftKmer) const {
-    return get_successors(bftKmer, bft);
+    if(is_kmer_in_cdbg(bftKmer)) {
+        return get_successors(bftKmer, bft);
+    }
+    return NULL;
 }
 
 bool Graph::hasSuffixNeighbors(BFT_kmer* bftKmer) const {

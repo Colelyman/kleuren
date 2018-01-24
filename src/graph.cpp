@@ -14,7 +14,10 @@ Graph::~Graph() {
 }
 
 bool Graph::isBFTKmer(char* strKmer) const {
-    if(query_sequence(bft, strKmer, 0.001, false)) {
+    uint32_t* colorSet = query_sequence(bft, strKmer, 0.001, false);
+    uint32_t numColors = colorSet[0];
+    free(colorSet);
+    if(numColors) {
         return true;
     }
     return false;
@@ -36,12 +39,31 @@ bool Graph::isValidBFTKmer(BFT_kmer* bftKmer) const {
     return false;
 }
 
+void Graph::setMarking() {
+    set_marking(bft);
+}
+
+void Graph::clearMarking() {
+    unset_marking(bft);
+}
+
+void Graph::markBFTKmer(BFT_kmer* bftKmer) {
+    set_flag_kmer(0, bftKmer, bft);
+}
+
+bool Graph::isMarkedBFTKmer(BFT_kmer* bftKmer) const {
+    if(get_flag_kmer(bftKmer, bft) == 0) {
+        return true;
+    }
+    return false;
+}
+
 uint32_t Graph::getNumColors(BFT_kmer* bftKmer) const {
     uint32_t numColors = 0;
     BFT_annotation* bftAnno = get_annotation(bftKmer);
     uint32_t* temp = get_list_id_genomes(bftAnno, bft);
     numColors = temp[0];
-    free(bftAnno);
+    free_BFT_annotation(bftAnno);
     free(temp);
 
     return numColors;
@@ -65,7 +87,10 @@ BFT_kmer* Graph::getSuffixNeighbors(BFT_kmer* bftKmer) const {
 }
 
 bool Graph::hasSuffixNeighbors(BFT_kmer* bftKmer) const {
-    return checkIfEmpty(getSuffixNeighbors(bftKmer));
+    BFT_kmer* neighbors = getSuffixNeighbors(bftKmer);
+    bool hasNeighbors = checkIfEmpty(neighbors);
+    if(neighbors != NULL) { free_BFT_kmer(neighbors, 4); }
+    return hasNeighbors;
 }
 
 BFT_kmer* Graph::getPrefixNeighbors(BFT_kmer* bftKmer) const {

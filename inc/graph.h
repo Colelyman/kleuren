@@ -44,6 +44,14 @@ class Graph {
 
        bool isValidBFTKmer(BFT_kmer* bftKmer) const;
 
+       void setMarking();
+
+       void clearMarking();
+
+       void markBFTKmer(BFT_kmer* bftKmer);
+
+       bool isMarkedBFTKmer(BFT_kmer* bftKmer) const;
+
        uint32_t getNumColors(BFT_kmer* bftKmer) const;
 
        int getNumColors() const;

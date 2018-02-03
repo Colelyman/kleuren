@@ -14,16 +14,10 @@
 #define BUBBLE_H
 
 #include <map>
-#include <utility>
-#include <set>
-#include <memory>
 
 #include "path.h"
 
 using std::map;
-using std::pair;
-using std::set;
-using std::shared_ptr;
 
 class Bubble {
     
@@ -44,20 +38,20 @@ class Bubble {
          * @param path the path to add to paths
          * @param colors the colors that are associated with the path
          */
-        void addPath(Path path, bit_vector colors);
+        void addPath(Path path, uint32_t* colors);
 
         /// Returns the colors that are associated with path
-        bit_vector getColors(Path path) const;
+        uint32_t* getColors(Path path) const;
 
         /// Returns the paths of the bubble
-        map<Path, bit_vector> getPaths() const;
+        map<Path, uint32_t*> getPaths() const;
 
     private:
         /// Return all of the paths in a vector
         vector<Path> pathsToVector() const;
 
         /// The paths that this bubble holds
-        map<Path, bit_vector> paths;
+        map<Path, uint32_t*> paths;
 
 };
 

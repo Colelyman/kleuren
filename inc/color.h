@@ -14,24 +14,14 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include <utility>
 #include <string>
-#include <vector>
-#include <sdsl/bit_vectors.hpp>
 
 using std::string;
-using std::pair;
-using std::vector;
-using sdsl::bit_vector;
 
 class Color {
 
     public:
-        Color(int id, string name, string pathToSequence);
-
-		Color(int id, int numColors, string name, string pathToSequence);
-
-        ~Color();
+        Color(uint32_t id, string name);
 
         /*
          * Getters
@@ -41,10 +31,7 @@ class Color {
         string getName() const;
 
         /// Return the ID of the color
-        int getID() const;
-
-        /// Return the bitVector of the color
-        bit_vector getBitVector() const;
+        uint32_t getID() const;
 
     private:
         /// The name of the color
@@ -53,13 +40,7 @@ class Color {
         /// The ID of the color, which is also used as the index of the bit to set in
         /// the bit_vector. For example, if there are 4 colors and the id is 3, then
         /// the bit_vector with only this color in it would be {0, 1, 0, 0}.
-        int id;
-
-        /// Represents what the bit_vector for only this color would be.
-        bit_vector bitVector;
-
-        /// The path to the sequence file
-        string pathToSequence;
+        uint32_t id;
 
 };
 

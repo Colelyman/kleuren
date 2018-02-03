@@ -38,9 +38,9 @@ class Driver {
         void run();
 
     private:
-        /// The only instance of the ColorManager, which regulates the addition,
+        /// The pointer to the ColorManager, which regulates the addition,
         /// removal, and access of colors
-        ColorManager colorManager;
+        ColorManager* colorManager;
 
         /// The pointer to the file handle that contains the kmers
         ifstream* kmerFile;

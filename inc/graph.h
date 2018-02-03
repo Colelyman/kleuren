@@ -54,9 +54,11 @@ class Graph {
 
        uint32_t getNumColors(BFT_kmer* bftKmer) const;
 
-       int getNumColors() const;
+       uint32_t getNumColors() const;
 
        uint32_t* getColors(BFT_kmer* bftKmer) const;
+
+       char* getColorFilePath(uint32_t colorId) const;
 
        /// Returns a vector of all of the vertices that neighbor v on the suffix side
        BFT_kmer* getSuffixNeighbors(BFT_kmer* bftKmer) const;

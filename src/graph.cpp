@@ -69,7 +69,7 @@ uint32_t Graph::getNumColors(BFT_kmer* bftKmer) const {
     return numColors;
 }
 
-int Graph::getNumColors() const {
+uint32_t Graph::getNumColors() const {
     return bft->nb_genomes;
 }
 
@@ -77,6 +77,10 @@ uint32_t* Graph::getColors(BFT_kmer* bftKmer) const {
     BFT_annotation* bftAnno = get_annotation(bftKmer);
 
     return get_list_id_genomes(bftAnno, bft);
+}
+
+char* Graph::getColorFilePath(uint32_t colorId) const {
+    return bft->filenames[colorId];
 }
 
 BFT_kmer* Graph::getSuffixNeighbors(BFT_kmer* bftKmer) const {

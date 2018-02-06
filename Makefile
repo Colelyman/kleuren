@@ -1,4 +1,4 @@
-PARAMS = -g -Wall -O0 -fpermissive $(INC) $(LIBS) -fsanitize=address
+PARAMS = -g -Wall -O0 -fpermissive $(INC) $(LIBS) #-fsanitize=address
 INC = -I./inc -I./thirdparty/BloomFilterTrie/include -I./thirdparty/cxxopts/include
 LIBS = -lbft -L./thirdparty/BloomFilterTrie/lib
 
@@ -20,7 +20,10 @@ src/main.o: src/main.cpp
 	$(CXX) $(PARAMS) -c $< -o $@
 
 $(LIB): $(OBJS)
-	ar -cvq $@ $<
+	ar -cvq $@ $^
+
+test/kleuren-test: $(LIB)
+	$(MAKE) -C test/
 
 clean:
-	rm $(OBJS) $(EXEC)
+	rm -f $(OBJS) $(EXEC) $(LIB)

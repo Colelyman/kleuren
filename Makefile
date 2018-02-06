@@ -10,6 +10,8 @@ OBJS = src/args.o src/arg_parse.o src/driver.o src/main.o \
 
 all: $(EXEC) $(LIB)
 
+.PHONY: test
+
 $(EXEC): $(OBJS)
 	$(CXX) $(OBJS) -o $@ $(PARAMS)
 
@@ -24,6 +26,9 @@ $(LIB): $(OBJS)
 
 test/kleuren-test: $(LIB)
 	$(MAKE) -C test/
+
+test: test/kleuren-test
+	cd test && ./kleuren-test
 
 clean:
 	rm -f $(OBJS) $(EXEC) $(LIB)

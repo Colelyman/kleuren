@@ -15,13 +15,9 @@
 
 #include <string>
 #include <fstream>
-#include <set>
-#include <memory>
 
 using std::string;
 using std::ifstream;
-using std::set;
-using std::shared_ptr;
 
 class KmerBank {
 
@@ -36,9 +32,6 @@ class KmerBank {
     private:
         /// The pointer to the file handle to the file of kmers
         ifstream* kmerFile; 
-
-        /// The set of visited kmers
-        shared_ptr<set<string> > visited;
 };
 
 #endif // KMER_BANK_H

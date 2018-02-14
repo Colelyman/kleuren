@@ -17,7 +17,9 @@ ColorManager::ColorManager(Graph* graph) {
 }
 
 ColorManager::~ColorManager() {
-    // TODO delete all the color pointers in colors
+    for(auto const& it : colors) {
+        delete it.second;
+    }
 }
 
 void ColorManager::addColors() {

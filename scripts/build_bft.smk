@@ -1,16 +1,19 @@
 from os.path import join
 
 # change the BASE variable to the path that leads to the root of the kleuren repo
-BASE = '/fslgroup/fslg_genome/compute/cole/kleuren'
+BASE = '/home/cole/Code/csl/kleuren'
 DSK = BASE + '/thirdparty/dsk/build/bin/dsk'
 DUMP = BASE + '/thirdparty/dsk/build/bin/dsk2ascii'
 BFT = BASE + '/thirdparty/BloomFilterTrie/bft'
 
 # chage the DIR variable to the path where the genomes are stored (must be in fasta
 # format, be gzipped, and have the suffix ".fasta.gz")
-DIR = '/fslgroup/fslg_genome/compute/cole/data/drosophila2/'
+DIR = '/home/cole/Code/csl/kleuren/test/data/'
+COLOR_FILE = DIR + 'colors.txt'
+BFT_FILE = DIR + 'bft.out'
+KMER_FILE = DIR + 'kmer.bft.out'
 
-KMER_LEN = 18
+KMER_LEN = 18 
 ABUNDANCE_MIN = 1
 ZIP_PAT = '{taxon}.fasta.gz'
 DIR_PAT = '{taxon}/'
@@ -18,9 +21,6 @@ TMP_PAT = '{taxon}.tmp'
 H5_PAT = '{taxon}.h5'
 KMER_PAT = '{taxon}.kmers.txt'
 KMER_GZ_PAT = '{taxon}.kmers.txt.gz'
-
-COLOR_FILE = DIR + 'colors.txt'
-BFT_FILE = DIR + 'bft.out'
 
 TAXA, = glob_wildcards(join(DIR, ZIP_PAT))
 
@@ -58,12 +58,11 @@ rule compile_colors:
     input:
         expand(join(DIR, KMER_PAT), taxon=TAXA)
     output:
-        colors = COLOR_FILE, bft = BFT_FILE
+        colors = COLOR_FILE, bft = BFT_FILE, kmers = KMER_FILE
     run:
         with open(output.colors, 'w') as out:
             for i in input:
                 #line = i + '\t' + i.split('/')[-1].split('.')[0] + '\n'
                 #out.write(line)
                 out.write(i + '\n')
-        shell(BFT + ' build ' + str(KMER_LEN) + ' kmers {output.colors} {output.bft}')
-
+        shell(BFT + ' build ' + str(KMER_LEN) + ' kmers {output.colors} {output.bft} -extract_kmers kmers {output.kmers}')

@@ -1,4 +1,4 @@
-PARAMS = -g -Wall -O0 -fpermissive $(INC) $(LIBS) #-fsanitize=address
+PARAMS = -std=c++11 -g -Wall -O0 -fpermissive $(INC) $(LIBS) #-fsanitize=address
 INC = -I./inc -I./thirdparty/BloomFilterTrie/include -I./thirdparty/cxxopts/include
 LIBS = -lbft -L./thirdparty/BloomFilterTrie/lib
 

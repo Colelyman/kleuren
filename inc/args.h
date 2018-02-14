@@ -13,6 +13,7 @@
 #define ARGS_H
 
 #include <string>
+#include <stdint.h>
 
 using std::string;
 

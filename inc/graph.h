@@ -74,11 +74,11 @@ class Graph {
 
     private:
 
-        bool checkIfEmpty(BFT_kmer* bftKmers) const;
+       bool checkIfEmpty(BFT_kmer* bftKmers) const;
 
-        /// The underlying structure representing the Colored de Bruijn Graph as a
-        /// BloomFilterTrie.
-        BFT* bft;
+       /// The underlying structure representing the Colored de Bruijn Graph as a
+       /// BloomFilterTrie.
+       BFT* bft;
 
 };
 

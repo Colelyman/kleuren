@@ -4,6 +4,8 @@
 
 #include "graph.h"
 
+#define V_VISITED 1 // for marking the BFT_kmer as visited
+
 Graph::Graph(char* bftFileName) {
     bft = load_BFT(bftFileName);
     free(bftFileName);
@@ -48,11 +50,11 @@ void Graph::clearMarking() {
 }
 
 void Graph::markBFTKmer(BFT_kmer* bftKmer) {
-    set_flag_kmer(0, bftKmer, bft);
+    set_flag_kmer(V_VISITED, bftKmer, bft);
 }
 
 bool Graph::isMarkedBFTKmer(BFT_kmer* bftKmer) const {
-    if(get_flag_kmer(bftKmer, bft) == 0) {
+    if(get_flag_kmer(bftKmer, bft) == V_VISITED) {
         return true;
     }
     return false;
@@ -92,17 +94,29 @@ BFT_kmer* Graph::getSuffixNeighbors(BFT_kmer* bftKmer) const {
 
 bool Graph::hasSuffixNeighbors(BFT_kmer* bftKmer) const {
     BFT_kmer* neighbors = getSuffixNeighbors(bftKmer);
-    bool hasNeighbors = checkIfEmpty(neighbors);
-    if(neighbors != NULL) { free_BFT_kmer(neighbors, 4); }
+    if(neighbors == NULL) {
+        return false;
+    }
+    bool hasNeighbors = !(checkIfEmpty(neighbors));
+    free_BFT_kmer(neighbors, 4);
     return hasNeighbors;
 }
 
 BFT_kmer* Graph::getPrefixNeighbors(BFT_kmer* bftKmer) const {
-    return get_predecessors(bftKmer, bft);
+    if(is_kmer_in_cdbg(bftKmer)) {
+        return get_predecessors(bftKmer, bft);
+    }
+    return NULL;
 }
 
 bool Graph::hasPrefixNeighbors(BFT_kmer* bftKmer) const {
-    return checkIfEmpty(getPrefixNeighbors(bftKmer));
+    BFT_kmer* neighbors = getPrefixNeighbors(bftKmer);
+    if(neighbors == NULL) {
+        return false;
+    }
+    bool hasNeighbors = !(checkIfEmpty(neighbors));
+    free_BFT_kmer(neighbors, 4);
+    return hasNeighbors;
 }
 
 bool Graph::checkIfEmpty(BFT_kmer* bftKmers) const {

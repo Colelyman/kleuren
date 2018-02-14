@@ -10,9 +10,6 @@
 [submodule "thirdparty/doxygen-bootstrapped"]
 	path = thirdparty/doxygen-bootstrapped
 	url = git@github.com:Velron/doxygen-bootstrapped.git
-[submodule "thirdparty/sdsl-lite"]
-	path = thirdparty/sdsl-lite
-	url = git@github.com:simongog/sdsl-lite.git
 [submodule "thirdparty/BloomFilterTrie"]
 	path = thirdparty/BloomFilterTrie
 	url = git@github.com:GuillaumeHolley/BloomFilterTrie.git

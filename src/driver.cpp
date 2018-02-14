@@ -17,11 +17,10 @@ using std::endl;
 Driver::Driver(Args args) {
     this->args = args;
 
-    char* bftFilePath = (char*) malloc(args.getBFTFilePath().length());
+    char* bftFilePath = (char*) malloc(args.getBFTFilePath().length() + 1);
     strcpy(bftFilePath, args.getBFTFilePath().c_str());
 	graph = new Graph(bftFilePath);
-    //colorManager = ColorManager(colorFile);
-    //graph->setNumColors(colorManager.getNumColors());
+    colorManager = new ColorManager(graph);
 
     // open the kmer file
     kmerFile = new ifstream();
@@ -37,7 +36,7 @@ Driver::Driver(Args args) {
         bubbleFile->open(args.getBubbleFilePath());
     }
 
-    //bubbleManager = BubbleManager(bubbleFile, matrixFile, &colorManager);
+    bubbleManager = BubbleManager(bubbleFile, colorManager);
 }
 
 Driver::~Driver() {
@@ -45,6 +44,7 @@ Driver::~Driver() {
     delete kmerFile;
     delete kmerBank;
 	delete graph;
+    delete colorManager;
 	delete bubbleBuilder;
     if(!args.getBubbleFilePath().empty()) {
         bubbleFile->close();
@@ -54,7 +54,6 @@ Driver::~Driver() {
 
 void Driver::run() {
     string kmer = kmerBank->getNextKmer();
-    shared_ptr<Color> color0 = colorManager.getColor(0);
 
     // iterate over the kmers
     while(kmer != "") {

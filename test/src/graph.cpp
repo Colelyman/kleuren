@@ -10,67 +10,112 @@
 using std::cout;
 using std::endl;
 
-uint32_t Graph::kmerLen;
+TEST_CASE("Graph loading and basic utilities", "[graph]") {
+    char* fileName = (char*) malloc(64 * sizeof(char));
+    strcpy(fileName, "./data/bft.out");
+    Graph graph = Graph(fileName);
 
-TEST_CASE("Graph simple vertex additions", "[graph]") {
-    SECTION("Testing isVertex() method") {
-        Graph::kmerLen = 5;
-        
-        Graph g = Graph();
-        bit_vector b1 = {0, 1, 0, 0};
-        Vertex v1 = Vertex("ACTGT", b1);
-        g.addVertex(v1);
-        REQUIRE(g.isVertex(v1));
-
-        bit_vector b2 = {1, 0, 0, 0};
-        Vertex v2 = Vertex("ACTGT", b2);
-        REQUIRE(!g.isVertex(v2));
-
-        bit_vector b3 = {1, 1, 0, 0};
-        Vertex v3 = Vertex("ACTGT", b3);
-        REQUIRE(g.isVertex(v3));
-
-        Vertex v4 = Vertex("ACTGG", b3);
-        REQUIRE(!g.isVertex(v4));
+    SECTION("Testing general color related functions in the Graph") {
+        REQUIRE(graph.getNumColors() == 4);
+        REQUIRE(strcmp(graph.getColorFilePath(0), "ebola.kmers.txt") == 0);
+        REQUIRE(strcmp(graph.getColorFilePath(1), "zika.kmers.txt") == 0);
+        REQUIRE(strcmp(graph.getColorFilePath(2), "flu.kmers.txt") == 0);
+        REQUIRE(strcmp(graph.getColorFilePath(3), "marburg.kmers.txt") == 0);
     }
 
-    SECTION("Testing getSuffixNeighbors() method") {
-        Graph g = Graph();
-        bit_vector b1 = {0, 0, 0, 1};
-        Vertex v1 = Vertex("AACCT", b1);
-        g.addVertex(v1);
-        Vertex v2 = Vertex("ACCTG", b1);
-        g.addVertex(v2);
-        Vertex v3 = Vertex("ACCTT", b1);
-        g.addVertex(v3);
-        vector<Vertex> vertices1;
-        vertices1.push_back(v2);
-        vertices1.push_back(v3);
-        vector<Vertex> vertices2 = g.getSuffixNeighbors(v1);
-        REQUIRE(vertices1 == vertices2);
+    SECTION("Testing BFT_kmer contains/validity methods") {
+        BFT_kmer* bftKmer = NULL;
+        REQUIRE(!graph.isValidBFTKmer(bftKmer));
 
-        bit_vector b2 = {0, 0, 1, 0};
-        Vertex v4 = Vertex("ACCTC", b2);
-        vector<Vertex> vertices3 = {};
-        vector<Vertex> vertices4 = g.getSuffixNeighbors(v4);
-        REQUIRE(vertices3 == vertices4);
+        char* kmer = (char*) malloc(19);
+        strcpy(kmer, "AAAAAACATTAAGAGAAC");
+        REQUIRE(graph.isBFTKmer(kmer));
+        bftKmer = graph.getBFTKmer(kmer);
+        REQUIRE(bftKmer != NULL);
+        REQUIRE(graph.isValidBFTKmer(bftKmer));
+        free(bftKmer);
+
+        strcpy(kmer, "AAAAAAAAAAAAAAAAAA");
+        REQUIRE(!graph.isBFTKmer(kmer));
+        bftKmer = graph.getBFTKmer(kmer);
+        REQUIRE(bftKmer == NULL);
+        REQUIRE(!graph.isValidBFTKmer(bftKmer));
+        // don't free bftKmer here because it should be NULL
+
+        free(kmer);
     }
 
-    SECTION("Testing getPrefixNeighbors() method") {
-        Graph::kmerLen = 6;
+    SECTION("Testing the BFT_kmer color functions of the Graph") {
+        char* kmer = (char*) malloc(19);
+        strcpy(kmer, "AAAAAACATTAAGAGAAC");
+        BFT_kmer* bftKmer = graph.getBFTKmer(kmer);
 
-        Graph g = Graph();
-        bit_vector b1 = {0, 1, 0, 0};
-        Vertex v1 = Vertex("TTACTN", b1);
-        g.addVertex(v1);
-        Vertex v2 = Vertex("ATTACT", b1);
-        g.addVertex(v2);
-        Vertex v3 = Vertex("GTTACT", b1);
-        g.addVertex(v3);
-        vector<Vertex> vertices1;
-        vertices1.push_back(v2);
-        vertices1.push_back(v3);
-        vector<Vertex> vertices2 = g.getPrefixNeighbors(v1);
-        REQUIRE(vertices1 == vertices2);
+        REQUIRE(graph.getNumColors(bftKmer) == 1);
+
+        REQUIRE(graph.getColors(bftKmer)[0] == 1);
+        REQUIRE(graph.getColors(bftKmer)[1] == 0);
+
+        free(kmer);
+        free(bftKmer);
     }
+
+    SECTION("Testing the marking functionality of the Graph") {
+        char* kmer = (char*) malloc(19);
+        strcpy(kmer, "AAAAAACATTAAGAGAAC");
+        BFT_kmer* bftKmer = graph.getBFTKmer(kmer);
+
+        graph.setMarking();
+        REQUIRE(!graph.isMarkedBFTKmer(bftKmer)); // should be unmarked, but it isn't
+        graph.markBFTKmer(bftKmer);
+        REQUIRE(graph.isMarkedBFTKmer(bftKmer));
+        graph.clearMarking();
+
+        free(kmer);
+        free_BFT_kmer(bftKmer, 1);
+    }
+
+    SECTION("Testing the get neighbor methods of the Graph") {
+        char* kmer = (char*) malloc(19);
+        strcpy(kmer, "AAAAAACATTAAGAGAAC");
+        BFT_kmer* bftKmer = graph.getBFTKmer(kmer);
+        BFT_kmer* neighbors = graph.getSuffixNeighbors(bftKmer);
+        REQUIRE(graph.isValidBFTKmer(neighbors + 0));
+        REQUIRE(!graph.isValidBFTKmer(neighbors + 1));
+        REQUIRE(!graph.isValidBFTKmer(neighbors + 2));
+        REQUIRE(!graph.isValidBFTKmer(neighbors + 3));
+        REQUIRE(graph.hasSuffixNeighbors(bftKmer));
+
+        free_BFT_kmer(neighbors, 4);
+        free_BFT_kmer(bftKmer, 1);
+
+        strcpy(kmer, "TTTCTTAATCTTCATCAA");
+        REQUIRE(graph.isBFTKmer(kmer));
+        strcpy(kmer, "TTTCTTAATCTTCATCAC");
+        REQUIRE(graph.isBFTKmer(kmer));
+
+        strcpy(kmer, "TTTTCTTAATCTTCATCA");
+        bftKmer = graph.getBFTKmer(kmer);
+        neighbors = graph.getSuffixNeighbors(bftKmer);
+        REQUIRE(graph.isValidBFTKmer(neighbors + 0));
+        REQUIRE(graph.isValidBFTKmer(neighbors + 1));
+        REQUIRE(!graph.isValidBFTKmer(neighbors + 2));
+        REQUIRE(!graph.isValidBFTKmer(neighbors + 3));
+        REQUIRE(graph.hasSuffixNeighbors(bftKmer));
+
+        free_BFT_kmer(neighbors, 4);
+        free_BFT_kmer(bftKmer, 1);
+
+        strcpy(kmer, "AAAAACATTAAGAGAACA");
+        bftKmer = graph.getBFTKmer(kmer);
+        neighbors = graph.getPrefixNeighbors(bftKmer);
+        REQUIRE(graph.isValidBFTKmer(neighbors + 0));
+        REQUIRE(graph.hasPrefixNeighbors(bftKmer));
+
+        free_BFT_kmer(neighbors, 4);
+        free_BFT_kmer(bftKmer, 1);
+
+        free(kmer);
+    }
+
+
 }

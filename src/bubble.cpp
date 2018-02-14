@@ -11,7 +11,6 @@ using std::endl;
 
 Bubble::Bubble() { }
 
-
 bool Bubble::pathExists(Path path) const {
     return paths.find(path) != paths.end();
 }
@@ -31,17 +30,17 @@ bool Bubble::isValid(size_t kmerLen) const {
     return true;
 }
 
-void Bubble::addPath(Path path, bit_vector colors) {
+void Bubble::addPath(Path path, uint32_t* colors) {
 	paths[path] = colors;
 }
 
-bit_vector Bubble::getColors(Path path) const {
+uint32_t* Bubble::getColors(Path path) const {
     if(pathExists(path)) {
         return paths.at(path);
     }
 }
 
-map<Path, bit_vector> Bubble::getPaths() const {
+map<Path, uint32_t*> Bubble::getPaths() const {
     return paths;
 }
 

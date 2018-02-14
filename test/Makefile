@@ -1,20 +1,21 @@
-INCLUDES=-I../inc -Ithirdparty/catch -I../thirdparty/dbgfm -I../thirdparty/sdsl-lite/bin/include
-LIBS=-L../.libs -lkleuren -L../thirdparty/dbgfm -ldbgfm  -L../thirdparty/sdsl-lite/bin/lib -lsdsl
-CXXFLAGS=-g -std=c++11 -Wall $(INCLUDES) $(LIBS)
+INCLUDES = -I../inc -Ithirdparty/catch -I../thirdparty/BloomFilterTrie/include
+LIBS = -L.. -lkleuren -L../thirdparty/BloomFilterTrie/lib -lbft
+CXXFLAGS = -g -std=c++11 -Wall -fpermissive $(INCLUDES) $(LIBS)
 
-.PHONY: all clean install main kleuren-test
+EXEC = kleuren-test
+TESTS_O = src/main.o src/bubble_builder.o src/color_manager.o src/graph.o src/kmer_bank.o src/path.o
 
-TESTS_CPP=src/bubble_builder.cpp src/color_manager.cpp src/graph.cpp src/kmer_bank.cpp src/path.cpp
-TESTS_O=src/main.o src/bubble_builder.o src/color_manager.o src/graph.o src/kmer_bank.o src/path.o
+all: $(EXEC)
 
-kleuren-test: src/main.o ../.libs/libkleuren.a $(TESTS_O)
-	$(CXX) $^ -o $@ $(CPPFLAGS) $(CXXFLAGS)
-
-clean:
-	rm -f kleuren-test $(TESTS_O) 
-
-src/main.o: src/main.cpp
-	$(CXX) -c -Ithirdparty/catch -o $@ $^
+$(EXEC): $(TESTS_O) src/main.o ../libkleuren.a
+	$(CXX) $^ $(CXXFLAGS) -o $@
 
 src/%.o: src/%.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@ 
+	$(CXX) $(CXXFLAGS) -c $< -o $@ 
+
+src/main.o: src/main.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(TESTS_O) $(EXEC)
+

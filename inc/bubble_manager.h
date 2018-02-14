@@ -30,7 +30,7 @@ class BubbleManager {
     public:
         BubbleManager() { }
 
-        BubbleManager(ofstream* bubbleFile, ofstream* matrixFile, ColorManager* colorManager);
+        BubbleManager(ofstream* bubbleFile, ColorManager* colorManager);
 
         /// Write the various paths of the bubble to a file in FASTA format
         void writeBubble(Bubble bubble);
@@ -42,16 +42,9 @@ class BubbleManager {
         /// @return the sharedKmerMatrix normalized
         map<int, map<int, float> > averageSharedKmerMatrix();
 
-        /// Writes the sharedKmerMatrix distance matrix to the specified file in the
-        /// lower triangular matrix format with the number of colors printed on the first line
-        void writeSharedKmerMatrix(map<int, map<int, float> > matrix);
-
     private:
         /// The pointer to the file handle in which the bubbles will be written to
         ofstream* bubbleFile;
-
-        /// The pointer to the file handle in which the matrix will be written to
-        ofstream* matrixFile;
 
 		/// The pointer to the ColorManager
 		ColorManager* colorManager;

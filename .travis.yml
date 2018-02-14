@@ -33,27 +33,23 @@ matrix:
 git:
     submodules: false
 
-# install the dbgfm and sdsl-lite thirdparty dependencies
+# install the thirdparty dependencies
 before_install:
     - eval "${MATRIX_EVAL}"
-    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
     - git submodule update --init --recursive
-    - cd thirdparty/dbgfm && make && cd -
-    - cd thirdparty/sdsl-lite && mkdir bin && ./install.sh bin && cd -
+    - cd thirdparty/BloomFilterTrie && ./configure make && cd -
 
 install:
-    - autoreconf --install
-    - ./configure
     - make
     - export PATH=$PATH:$PWD:$PWD/test/
 
 # install the test binary
 before_script:
-    - cd test && make && cd -
+    - make test/kleuren-test
 
 # run the test cases
 script:
-    - cd test && kleuren-test && cd -
+    - make test
 
 # generate and deploy documentation
 after_success:

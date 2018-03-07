@@ -83,11 +83,11 @@ class BubbleBuilder {
          * for a path
          * @return the paths for each color between startKmer and endKmer
          */
-        map<uint32_t*, string, uint32Cmp> extendPaths(BFT_kmer* startBftKmer, BFT_kmer* endBftKmer, uint32_t maxDepth);
+        Bubble extendPaths(BFT_kmer* startBftKmer, BFT_kmer* endBftKmer, uint32_t maxDepth);
 
     private:
 
-        bool recursiveExtend(BFT_kmer* currentBftKmer, uint32_t currentColor, uint32_t** intersectingColors, BFT_kmer* endBftKmer, string& path, list<BFT_kmer*>& toFree, uint32_t depth, uint32_t maxDepth);
+        bool recursiveExtend(BFT_kmer* currentBftKmer, uint32_t currentColor, uint32_t** intersectingColors, BFT_kmer* endBftKmer, string& path, uint32_t depth, uint32_t maxDepth);
 
         Graph* graph;
 };

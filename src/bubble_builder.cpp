@@ -67,12 +67,13 @@ BFT_kmer* BubbleBuilder::findEndBftKmer(BFT_kmer* startBftKmer, uint32_t numColo
 
     graph->markBFTKmer(startBftKmer);
     BFT_kmer* startCopy = graph->getBFTKmer(startBftKmer->kmer);
-    queue.push_back(startCopy), depthQueue.push_back(0);
+    uint32_t depth = 0;
+    queue.push_back(startCopy), depthQueue.push_back(depth);
 
     // loop until a kmer is found or there are no more neighbors to check
     while(!queue.empty() && depth < maxDepth) {
         BFT_kmer* currentBftKmer = queue.front();
-        uint32_t depth = depthQueue.front();
+        depth = depthQueue.front();
         queue.pop_front(), depthQueue.pop_front();
 
         // iterate over each of the neighbors for currentBftKmer

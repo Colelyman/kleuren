@@ -9,6 +9,7 @@
 Graph::Graph(char* bftFileName) {
     bft = load_BFT(bftFileName);
     free(bftFileName);
+    //set_neighbors_traversal(bft);
 }
 
 Graph::~Graph() {
@@ -17,6 +18,9 @@ Graph::~Graph() {
 
 bool Graph::isBFTKmer(char* strKmer) const {
     uint32_t* colorSet = query_sequence(bft, strKmer, 0.001, false);
+    if(colorSet == NULL) {
+        return false;
+    }
     uint32_t numColors = colorSet[0];
     free(colorSet);
     if(numColors) {
@@ -42,21 +46,23 @@ bool Graph::isValidBFTKmer(BFT_kmer* bftKmer) const {
 }
 
 void Graph::setMarking() {
-    set_marking(bft);
+    //set_marking(bft);
 }
 
 void Graph::clearMarking() {
-    unset_marking(bft);
+    //unset_marking(bft);
 }
 
 void Graph::markBFTKmer(BFT_kmer* bftKmer) {
-    set_flag_kmer(V_VISITED, bftKmer, bft);
+    //set_flag_kmer(V_VISITED, bftKmer, bft);
 }
 
 bool Graph::isMarkedBFTKmer(BFT_kmer* bftKmer) const {
+    /*
     if(get_flag_kmer(bftKmer, bft) == V_VISITED) {
         return true;
     }
+    */
     return false;
 }
 
@@ -78,7 +84,9 @@ uint32_t Graph::getNumColors() const {
 uint32_t* Graph::getColors(BFT_kmer* bftKmer) const {
     BFT_annotation* bftAnno = get_annotation(bftKmer);
 
-    return get_list_id_genomes(bftAnno, bft);
+    uint32_t* colors = get_list_id_genomes(bftAnno, bft);
+    free_BFT_annotation(bftAnno);
+    return colors;
 }
 
 char* Graph::getColorFilePath(uint32_t colorId) const {

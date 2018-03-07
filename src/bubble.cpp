@@ -11,8 +11,13 @@ using std::endl;
 
 Bubble::Bubble() { }
 
-bool Bubble::pathExists(Path path) const {
-    return paths.find(path) != paths.end();
+bool Bubble::pathExists(Path pathCandidate) const {
+    for(auto const& path : paths) {
+        if(pathCandidate.getSequence() == path.getSequence()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool Bubble::isValid(size_t kmerLen) const {
@@ -22,7 +27,7 @@ bool Bubble::isValid(size_t kmerLen) const {
     }
     // check if any of the paths are empty or less than or equal to the kmer length
     for(auto const& path : paths) {
-        if(path.first.getSequence().empty() || path.first.getSequence().length() <= kmerLen) {
+        if(path.getSequence().empty() || path.getSequence().length() <= kmerLen) {
             return false;
         }
     }
@@ -30,24 +35,10 @@ bool Bubble::isValid(size_t kmerLen) const {
     return true;
 }
 
-void Bubble::addPath(Path path, uint32_t* colors) {
-	paths[path] = colors;
+void Bubble::addPath(Path path) {
+	paths.push_back(path);
 }
 
-uint32_t* Bubble::getColors(Path path) const {
-    if(pathExists(path)) {
-        return paths.at(path);
-    }
-}
-
-map<Path, uint32_t*> Bubble::getPaths() const {
+vector<Path> Bubble::getPaths() const {
     return paths;
-}
-
-vector<Path> Bubble::pathsToVector() const {
-    vector<Path> pathVector;
-    for(auto const& path : paths) {
-        pathVector.push_back(path.first);
-    }
-    return pathVector;
 }

@@ -38,6 +38,10 @@ class Path {
         /// Appends to the seq
         void append(string suffix);
 
+        void addColorName(string colorName);
+
+        vector<string> getColorNames() const;
+
         /** 
          * Runs the Needleman-Wunsch alignment algorithm to compare with another 
          * path.
@@ -65,6 +69,8 @@ class Path {
          * from.
          */
         string seq;
+
+        vector<string> colorNames;
 
 };
 

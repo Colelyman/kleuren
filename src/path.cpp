@@ -26,6 +26,14 @@ void Path::append(string suffix) {
     seq += suffix;
 }
 
+void Path::addColorName(string colorName) {
+    colorNames.push_back(colorName);
+}
+
+vector<string> Path::getColorNames() const {
+    return colorNames;
+}
+
 int Path::runNW(Path path) const {
     string seqA = getSequence();
     string seqB = path.getSequence();

@@ -14,13 +14,16 @@ extern "C" {
 using std::cout;
 using std::endl;
 
-Driver::Driver(Args args) {
-    this->args = args;
+Driver::Driver(Args args_p) {
+    this->args = args_p;
 
     char* bftFilePath = (char*) malloc(args.getBFTFilePath().length() + 1);
     strcpy(bftFilePath, args.getBFTFilePath().c_str());
 	graph = new Graph(bftFilePath);
-    colorManager = new ColorManager(graph);
+
+    if(args.getN() == 0) {
+        args.setN(graph->getNumColors());
+    }
 
     // open the kmer file
     kmerFile = new ifstream();
@@ -36,7 +39,7 @@ Driver::Driver(Args args) {
         bubbleFile->open(args.getBubbleFilePath());
     }
 
-    bubbleManager = BubbleManager(bubbleFile, colorManager);
+    bubbleManager = BubbleManager(bubbleFile);
 }
 
 Driver::~Driver() {
@@ -44,7 +47,6 @@ Driver::~Driver() {
     delete kmerFile;
     delete kmerBank;
 	delete graph;
-    delete colorManager;
 	delete bubbleBuilder;
     if(!args.getBubbleFilePath().empty()) {
         bubbleFile->close();

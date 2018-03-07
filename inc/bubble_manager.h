@@ -18,7 +18,6 @@
 #include <utility>
 
 #include "bubble.h"
-#include "color_manager.h"
 
 using std::ofstream;
 using std::endl;
@@ -30,7 +29,7 @@ class BubbleManager {
     public:
         BubbleManager() { }
 
-        BubbleManager(ofstream* bubbleFile, ColorManager* colorManager);
+        BubbleManager(ofstream* bubbleFile);
 
         /// Write the various paths of the bubble to a file in FASTA format
         void writeBubble(Bubble bubble);
@@ -45,9 +44,6 @@ class BubbleManager {
     private:
         /// The pointer to the file handle in which the bubbles will be written to
         ofstream* bubbleFile;
-
-		/// The pointer to the ColorManager
-		ColorManager* colorManager;
 
         /** 
          * The matrix showing the similarity between colors based on shared kmers.

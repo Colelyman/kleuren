@@ -17,7 +17,6 @@
 #include <fstream>
 
 #include "args.h"
-#include "color_manager.h"
 #include "kmer_bank.h"
 #include "bubble_builder.h"
 #include "bubble_manager.h"
@@ -38,10 +37,6 @@ class Driver {
         void run();
 
     private:
-        /// The pointer to the ColorManager, which regulates the addition,
-        /// removal, and access of colors
-        ColorManager* colorManager;
-
         /// The pointer to the file handle that contains the kmers
         ifstream* kmerFile;
 

@@ -64,6 +64,19 @@ void Driver::run() {
         if(graph->isBFTKmer(strKmer)) {
             cout << "startKmer: " << strKmer << endl;
             BFT_kmer* bftKmer = graph->getBFTKmer(strKmer);
+            uint32_t* colors = graph->getColors(bftKmer);
+
+            // check if the bftKmer has enough colors
+            if(colors[0] < args.getN()) {
+                free(colors);
+                free_BFT_kmer(bftKmer, 1);
+                kmer = kmerBank->getNextKmer();
+                continue;
+            }
+            else {
+                free(colors);
+            }
+
             // build the bubble
             Bubble bubble = bubbleBuilder->build(bftKmer, args.getN(), args.getMaxDepth());
             if(bubble.getPaths().empty()) { // no bubble was found, try next kmer

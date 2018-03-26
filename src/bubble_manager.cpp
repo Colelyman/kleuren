@@ -19,9 +19,10 @@ void BubbleManager::writeBubble(Bubble bubble) {
     for(auto const& path : bubble.getPaths()) {
         // write the header
         *bubbleFile << "> bubble " << n << " for ";
-        vector<string> colorNames = path.getColorNames();
-        *bubbleFile << colorNames.at(0);
-        colorNames.erase(colorNames.begin());
+        set<string> colorNames = path.getColorNames();
+        set<string>::iterator firstColor = colorNames.begin();
+        *bubbleFile << *firstColor;
+        colorNames.erase(firstColor);
         for(auto const& colorName : colorNames) {
             *bubbleFile << ", " << colorName;
         }

@@ -84,7 +84,7 @@ void Driver::run() {
                 kmer = kmerBank->getNextKmer();
                 continue;
             }
-            if(!bubble.isValid(kmer.length())) { // the bubble is not valid, try next kmer
+            if(!bubble.isValid(kmer.length(), args.getN())) { // the bubble is not valid, try next kmer
                 cout << "\tinvalid bubble" << endl;
                 kmer = kmerBank->getNextKmer();
                 continue;

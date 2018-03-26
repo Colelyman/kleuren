@@ -27,10 +27,14 @@ void Path::append(string suffix) {
 }
 
 void Path::addColorName(string colorName) {
-    colorNames.push_back(colorName);
+    colorNames.insert(colorName);
 }
 
-vector<string> Path::getColorNames() const {
+void Path::addColorNames(set<string> colorNames) {
+    this->colorNames.insert(colorNames.begin(), colorNames.end());
+}
+
+set<string> Path::getColorNames() const {
     return colorNames;
 }
 

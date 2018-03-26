@@ -40,7 +40,9 @@ class Path {
 
         void addColorName(string colorName);
 
-        vector<string> getColorNames() const;
+        void addColorNames(set<string> colorNames);
+
+        set<string> getColorNames() const;
 
         /** 
          * Runs the Needleman-Wunsch alignment algorithm to compare with another 
@@ -70,7 +72,7 @@ class Path {
          */
         string seq;
 
-        vector<string> colorNames;
+        set<string> colorNames;
 
 };
 

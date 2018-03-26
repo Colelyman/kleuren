@@ -47,14 +47,18 @@ bool Graph::isValidBFTKmer(BFT_kmer* bftKmer) const {
 
 void Graph::setMarking() {
     //set_marking(bft);
+    visited.clear();
 }
 
 void Graph::clearMarking() {
     //unset_marking(bft);
+    visited.clear();
 }
 
 void Graph::markBFTKmer(BFT_kmer* bftKmer) {
     //set_flag_kmer(V_VISITED, bftKmer, bft);
+    //visited.insert(bftKmer->kmer);
+    //printf("\tvisited size is: %lu\n", visited.size());
 }
 
 bool Graph::isMarkedBFTKmer(BFT_kmer* bftKmer) const {
@@ -62,7 +66,11 @@ bool Graph::isMarkedBFTKmer(BFT_kmer* bftKmer) const {
     if(get_flag_kmer(bftKmer, bft) == V_VISITED) {
         return true;
     }
+    return false;
     */
+    if(visited.find(bftKmer->kmer) != visited.end()) {
+        return true;
+    }
     return false;
 }
 

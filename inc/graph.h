@@ -18,6 +18,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include <iostream>
 
 extern "C" {
@@ -27,6 +28,7 @@ extern "C" {
 using std::string;
 using std::vector;
 using std::map;
+using std::set;
 using std::cout;
 using std::endl;
 
@@ -80,6 +82,13 @@ class Graph {
        /// BloomFilterTrie.
        BFT* bft;
 
+       struct set_object {
+           bool operator()(const char* left, const char* right) const {
+               return strcmp(left, right);
+           }
+       };
+
+       set<const char*, set_object> visited;
 };
 
 #endif

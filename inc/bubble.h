@@ -30,13 +30,14 @@ class Bubble {
         /// Checks if a bubble is valid, meaning it fits the following criteria:
         /// * there is more than one path
         /// * none of the paths are empty
-        bool isValid(size_t kmerLen) const;
+        /// * at least n colors are present in the bubble
+        /// * there are no paths that have overlapping colors
+        bool isValid(size_t kmerLen, uint32_t n) const;
 
         /** 
          * Adds a path to paths, and appends the color to the corresponding path
          * if the path is already contained in colors.
          * @param path the path to add to paths
-         * @param colors the colors that are associated with the path
          */
         void addPath(Path path);
 

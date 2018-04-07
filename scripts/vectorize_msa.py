@@ -29,6 +29,22 @@ def parse_MSAs(bubble_dir):
         np.array(num_labels).reshape((-1, len(taxa))), taxa_names
 
 
+def parse_MSAs_add(bubble_dir):
+    num_labels = []
+    taxa = []
+    taxa_names = []
+    for record in SeqIO.parse(
+            os.path.join(bubble_dir, 'msa-0.fasta'), 'fasta'):
+        taxa.append(record.id)
+        taxa_names.append(record.description)
+    vectorized_bubbles = np.zeros(shape=(len(taxa), len(taxa)), dtype=int)
+    num_labels = np.linspace(0, len(taxa), len(taxa), dtype=int)
+    for msa_file in glob.glob(os.path.join(bubble_dir, 'msa-*.fasta')):
+        vectorized_bubbles = np.add(vectorized_bubbles,
+                                    vectorize_MSA(parse_MSA(msa_file), taxa))
+    return vectorized_bubbles, num_labels, taxa_names
+
+
 def parse_MSA(msa_file):
     return SeqIO.to_dict(SeqIO.parse(msa_file, 'fasta'))
 
@@ -60,28 +76,42 @@ def rand_jitter(arr):
 def reduce_dim_pca(vectorized_bubbles, num_labels, taxa_names, n_components):
     pca = PCA(n_components=n_components)
     projected_bubbles = pca.fit_transform(vectorized_bubbles)
-    print(projected_bubbles.shape)
     flat_labels = num_labels.flatten()
-    plot(projected_bubbles, flat_labels, num_labels, taxa_names, 2, 3)
+    plot_pca(projected_bubbles, flat_labels, num_labels, taxa_names, 0, 1)
 
 
-def reduce_dim_mds(vectorized_bubbles, num_labels, n_components):
-    mds = MDS(n_components=n_components)
+def reduce_dim_mds(vectorized_bubbles, num_labels, taxa_names, n_components):
+    mds = MDS(n_components=n_components, max_iter=3000, eps=1e-9,
+              dissimilarity='precomputed', n_jobs=1)
     projected_bubbles = mds.fit_transform(vectorized_bubbles)
-    print(projected_bubbles)
+    flat_labels = num_labels.flatten()
+    plot_mds(projected_bubbles, flat_labels, num_labels, taxa_names, 0, 1)
 
 
-def plot(projected_bubbles, flat_labels, num_labels, taxa_names, c1, c2):
+def plot_pca(projected_bubbles, flat_labels, num_labels, taxa_names, c1, c2):
     plt.scatter(rand_jitter(projected_bubbles[:, c1]),
                 rand_jitter(projected_bubbles[:, c2]),
                 c=flat_labels, edgecolor='none', alpha=0.9,
-                cmap=plt.cm.get_cmap('nipy_spectral', len(num_labels[0])))
+                cmap=plt.cm.get_cmap('nipy_spectral', len(num_labels)))
     plt.xlabel('PC ' + str(c1 + 1))
     plt.ylabel('PC ' + str(c2 + 1))
-    plt.title('Reduced Dimensions of each Path in a Set of Bubbles')
+    plt.title('PCA Reduced Dimensions of each Species From a Set of Bubbles')
     cb = plt.colorbar()
     cb.set_label('Species', rotation=270)
-    cb.set_ticks(num_labels[0])
+    cb.set_ticks(num_labels)
+    cb.set_ticklabels(taxa_names)
+    plt.show()
+
+
+def plot_mds(projected_bubbles, flat_labels, num_labels, taxa_names, c1, c2):
+    plt.scatter(rand_jitter(projected_bubbles[:, c1]),
+                rand_jitter(projected_bubbles[:, c2]),
+                c=flat_labels, edgecolor='none', alpha=0.9,
+                cmap=plt.cm.get_cmap('nipy_spectral', len(num_labels)))
+    plt.title('MDS Reduced Dimensions of each Species From a Set of Bubbles')
+    cb = plt.colorbar()
+    cb.set_label('Species', rotation=270)
+    cb.set_ticks(num_labels)
     cb.set_ticklabels(taxa_names)
     plt.show()
 
@@ -101,4 +131,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     vectorized_bubbles, num_labels, taxa_names = parse_MSAs(args.bubble_dir)
-    reduce_dim_pca(vectorized_bubbles, num_labels, taxa_names, 12)
+    reduce_dim_mds(vectorized_bubbles, num_labels, taxa_names, 2)

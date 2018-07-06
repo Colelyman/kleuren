@@ -30,11 +30,12 @@
 *.exe
 *.out
 *.app
-kleuren
-kleuren-test
+bin
+build
 
 # iqtree
 thirdparty/iqtree-omp-1.5.5-Linux/
+thirdparty/tmp
 
 # backup files
 *~

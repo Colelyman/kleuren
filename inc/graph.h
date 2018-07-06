@@ -1,36 +1,22 @@
 /**
  * @class Graph
  *
- * Graph represents the Colored de Bruijn graph for all of the 
- * colors provided. Currently it is implemented as a hash map
- * with the key being a vertex (kmer) and the value being a 
- * bitvector of colors.
+ * Graph represents the Colored de Bruijn Graph CdBG for all of the
+ * colors provided. Currently it is a wrapper around the BloomFilterTrie
+ * library for fast, exact queries.
  *
  * @author Cole Lyman
  *
- * @date 2017/10/10
+ * @date 2018/5/21
  *
  */
 
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <string>
-#include <vector>
-#include <map>
-#include <set>
-#include <iostream>
-
 extern "C" {
     #include <bft.h>
 }
-
-using std::string;
-using std::vector;
-using std::map;
-using std::set;
-using std::cout;
-using std::endl;
 
 class Graph {
 
@@ -39,27 +25,23 @@ class Graph {
        Graph(char* bftFileName);
 
        ~Graph();
-       
-       bool isBFTKmer(char* strKmer) const;
 
-       BFT_kmer* getBFTKmer(char* strKmer) const;
+       bool isBFTKmer(char* kmer) const;
+
+       BFT_kmer* getBFTKmer(char* kmer) const;
 
        bool isValidBFTKmer(BFT_kmer* bftKmer) const;
 
-       void setMarking();
-
-       void clearMarking();
-
-       void markBFTKmer(BFT_kmer* bftKmer);
-
-       bool isMarkedBFTKmer(BFT_kmer* bftKmer) const;
-
+       /// Returns the number of colors that node contains
        uint32_t getNumColors(BFT_kmer* bftKmer) const;
 
+       /// Returns the total number of colors present in the CdBG
        uint32_t getNumColors() const;
 
+       /// Returns the array of colors that node contains
        uint32_t* getColors(BFT_kmer* bftKmer) const;
 
+       /// Returns the file path of the color represented by colorId
        char* getColorFilePath(uint32_t colorId) const;
 
        /// Returns a vector of all of the vertices that neighbor v on the suffix side
@@ -76,19 +58,12 @@ class Graph {
 
     private:
 
+       /// Returns false if there is a valid node in the nodes array. Otherwise returns true
        bool checkIfEmpty(BFT_kmer* bftKmers) const;
 
        /// The underlying structure representing the Colored de Bruijn Graph as a
        /// BloomFilterTrie.
        BFT* bft;
-
-       struct set_object {
-           bool operator()(const char* left, const char* right) const {
-               return strcmp(left, right);
-           }
-       };
-
-       set<const char*, set_object> visited;
 };
 
-#endif
+#endif // GRAPH_H

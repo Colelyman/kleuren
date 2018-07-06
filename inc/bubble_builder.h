@@ -22,7 +22,7 @@
 #include "path.h"
 
 extern "C" {
-    #include <bft/bft.h>
+    #include <bft.h>
 }
 
 using std::string;

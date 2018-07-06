@@ -22,7 +22,7 @@
 #include <iostream>
 
 extern "C" {
-    #include <bft/bft.h>
+    #include <bft.h>
 }
 
 using std::string;

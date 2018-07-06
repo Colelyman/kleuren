@@ -18,7 +18,7 @@
 using std::string;
 
 class Args {
-    
+
     public:
         /// Returns a string representation of the arguments provided
         string toString();
@@ -53,7 +53,7 @@ class Args {
          * The path to the file that contains the super set of all of the kmers from
          * each of the colors.
          * The formatting of the file should be as follows:
-         *      
+         *
          *      <kmer> <number of occurances of the kmer>
          *      ...
          *
@@ -85,7 +85,7 @@ class Args {
         uint32_t n;
 
         /**
-         * The maximum depth to recurse when extending the path to build the bubbles. The 
+         * The maximum depth to recurse when extending the path to build the bubbles. The
          * larger the maxDepth the more paths the recursive function will explore, thereby
          * the longer kleuren will take and the more bubbles it will find.
          */

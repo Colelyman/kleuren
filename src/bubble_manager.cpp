@@ -9,9 +9,19 @@
 using std::cout;
 using std::endl;
 
-BubbleManager::BubbleManager(ofstream* bubbleFile) {
+BubbleManager::BubbleManager(ofstream* bubbleFile, Graph* graph) {
     this->bubbleFile = bubbleFile;
+    this->graph = graph;
     n = 0;
+}
+
+vector<string> BubbleManager::getColorNames(set<uint32_t> colors) {
+    vector<string> colorNames;
+    for(auto const& colorId : colors) {
+        string colorName(graph->getColorFilePath(colorId));
+        colorNames.push_back(colorName);
+    }
+    return colorNames;
 }
 
 void BubbleManager::writeBubble(Bubble bubble) {
@@ -19,15 +29,16 @@ void BubbleManager::writeBubble(Bubble bubble) {
     for(auto const& path : bubble.getPaths()) {
         // write the header
         *bubbleFile << "> bubble " << n << " for ";
-        set<string> colorNames = path.getColorNames();
-        set<string>::iterator firstColor = colorNames.begin();
+        set<uint32_t> colors = path.second;
+        vector<string> colorNames = getColorNames(colors);
+        auto firstColor = colorNames.begin();
         *bubbleFile << *firstColor;
         colorNames.erase(firstColor);
         for(auto const& colorName : colorNames) {
             *bubbleFile << ", " << colorName;
         }
         *bubbleFile << endl;
-        string seq = path.getSequence();
+        string seq = path.first;
         cout << "seq: " << seq << endl;
 
         // print out the sequence

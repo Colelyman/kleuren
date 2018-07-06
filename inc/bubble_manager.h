@@ -16,20 +16,25 @@
 #include <fstream>
 #include <map>
 #include <utility>
+#include <vector>
 
 #include "bubble.h"
+#include "graph.h"
 
 using std::ofstream;
 using std::endl;
 using std::map;
 using std::pair;
+using std::vector;
 
 class BubbleManager {
 
     public:
         BubbleManager() { }
 
-        BubbleManager(ofstream* bubbleFile);
+        BubbleManager(ofstream* bubbleFile, Graph* graph);
+
+        vector<string> getColorNames(set<uint32_t> colors);
 
         /// Write the various paths of the bubble to a file in FASTA format
         void writeBubble(Bubble bubble);
@@ -45,13 +50,15 @@ class BubbleManager {
         /// The pointer to the file handle in which the bubbles will be written to
         ofstream* bubbleFile;
 
-        /** 
+        Graph* graph;
+
+        /**
          * The matrix showing the similarity between colors based on shared kmers.
          * The key is a pair of ints that represent the color's ID, and the value is
          * also a pair, but of uint32_t's representing the number of shared kmers
          * between the two colors, and the number of bubbles the colors are found in.
          *
-         * The number of bubbles that the colors are found in are kept so that the 
+         * The number of bubbles that the colors are found in are kept so that the
          * average number of shared kmers can more accurately be calculated.
          */
         map<pair<int, int>, pair<uint32_t, uint32_t> > sharedKmerMatrix;

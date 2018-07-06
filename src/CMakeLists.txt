@@ -1,0 +1,14 @@
+target_sources(kleuren
+  PUBLIC
+    "${CMAKE_CURRENT_LIST_DIR}/arg_parse.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/args.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/bubble.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/bubble_builder.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/bubble_manager.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/color.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/driver.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/graph.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/kmer_bank.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/main.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/path.cpp"
+  )

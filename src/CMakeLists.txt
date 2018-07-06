@@ -7,8 +7,8 @@ target_sources(kleuren
     "${CMAKE_CURRENT_LIST_DIR}/bubble_manager.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/color.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/driver.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/filter.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/graph.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/kmer_bank.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/main.cpp"
-    "${CMAKE_CURRENT_LIST_DIR}/path.cpp"
   )

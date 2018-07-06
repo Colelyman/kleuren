@@ -4,6 +4,7 @@ include(ExternalProject)
 PROJECT(kleuren)
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(THIRDPARTY ${CMAKE_SOURCE_DIR}/thirdparty)
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)

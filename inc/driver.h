@@ -46,8 +46,8 @@ class Driver {
         /// The KmerBank provides a super set of kmers for each color
         KmerBank* kmerBank;
 
-		/// The Graph underlying structure to represent the Colored de Bruijn graph
-		Graph* graph;
+        /// The Graph underlying structure to represent the Colored de Bruijn graph
+        Graph* graph;
 
         /// Builds bubbles!
         BubbleBuilder* bubbleBuilder;

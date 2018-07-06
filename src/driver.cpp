@@ -19,7 +19,7 @@ Driver::Driver(Args args_p) {
 
     char* bftFilePath = (char*) malloc(args.getBFTFilePath().length() + 1);
     strcpy(bftFilePath, args.getBFTFilePath().c_str());
-	graph = new Graph(bftFilePath);
+    graph = new Graph(bftFilePath);
 
     if(args.getN() == 0) {
         args.setN(graph->getNumColors());
@@ -39,15 +39,15 @@ Driver::Driver(Args args_p) {
         bubbleFile->open(args.getBubbleFilePath());
     }
 
-    bubbleManager = BubbleManager(bubbleFile);
+    bubbleManager = BubbleManager(bubbleFile, graph);
 }
 
 Driver::~Driver() {
     kmerFile->close();
     delete kmerFile;
     delete kmerBank;
-	delete graph;
-	delete bubbleBuilder;
+    delete graph;
+    delete bubbleBuilder;
     if(!args.getBubbleFilePath().empty()) {
         bubbleFile->close();
         delete bubbleFile;
@@ -62,20 +62,7 @@ void Driver::run() {
         char* strKmer = const_cast<char*>(kmer.c_str());
         // find a start kmer for a bubble
         if(graph->isBFTKmer(strKmer)) {
-            cout << "startKmer: " << strKmer << endl;
             BFT_kmer* bftKmer = graph->getBFTKmer(strKmer);
-            uint32_t* colors = graph->getColors(bftKmer);
-
-            // check if the bftKmer has enough colors
-            if(colors[0] < args.getN()) {
-                free(colors);
-                free_BFT_kmer(bftKmer, 1);
-                kmer = kmerBank->getNextKmer();
-                continue;
-            }
-            else {
-                free(colors);
-            }
 
             // build the bubble
             Bubble bubble = bubbleBuilder->build(bftKmer, args.getN(), args.getMaxDepth());
@@ -98,7 +85,5 @@ void Driver::run() {
         // get the next kmer
         kmer = kmerBank->getNextKmer();
     }
-
-    return;
 }
 

@@ -33,9 +33,10 @@
 bin
 build
 
-# iqtree
+# Thirdparty dependencies
 thirdparty/iqtree-omp-1.5.5-Linux/
 thirdparty/tmp
+thirdparty/BloomFilterTrie
 
 # backup files
 *~

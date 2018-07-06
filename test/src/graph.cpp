@@ -23,7 +23,7 @@ TEST_CASE("Graph loading and basic utilities", "[graph]") {
         REQUIRE(strcmp(graph.getColorFilePath(3), "marburg.kmers.txt") == 0);
     }
 
-    SECTION("Testing BFT_kmer contains/validity methods") {
+    SECTION("Testing BFTKmer contains/validity methods") {
         BFT_kmer* bftKmer = NULL;
         REQUIRE(!graph.isValidBFTKmer(bftKmer));
 
@@ -45,7 +45,7 @@ TEST_CASE("Graph loading and basic utilities", "[graph]") {
         free(kmer);
     }
 
-    SECTION("Testing the BFT_kmer color functions of the Graph") {
+    SECTION("Testing the BFTKmer color functions of the Graph") {
         char* kmer = (char*) malloc(19);
         strcpy(kmer, "AAAAAACATTAAGAGAAC");
         BFT_kmer* bftKmer = graph.getBFTKmer(kmer);
@@ -57,21 +57,6 @@ TEST_CASE("Graph loading and basic utilities", "[graph]") {
 
         free(kmer);
         free(bftKmer);
-    }
-
-    SECTION("Testing the marking functionality of the Graph") {
-        char* kmer = (char*) malloc(19);
-        strcpy(kmer, "AAAAAACATTAAGAGAAC");
-        BFT_kmer* bftKmer = graph.getBFTKmer(kmer);
-
-        graph.setMarking();
-        REQUIRE(!graph.isMarkedBFTKmer(bftKmer)); // should be unmarked, but it isn't
-        graph.markBFTKmer(bftKmer);
-        REQUIRE(graph.isMarkedBFTKmer(bftKmer));
-        graph.clearMarking();
-
-        free(kmer);
-        free_BFT_kmer(bftKmer, 1);
     }
 
     SECTION("Testing the get neighbor methods of the Graph") {

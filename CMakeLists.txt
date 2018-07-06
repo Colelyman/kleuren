@@ -23,14 +23,25 @@ set_target_properties(kleuren_bin
 # the kleuren library
 add_library(kleuren_static STATIC $<TARGET_OBJECTS:kleuren>)
 
+# the kleuren test suite executable
+add_executable(kleuren_test "")
+set_target_properties(kleuren_test
+  PROPERTIES OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/test)
+
 # Set the proper include directories
 target_include_directories(kleuren PUBLIC
   "${CMAKE_SOURCE_DIR}/inc"
   "${THIRDPARTY}/cxxopts/include"
 )
+target_include_directories(kleuren_test PUBLIC
+  "${CMAKE_SOURCE_DIR}/inc"
+  "${CMAKE_SOURCE_DIR}/test/thirdparty/catch"
+)
+target_link_libraries(kleuren_test kleuren_static)
 
 # Add the source files from the subdirectories
 include(src/CMakeLists.txt)
+include(test/src/CMakeLists.txt)
 
 # Set the proper installation directory
 install(TARGETS kleuren_bin kleuren_static DESTINATION ${CMAKE_INSTALL_PREFIX})
@@ -49,6 +60,7 @@ add_library(bft STATIC IMPORTED)
 set(BFT_PATH ${install_dir}/src/project_bft)
 set_property(TARGET bft PROPERTY IMPORTED_LOCATION ${BFT_PATH}/bin/libbft_static.a)
 include_directories(${BFT_PATH}/include)
+add_dependencies(kleuren project_bft)
 target_link_libraries(kleuren_bin judy jemalloc bft)
 target_link_libraries(kleuren_static judy jemalloc bft)
 

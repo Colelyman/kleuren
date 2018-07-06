@@ -13,6 +13,7 @@ using std::endl;
 using std::make_shared;
 
 TEST_CASE("BubbleBuilder simple toy examples", "[bubble]") {
+    /*
     Graph graph = Graph();
     BubbleBuilder bb = BubbleBuilder(&graph);
     string pathToToy1 = "./data/toy1.bwtdisk";
@@ -24,7 +25,6 @@ TEST_CASE("BubbleBuilder simple toy examples", "[bubble]") {
     shared_ptr<Color> toyColor3(new Color(3, "toyColor3", pathToToy3));
     shared_ptr<Color> toyColor4(new Color(4, "toyColor4", pathToToy4));
 
-    /*
     SECTION("Finding a simple endKmer of two colors with a single SNP, that turns out to be a loop") {
         Vertex startVertex = Vertex("AAA", toyColor1->getBitVector());
         Vertex endVertex = Vertex("AAA", toyColor1->getBitVector());

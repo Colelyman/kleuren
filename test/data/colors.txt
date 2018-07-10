@@ -1,4 +1,12 @@
-/home/cole/Code/csl/kleuren/test/data/ebola.kmers.txt
-/home/cole/Code/csl/kleuren/test/data/zika.kmers.txt
-/home/cole/Code/csl/kleuren/test/data/flu.kmers.txt
-/home/cole/Code/csl/kleuren/test/data/marburg.kmers.txt
+./data/0.fasta
+./data/1.fasta
+./data/2.fasta
+./data/3.fasta
+./data/4.fasta
+./data/5.fasta
+./data/6.fasta
+./data/7.fasta
+./data/8.fasta
+./data/9.fasta
+./data/10.fasta
+./data/11.fasta

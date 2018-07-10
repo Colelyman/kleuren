@@ -1,14 +1,14 @@
 from os.path import join
 
 # change the BASE variable to the path that leads to the root of the kleuren repo
-BASE = '/home/cole/Code/csl/kleuren'
+BASE = '/Users/cole/code/csl/kleuren'
 DSK = BASE + '/thirdparty/dsk/build/bin/dsk'
 DUMP = BASE + '/thirdparty/dsk/build/bin/dsk2ascii'
-BFT = BASE + '/thirdparty/BloomFilterTrie/bft'
+BFT = BASE + '/thirdparty/BloomFilterTrie/src/project_bft/bin/bft'
 
 # chage the DIR variable to the path where the genomes are stored (must be in fasta
 # format, be gzipped, and have the suffix ".fasta.gz")
-DIR = '/home/cole/Code/csl/kleuren/test/data/'
+DIR = '/Users/cole/code/csl/kleuren/test/data/'
 COLOR_FILE = DIR + 'colors.txt'
 BFT_FILE = DIR + 'bft.out'
 KMER_FILE = DIR + 'kmer.bft.out'

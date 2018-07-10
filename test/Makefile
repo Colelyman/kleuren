@@ -1,21 +1,21 @@
-INCLUDES = -I../inc -Ithirdparty/catch -I../thirdparty/BloomFilterTrie/include
-LIBS = -L.. -lkleuren -L../thirdparty/BloomFilterTrie/lib -lbft
-CXXFLAGS = -g -std=c++11 -Wall -fpermissive $(INCLUDES) $(LIBS)
+EXEC = ../bin/kleuren_test
+BFT_EXEC = ../thirdparty/BloomFilterTrie/src/project_bft/bin/bft
+COLORS = ./data/colors.txt
+BFT_OUT = ./data/bft.out
+KMERS = ./data/kmers.out
+SRC = ./src/bubble_builder.cpp ./src/graph.cpp ./src/kmer_bank.cpp
 
-EXEC = kleuren-test
-TESTS_O = src/main.o src/bubble_builder.o src/color_manager.o src/graph.o src/kmer_bank.o src/path.o
+all: $(EXEC) $(BFT_OUT) test
 
-all: $(EXEC)
+$(EXEC): $(SRC)
+	mkdir -p ../build
+	cd ../build && cmake .. && make
 
-$(EXEC): $(TESTS_O) src/main.o ../libkleuren.a
-	$(CXX) $^ $(CXXFLAGS) -o $@
+$(BFT_OUT): $(COLORS)
+	$(BFT_EXEC) build 18 kmers $(COLORS) $(BFT_OUT) -extract_kmers kmers $(KMERS)
 
-src/%.o: src/%.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ 
-
-src/main.o: src/main.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+test: $(EXEC) $(BFT_OUT)
+	$(EXEC)
 
 clean:
-	rm -f $(TESTS_O) $(EXEC)
-
+	rm $(BFT_OUT) $(EXEC)

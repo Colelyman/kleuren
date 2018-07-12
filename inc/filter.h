@@ -13,16 +13,17 @@
 #define FILTER_H
 
 #include "graph.h"
+#include "bubble_stats.h"
 
 class Filter {
     public:
         Filter(Graph* graph);
 
-        bool filterStart(BFT_kmer* bftKmer, uint32_t n);
+        bool filterStart(BFT_kmer* bftKmer, uint32_t n, BubbleStats* bubbleStats);
 
-        bool filterEnd(BFT_kmer* bftKmer, uint32_t n);
+        bool filterEnd(BFT_kmer* bftKmer, uint32_t n, BubbleStats* bubbleStats);
 
-        bool filterMiddle(BFT_kmer* bftKmer);
+        bool filterMiddle(BFT_kmer* bftKmer, BubbleStats* bubbleStats);
 
     private:
         Graph* graph;

@@ -31,7 +31,9 @@ Driver::Driver(Args args_p) {
 
     kmerBank = new KmerBank(kmerFile);
 
-    bubbleBuilder = new BubbleBuilder(graph);
+    bubbleStats = new BubbleStats();
+
+    bubbleBuilder = new BubbleBuilder(graph, bubbleStats);
 
     // create the output bubble file
     if(!args.getBubbleFilePath().empty()) {
@@ -48,6 +50,7 @@ Driver::~Driver() {
     delete kmerBank;
     delete graph;
     delete bubbleBuilder;
+    delete bubbleStats;
     if(!args.getBubbleFilePath().empty()) {
         bubbleFile->close();
         delete bubbleFile;
@@ -59,6 +62,7 @@ void Driver::run() {
 
     // iterate over the kmers
     while(kmer != "") {
+        bubbleStats->incNumKmers();
         char* strKmer = const_cast<char*>(kmer.c_str());
         // find a start kmer for a bubble
         if(graph->isBFTKmer(strKmer)) {
@@ -85,5 +89,6 @@ void Driver::run() {
         // get the next kmer
         kmer = kmerBank->getNextKmer();
     }
+    cout << bubbleStats->toString() << endl;
 }
 

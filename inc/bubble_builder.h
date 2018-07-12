@@ -17,6 +17,7 @@
 #include <list>
 
 #include "bubble.h"
+#include "bubble_stats.h"
 #include "graph.h"
 #include "filter.h"
 
@@ -45,7 +46,7 @@ class BubbleBuilder {
 
     public:
 
-        BubbleBuilder(Graph* graph);
+        BubbleBuilder(Graph* graph, BubbleStats* bubbleStats);
 
         /**
          * Builds the bubble starting at startBFTKmer.
@@ -87,6 +88,8 @@ class BubbleBuilder {
         Graph* graph;
 
         Filter filter;
+
+        BubbleStats* bubbleStats;
 };
 
 #endif // BUBBLE_BUILDER_H

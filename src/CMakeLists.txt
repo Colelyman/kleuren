@@ -5,6 +5,7 @@ target_sources(kleuren
     "${CMAKE_CURRENT_LIST_DIR}/bubble.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/bubble_builder.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/bubble_manager.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/bubble_stats.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/color.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/driver.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/filter.cpp"

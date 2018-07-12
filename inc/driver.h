@@ -20,6 +20,7 @@
 #include "kmer_bank.h"
 #include "bubble_builder.h"
 #include "bubble_manager.h"
+#include "bubble_stats.h"
 #include "graph.h"
 
 using std::set;
@@ -54,6 +55,9 @@ class Driver {
 
         /// Manages bubbles
         BubbleManager bubbleManager;
+
+        /// Hold statistics about the bubbles and kleuren in general
+        BubbleStats* bubbleStats;
 
         /// The arguments for the current run
         Args args;

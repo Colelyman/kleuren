@@ -20,15 +20,17 @@ using std::cerr;
 using std::endl;
 using std::random_shuffle;
 
-BubbleBuilder::BubbleBuilder(Graph* graph) :
+BubbleBuilder::BubbleBuilder(Graph* graph, BubbleStats* bubbleStats) :
     filter(graph) {
     this->graph = graph;
+    this->bubbleStats = bubbleStats;
 }
 
 Bubble BubbleBuilder::build(BFT_kmer* startBFTKmer, uint32_t numColors, uint32_t maxDepth) {
     Bubble bubble = Bubble();
+    bubbleStats->incNumVisitedNodes();
 
-    if(!filter.filterStart(startBFTKmer, numColors)) {
+    if(!filter.filterStart(startBFTKmer, numColors, bubbleStats)) {
         free_BFT_kmer(startBFTKmer, 1);
         return bubble;
     }
@@ -42,6 +44,7 @@ Bubble BubbleBuilder::build(BFT_kmer* startBFTKmer, uint32_t numColors, uint32_t
             free_BFT_kmer(endBFTKmer, 1);
         }
         free_BFT_kmer(startBFTKmer, 1);
+        bubbleStats->incNumNoEndKmersFound();
         return bubble;
     }
 
@@ -77,7 +80,7 @@ BFT_kmer* BubbleBuilder::findEndBFTKmer(BFT_kmer* startBFTKmer, uint32_t numColo
         // iterate over each of the neighbors for currentBFTKmer
         BFT_kmer* neighbors = graph->getSuffixNeighbors(currentBFTKmer);
         for(size_t i = 0; i < 4; i++) {
-            if(filter.filterEnd(&neighbors[i], numColors)) {
+            if(filter.filterEnd(&neighbors[i], numColors, bubbleStats)) {
                 free_BFT_kmer(currentBFTKmer, 1);
                 free_BFT_kmer(neighbors, 4);
                 freeQueue(queue);
@@ -155,7 +158,7 @@ bool BubbleBuilder::recursiveExtend(BFT_kmer* currentBFTKmer, uint32_t currentCo
     // iterate over each of the neighbors to extend the path
     BFT_kmer* neighbors = graph->getSuffixNeighbors(currentBFTKmer);
     for(size_t i = 0; i < 4; i++) {
-        if(!filter.filterMiddle(&neighbors[i])) {
+        if(!filter.filterMiddle(&neighbors[i], bubbleStats)) {
             continue;
         }
         BFT_kmer* neighbor = graph->getBFTKmer(neighbors[i].kmer);

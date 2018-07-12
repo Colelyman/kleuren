@@ -1,5 +1,0 @@
-This is a breakdown of the de Bruijn graph of toy1.fa
-
-
-
-ACT->CTG->TGT->GTA->TAG->AGG->GGA->GAC

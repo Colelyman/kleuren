@@ -12,30 +12,30 @@ using std::endl;
 
 TEST_CASE("Graph loading and basic utilities", "[graph]") {
     char* fileName = (char*) malloc(64 * sizeof(char));
-    strcpy(fileName, "./data/bft.out");
+    strcpy(fileName, "./data/small/bft.out");
     Graph graph = Graph(fileName);
 
     SECTION("Testing general color related functions in the Graph") {
         REQUIRE(graph.getNumColors() == 4);
-        REQUIRE(strcmp(graph.getColorFilePath(0), "ebola.kmers.txt") == 0);
-        REQUIRE(strcmp(graph.getColorFilePath(1), "zika.kmers.txt") == 0);
-        REQUIRE(strcmp(graph.getColorFilePath(2), "flu.kmers.txt") == 0);
-        REQUIRE(strcmp(graph.getColorFilePath(3), "marburg.kmers.txt") == 0);
+        REQUIRE(strcmp(graph.getColorFilePath(0), "1.kmers.txt") == 0);
+        REQUIRE(strcmp(graph.getColorFilePath(1), "2.kmers.txt") == 0);
+        REQUIRE(strcmp(graph.getColorFilePath(2), "3.kmers.txt") == 0);
+        REQUIRE(strcmp(graph.getColorFilePath(3), "4.kmers.txt") == 0);
     }
 
     SECTION("Testing BFTKmer contains/validity methods") {
         BFT_kmer* bftKmer = NULL;
         REQUIRE(!graph.isValidBFTKmer(bftKmer));
 
-        char* kmer = (char*) malloc(19);
-        strcpy(kmer, "AAAAAACATTAAGAGAAC");
+        char* kmer = (char*) malloc(9);
+        strcpy(kmer, "ACTTGTGCT");
         REQUIRE(graph.isBFTKmer(kmer));
         bftKmer = graph.getBFTKmer(kmer);
         REQUIRE(bftKmer != NULL);
         REQUIRE(graph.isValidBFTKmer(bftKmer));
-        free(bftKmer);
+        free_BFT_kmer(bftKmer, 1);
 
-        strcpy(kmer, "AAAAAAAAAAAAAAAAAA");
+        strcpy(kmer, "AAAAAAAAA");
         REQUIRE(!graph.isBFTKmer(kmer));
         bftKmer = graph.getBFTKmer(kmer);
         REQUIRE(bftKmer == NULL);
@@ -46,55 +46,29 @@ TEST_CASE("Graph loading and basic utilities", "[graph]") {
     }
 
     SECTION("Testing the BFTKmer color functions of the Graph") {
-        char* kmer = (char*) malloc(19);
-        strcpy(kmer, "AAAAAACATTAAGAGAAC");
+        char* kmer = (char*) malloc(9);
+        strcpy(kmer, "CATGAGCTC");
         BFT_kmer* bftKmer = graph.getBFTKmer(kmer);
 
         REQUIRE(graph.getNumColors(bftKmer) == 1);
 
-        REQUIRE(graph.getColors(bftKmer)[0] == 1);
-        REQUIRE(graph.getColors(bftKmer)[1] == 0);
+        REQUIRE(graph.getColors(bftKmer)[0] == 1); // the number of colors
+        REQUIRE(graph.getColors(bftKmer)[1] == 0); // the color id
 
         free(kmer);
-        free(bftKmer);
+        free_BFT_kmer(bftKmer, 1);
     }
 
     SECTION("Testing the get neighbor methods of the Graph") {
-        char* kmer = (char*) malloc(19);
-        strcpy(kmer, "AAAAAACATTAAGAGAAC");
+        char* kmer = (char*) malloc(9);
+        strcpy(kmer, "GGCTAACAC");
         BFT_kmer* bftKmer = graph.getBFTKmer(kmer);
         BFT_kmer* neighbors = graph.getSuffixNeighbors(bftKmer);
         REQUIRE(graph.isValidBFTKmer(neighbors + 0));
-        REQUIRE(!graph.isValidBFTKmer(neighbors + 1));
-        REQUIRE(!graph.isValidBFTKmer(neighbors + 2));
-        REQUIRE(!graph.isValidBFTKmer(neighbors + 3));
-        REQUIRE(graph.hasSuffixNeighbors(bftKmer));
-
-        free_BFT_kmer(neighbors, 4);
-        free_BFT_kmer(bftKmer, 1);
-
-        strcpy(kmer, "TTTCTTAATCTTCATCAA");
-        REQUIRE(graph.isBFTKmer(kmer));
-        strcpy(kmer, "TTTCTTAATCTTCATCAC");
-        REQUIRE(graph.isBFTKmer(kmer));
-
-        strcpy(kmer, "TTTTCTTAATCTTCATCA");
-        bftKmer = graph.getBFTKmer(kmer);
-        neighbors = graph.getSuffixNeighbors(bftKmer);
-        REQUIRE(graph.isValidBFTKmer(neighbors + 0));
         REQUIRE(graph.isValidBFTKmer(neighbors + 1));
         REQUIRE(!graph.isValidBFTKmer(neighbors + 2));
-        REQUIRE(!graph.isValidBFTKmer(neighbors + 3));
+        REQUIRE(graph.isValidBFTKmer(neighbors + 3));
         REQUIRE(graph.hasSuffixNeighbors(bftKmer));
-
-        free_BFT_kmer(neighbors, 4);
-        free_BFT_kmer(bftKmer, 1);
-
-        strcpy(kmer, "AAAAACATTAAGAGAACA");
-        bftKmer = graph.getBFTKmer(kmer);
-        neighbors = graph.getPrefixNeighbors(bftKmer);
-        REQUIRE(graph.isValidBFTKmer(neighbors + 0));
-        REQUIRE(graph.hasPrefixNeighbors(bftKmer));
 
         free_BFT_kmer(neighbors, 4);
         free_BFT_kmer(bftKmer, 1);

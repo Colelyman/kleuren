@@ -86,8 +86,11 @@ BFT_kmer* BubbleBuilder::findEndBFTKmer(BFT_kmer* startBFTKmer, uint32_t numColo
                 freeQueue(queue);
                 return graph->getBFTKmer(neighbors[i].kmer);
             }
-            else {
-                queue.push_back(graph->getBFTKmer(neighbors[i].kmer)), depthQueue.push_back(depth + 1);
+            else if(neighbors + i != NULL) {
+                BFT_kmer* neighbor = graph->getBFTKmer(neighbors[i].kmer);
+                if(neighbor != NULL) {
+                    queue.push_back(neighbor), depthQueue.push_back(depth + 1);
+                }
             }
         }
         free_BFT_kmer(neighbors, 4);

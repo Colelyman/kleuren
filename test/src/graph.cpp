@@ -27,7 +27,7 @@ TEST_CASE("Graph loading and basic utilities", "[graph]") {
         BFT_kmer* bftKmer = NULL;
         REQUIRE(!graph.isValidBFTKmer(bftKmer));
 
-        char* kmer = (char*) malloc(9);
+        char* kmer = (char*) malloc(10);
         strcpy(kmer, "ACTTGTGCT");
         REQUIRE(graph.isBFTKmer(kmer));
         bftKmer = graph.getBFTKmer(kmer);
@@ -46,7 +46,7 @@ TEST_CASE("Graph loading and basic utilities", "[graph]") {
     }
 
     SECTION("Testing the BFTKmer color functions of the Graph") {
-        char* kmer = (char*) malloc(9);
+        char* kmer = (char*) malloc(10);
         strcpy(kmer, "CATGAGCTC");
         BFT_kmer* bftKmer = graph.getBFTKmer(kmer);
 
@@ -54,6 +54,20 @@ TEST_CASE("Graph loading and basic utilities", "[graph]") {
 
         REQUIRE(graph.getColors(bftKmer)[0] == 1); // the number of colors
         REQUIRE(graph.getColors(bftKmer)[1] == 0); // the color id
+
+        free(kmer);
+        free_BFT_kmer(bftKmer, 1);
+    }
+
+    SECTION("Testing getting the colors of a kmer multiple times") {
+        char* kmer = (char*) malloc(10);
+        strcpy(kmer, "GGCTAACAC");
+        BFT_kmer* bftKmer = graph.getBFTKmer(kmer);
+
+        int n = 10;
+        for(int i = 0; i < n; i++) {
+            REQUIRE(graph.getNumColors(bftKmer) == 4);
+        }
 
         free(kmer);
         free_BFT_kmer(bftKmer, 1);

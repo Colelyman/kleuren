@@ -5,6 +5,7 @@ PROJECT(kleuren)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_FLAGS "-g -O0")
 
 set(THIRDPARTY ${CMAKE_SOURCE_DIR}/thirdparty)
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
@@ -52,7 +53,7 @@ ExternalProject_Add(project_bft
   GIT_REPOSITORY https://github.com/Colelyman/BloomFilterTrie
   GIT_TAG 0.8.9
   PREFIX ${THIRDPARTY}/BloomFilterTrie
-  CMAKE_ARGS -DCMAKE_C_FLAGS=-fpermissive
+  CMAKE_ARGS
   INSTALL_COMMAND "" # doesn't need to be installed system-wide, just locally
 )
 ExternalProject_Get_Property(project_bft install_dir)

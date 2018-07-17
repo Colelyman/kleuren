@@ -20,6 +20,8 @@ using std::cerr;
 using std::endl;
 using std::random_shuffle;
 
+#define DEBUG(STR) if(true) printf("In file: %s on line: %d\n\tMessage: %s\n", __FILE__, __LINE__, STR);
+
 BubbleBuilder::BubbleBuilder(Graph* graph, BubbleStats* bubbleStats) :
     filter(graph) {
     this->graph = graph;
@@ -47,7 +49,6 @@ Bubble BubbleBuilder::build(BFT_kmer* startBFTKmer, uint32_t numColors, uint32_t
         bubbleStats->incNumNoEndKmersFound();
         return bubble;
     }
-
     bubble = this->extendPaths(startBFTKmer, endBFTKmer, maxDepth);
     free_BFT_kmer(startBFTKmer, 1);
     free_BFT_kmer(endBFTKmer, 1);
@@ -122,11 +123,11 @@ uint32_t min(uint32_t a, uint32_t b) {
 // Adapted from @GuillaumeHolley's function
 uint32_t* intersectColorArrays(uint32_t* a, uint32_t* b) {
     uint32_t i = 1, j = 1, it = 0;
-    uint32_t aSize= a[0] + 1, sizeB = b[0] + 1;
+    uint32_t aSize= a[0] + 1, bSize = b[0] + 1;
 
-    uint32_t* c = (uint32_t*) malloc(min(*a, *b) * sizeof(uint32_t));
+    uint32_t* c = (uint32_t*) malloc(min(aSize, bSize) * sizeof(uint32_t));
 
-    while(i < aSize && j < sizeB) {
+    while(i < aSize && j < bSize) {
         if(a[i] > b[j]) {
             j++;
         }

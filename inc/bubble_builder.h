@@ -81,9 +81,9 @@ class BubbleBuilder {
          */
         Bubble extendPaths(BFT_kmer* startBFTKmer, BFT_kmer* endBFTKmer, uint32_t maxDepth);
 
-    private:
-
         bool recursiveExtend(BFT_kmer* currentBFTKmer, uint32_t currentColor, uint32_t*& intersectingColors, BFT_kmer* endBFTKmer, string& path, uint32_t depth, uint32_t maxDepth);
+
+    private:
 
         Graph* graph;
 

@@ -9,6 +9,8 @@
 using std::cout;
 using std::endl;
 
+#define DEBUG(STR) if(false) printf("In file: %s on line: %d\n\tMessage: %s\n", __FILE__, __LINE__, STR);
+
 BubbleManager::BubbleManager(ofstream* bubbleFile, Graph* graph) {
     this->bubbleFile = bubbleFile;
     this->graph = graph;

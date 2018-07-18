@@ -14,8 +14,6 @@
 #ifndef BUBBLE_STATS_H_
 #define BUBBLE_STATS_H_
 
-#define inc(var, num) var += num; return var;
-
 #include <sstream>
 #include <stdint.h>
 #include <map>
@@ -44,6 +42,14 @@ class BubbleStats {
         /// @return the new value of numNoEndKmersFound
         uint32_t incNumNoEndKmersFound(uint32_t num = 1);
 
+        /// Increments the number of bubbles in which no paths were found
+        /// @return the new value of numNoPathsFound
+        uint32_t incNumNoPathsFound(uint32_t num = 1);
+
+        /// Increments the number of valid bubbles found
+        /// @return the new value of numBubblesFound
+        uint32_t incNumBubblesFound(uint32_t num = 1);
+
         /// Increments the value of numColorsInNodes[color]
         /// @return the value of numColorsInNodes[color]
         uint32_t incNumColorsInNodes(uint32_t color, uint32_t num = 1);
@@ -58,8 +64,12 @@ class BubbleStats {
         /// The number of bubbles in which there was no end kmer found
         uint32_t numNoEndKmersFound;
 
-        uint32_t num;
-        
+        /// The number of bubbles in which there are no paths
+        uint32_t numNoPathsFound;
+
+        /// The number of bubbles found 
+        uint32_t numBubblesFound;
+
         /// A map that contains how many colors are present in the nodes
         map<uint32_t, uint32_t> numColorsInNodes;
 };

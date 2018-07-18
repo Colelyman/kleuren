@@ -32,6 +32,9 @@ class KmerBank {
     private:
         /// The pointer to the file handle to the file of kmers
         ifstream* kmerFile; 
+
+        /// Indicates whether or not counts are present in the kmer file
+        bool counts;
 };
 
 #endif // KMER_BANK_H

@@ -35,5 +35,9 @@ $(JELLYFISH):
 	 $(JELLYFISH) count -m $(KMER_SIZE) -s 1M -o $<.jf $<
 	 $(JELLYFISH) dump -c $<.jf_0 -o $@
 
+./data/$(SIZE)/super.kmers.txt:
+	$(JELLYFISH) count -m $(KMER_SIZE) -s 5M -o ./data/$(SIZE)/super.kmers.jf ./data/$(SIZE)/*.fasta
+	$(JELLYFISH) dump -c ./data/$(SIZE)/super.kmers.jf_0 -o $@
+
 clean:
 	rm $(BFT_OUT) $(EXEC)

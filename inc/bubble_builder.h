@@ -64,10 +64,14 @@ class BubbleBuilder {
          * @param startBFTKmer the kmer to start the search with
          * @param numColors the number of colors necessary in order for a vertex to be considered.
          * @param maxDepth how many levels deep to search for the endBFTKmer
+         * @param minDepth how many levels must be searched before an endBFTKmer is returned
          * @return the next kmer that is present in numColors (or more) colors, but if there is no kmer
          * that is present in numColors (or more) it will return null
          */
-        BFT_kmer* findEndBFTKmer(BFT_kmer* startBFTKmer, uint32_t numColors, uint32_t maxDepth);
+        BFT_kmer* findEndBFTKmer(BFT_kmer* startBFTKmer,
+                                 uint32_t numColors,
+                                 uint32_t maxDepth,
+                                 uint32_t minDepth);
 
         /**
          * Extends the paths between startBFTKmer and endBFTKmer for all colors. The function will

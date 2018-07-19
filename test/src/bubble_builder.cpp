@@ -21,7 +21,7 @@ TEST_CASE("BubbleBuilder testing", "[bubble]") {
         char* kmer = (char*) malloc(10);
         strcpy(kmer, "GGCTAACAC");
         BFT_kmer* startBFTKmer = graph->getBFTKmer(kmer);
-        BFT_kmer* endBFTKmer = bubbleBuilder->findEndBFTKmer(startBFTKmer, 4, 30);
+        BFT_kmer* endBFTKmer = bubbleBuilder->findEndBFTKmer(startBFTKmer, 4, 30, 0);
         REQUIRE(strcmp(endBFTKmer->kmer, "GCTCAGGAC") == 0);
 
         free(kmer);

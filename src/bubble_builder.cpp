@@ -38,7 +38,7 @@ Bubble BubbleBuilder::build(BFT_kmer* startBFTKmer, uint32_t numColors, uint32_t
     }
 
     // find the next kmer that occurs in all of the colors
-    BFT_kmer* endBFTKmer = findEndBFTKmer(startBFTKmer, numColors, maxDepth);
+    BFT_kmer* endBFTKmer = findEndBFTKmer(startBFTKmer, numColors, maxDepth, 10);
 
     // if there is no endKmer, or the endKmer is the same as the startKmer, return an empty bubble
     if(!graph->isValidBFTKmer(endBFTKmer) || strncmp(startBFTKmer->kmer, endBFTKmer->kmer, strlen(startBFTKmer->kmer)) == 0) {
@@ -64,13 +64,18 @@ void freeQueue(list<BFT_kmer*> queue) {
     }
 }
 
-BFT_kmer* BubbleBuilder::findEndBFTKmer(BFT_kmer* startBFTKmer, uint32_t numColors, uint32_t maxDepth) {
+BFT_kmer* BubbleBuilder::findEndBFTKmer(BFT_kmer* startBFTKmer,
+                                        uint32_t numColors,
+                                        uint32_t maxDepth,
+                                        uint32_t minDepth) {
     list<BFT_kmer*> queue;
     list<uint32_t> depthQueue;
 
     BFT_kmer* startCopy = graph->getBFTKmer(startBFTKmer->kmer);
     uint32_t depth = 0;
     queue.push_back(startCopy), depthQueue.push_back(depth);
+
+    bool nodeLessThanNumColors = false;
 
     // loop until a kmer is found or there are no more neighbors to check
     while(!queue.empty() && depth < maxDepth) {
@@ -81,7 +86,7 @@ BFT_kmer* BubbleBuilder::findEndBFTKmer(BFT_kmer* startBFTKmer, uint32_t numColo
         // iterate over each of the neighbors for currentBFTKmer
         BFT_kmer* neighbors = graph->getSuffixNeighbors(currentBFTKmer);
         for(size_t i = 0; i < 4; i++) {
-            if(filter.filterEnd(&neighbors[i], numColors, bubbleStats)) {
+            if(nodeLessThanNumColors && depth >= minDepth && filter.filterEnd(&neighbors[i], numColors, bubbleStats)) {
                 free_BFT_kmer(currentBFTKmer, 1);
                 free_BFT_kmer(neighbors, 4);
                 freeQueue(queue);
@@ -90,6 +95,9 @@ BFT_kmer* BubbleBuilder::findEndBFTKmer(BFT_kmer* startBFTKmer, uint32_t numColo
             else if(neighbors + i != NULL) {
                 BFT_kmer* neighbor = graph->getBFTKmer(neighbors[i].kmer);
                 if(neighbor != NULL) {
+                    if(graph->getNumColors(neighbor) < numColors) {
+                        nodeLessThanNumColors = true;
+                    }
                     queue.push_back(neighbor), depthQueue.push_back(depth + 1);
                 }
             }

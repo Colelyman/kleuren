@@ -32,7 +32,7 @@ set_target_properties(kleuren_test
 # Set the proper include directories
 target_include_directories(kleuren PUBLIC
   "${CMAKE_SOURCE_DIR}/inc"
-  "${THIRDPARTY}/cxxopts/include"
+  "${THIRDPARTY}/args"
 )
 target_include_directories(kleuren_test PUBLIC
   "${CMAKE_SOURCE_DIR}/inc"

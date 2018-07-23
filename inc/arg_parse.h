@@ -13,11 +13,9 @@
 #ifndef ARG_PARSE_H
 #define ARG_PARSE_H
 
-#include <cxxopts.hpp>
+#include <args.hxx>
 
 #include "args.h"
-
-using cxxopts::Options;
 
 class ArgParse {
 
@@ -26,8 +24,6 @@ class ArgParse {
         Args parseArgs(int argc, char* argv[]);
 
     private:
-        /// Helper method to set the arguments
-        void setArgs(Options options);
 
         /// The holder class for all of the parse arguments
         Args args;

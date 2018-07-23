@@ -4,72 +4,76 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <vector>
 #include <string>
 
 #include "arg_parse.h"
 
 using std::cout;
+using std::cerr;
 using std::endl;
 using std::exit;
-using std::vector;
 using std::string;
 
 Args ArgParse::parseArgs(int argc, char* argv[]) {
-    Options options("kleuren", "A colored de Bruijn graph implementation for phylogeny tree reconstruction.");
-
-    this->args = Args();
+    args::ArgumentParser parser("kleuren", "A colored de Bruijn graph implementation for phylogeny tree reconstruction.");
+    args::Group required(parser, "Required parameters", args::Group::Validators::All);
+    args::ValueFlag<string> bftFilePath(required, "Path to BFT file",
+                                        "Path to the BloomFilterTrie generated file",
+                                        {'f', "bftFilePath"});
+    args::ValueFlag<string> kmerFilePath(required, "kmerFilePath",
+                                         "Path to the file that contains the kmers",
+                                         {'k', "kmerFilePath"});
+    args::ValueFlag<string> bubbleFilePath(parser, "bubbleFilePath",
+                                           "Path to the file in which to output the bubbles, if not provided bubbles will not be outputted",
+                                           {'b', "bubbleFilePath"});
+    args::ValueFlag<uint32_t> kmerLen(parser, "kmerLen",
+                                      "The length of kmer to use in order to construct the Colored de Bruijn Graph",
+                                      {'k', "kmerLen"},
+                                      18);
+    args::ValueFlag<uint32_t> numMinColors(parser, "numMinColors",
+                                           "The number of colors a kmer must be present in for a bubble to be formed. When set to 0, all colors must be present",
+                                           {'n', "numMinColors"},
+                                           0);
+    args::ValueFlag<uint32_t> maxDepth(parser, "maxDepth",
+                                       "The maximum depth for which to recursively extend paths for a bubble",
+                                       {'d', "maxDepth"},
+                                       30);
+    args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
 
     try {
-        // set up each argument
-        options.add_options()
-            ("f,bftFilePath", "Path to the BloomFilterTrie generated file.",
-                cxxopts::value<string>(), "PATH")
-            ("k,kmerFilePath", "Path to the file that contains the kmers", cxxopts::value<string>(), "PATH")
-            ("b,bubbleFilePath", "Path to the file in which to output the bubbles, if not provided bubbles will not be outputted", cxxopts::value<string>(), "PATH")
-            ("l,kmerLen", "The length of kmer to use in order to construct the Colored de Bruijn Graph", cxxopts::value<uint32_t>()->default_value("18"), "INT") 
-            ("n,numMinColors", "The number of colors a kmer must be present in for a bubble to be formed. When set to 0, all colors must be present", cxxopts::value<uint32_t>()->default_value("0"), "INT")
-            ("d,maxDepth", "The maximum depth for which to recursively extend paths for a bubble", cxxopts::value<uint32_t>()->default_value("30"), "INT")
-            ("h,help", "Print help")
-        ;
-
-        // specify required arguments
-        vector<string> required;
-        required.push_back("bftFilePath");
-        required.push_back("kmerFilePath");
-
-        // parse the arguments
-        options.parse(argc, argv);
-
-        // print the help menu
-        if(options.count("help")) {
-            cout << options.help() << endl;
-            exit(0);
+        parser.ParseCLI(argc, argv);
+    } catch(args::Help) {
+        cout << parser;
+        exit(1);
+    } catch(args::ValidationError e) {
+        cerr << e.what();
+        cerr << " bftFilePath and kmerFilePath are both required." << endl;
+        if(!bftFilePath) {
+            cerr << "bftFilePath is not provided." << endl;
         }
-
-        check_required(options, required);
-
-        setArgs(options);
-
-    } catch(const cxxopts::OptionException& e) {
-        cout << options.help() << endl;
-        cout << "Error parsing options: " << e.what() << endl;
+        if(!kmerFilePath) {
+            cerr << "kmerFilePath is not provided." << endl;
+        }
+        cerr << parser;
+        exit(1);
+    } catch(args::ParseError e) {
+        cerr << e.what() << endl;
+        cerr << parser;
         exit(1);
     }
 
-    return args;
-}
-
-void ArgParse::setArgs(Options options) {
-    args.setBFTFilePath(options["bftFilePath"].as<string>());
-    args.setKmerFilePath(options["kmerFilePath"].as<string>());
-    if(options.count("bubbleFilePath") || options.count("b")) { // check if the bubbleFilePath parameter is present
-        args.setBubbleFilePath(options["bubbleFilePath"].as<string>());
+    args.setBFTFilePath(args::get(bftFilePath));
+    args.setKmerFilePath(args::get(kmerFilePath));
+    if(bubbleFilePath) {
+        args.setBubbleFilePath(args::get(bubbleFilePath));
     }
     else {
         args.setBubbleFilePath("");
     }
-    args.setKmerLen(options["kmerLen"].as<uint32_t>());
-    args.setN(options["numMinColors"].as<uint32_t>());
-    args.setMaxDepth(options["maxDepth"].as<uint32_t>());
+    args.setKmerLen(args::get(kmerLen));
+    args.setN(args::get(numMinColors));
+    args.setMaxDepth(args::get(maxDepth));
+
+    return args;
 }
+

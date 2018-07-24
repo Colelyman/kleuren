@@ -51,7 +51,7 @@ install(TARGETS kleuren_bin kleuren_static DESTINATION ${CMAKE_INSTALL_PREFIX})
 # BloomFilterTrie
 ExternalProject_Add(project_bft
   GIT_REPOSITORY https://github.com/Colelyman/BloomFilterTrie
-  GIT_TAG 0.8.9
+  GIT_TAG 0.9.0
   PREFIX ${THIRDPARTY}/BloomFilterTrie
   CMAKE_ARGS
   INSTALL_COMMAND "" # doesn't need to be installed system-wide, just locally
@@ -60,8 +60,20 @@ ExternalProject_Get_Property(project_bft install_dir)
 add_library(bft STATIC IMPORTED)
 set(BFT_PATH ${install_dir}/src/project_bft)
 set_property(TARGET bft PROPERTY IMPORTED_LOCATION ${BFT_PATH}/bin/libbft_static.a)
-include_directories(${BFT_PATH}/include)
+
+# Judy array (a dependency of BloomFilterTrie)
+set(JUDY_PATH ${BFT_PATH}/bin/judy-1.0.5)
+find_library(JUDY_LIB NAMES Judy HINTS ${JUDY_PATH}/lib)
+
+# Jemalloc (a dependency of BloomFilterTrie)
+set(JEMALLOC_PATH ${BFT_PATH}/bin/jemalloc-5.1.0)
+find_library(JEMALLOC_LIB NAMES jemalloc HINTS ${JEMALLOC_PATH}/lib)
+
+include_directories(${BFT_PATH}/include 
+  ${JUDY_PATH}/include
+  ${JEMALLOC_PATH}/include)
+
 add_dependencies(kleuren project_bft)
-target_link_libraries(kleuren_bin judy jemalloc bft)
-target_link_libraries(kleuren_static judy jemalloc bft)
+target_link_libraries(kleuren_bin ${JUDY_LIB} ${JEMALLOC_LIB} bft)
+target_link_libraries(kleuren_static ${JUDY_LIB} ${JEMALLOC_LIB} bft)
 

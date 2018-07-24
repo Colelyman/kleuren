@@ -48,10 +48,3 @@ void Args::setMaxDepth(uint32_t maxDepth) {
     this->maxDepth = maxDepth;
 }
 
-uint32_t Args::getKmerLen() {
-    return kmerLen;
-}
-
-void Args::setKmerLen(uint32_t kmerLen) {
-    this->kmerLen = kmerLen;
-}

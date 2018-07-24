@@ -26,11 +26,11 @@ Args ArgParse::parseArgs(int argc, char* argv[]) {
     args::ValueFlag<string> bubbleFilePath(parser, "Path to the bubble file",
                                            "Path to the file in which to output the bubbles, if not provided bubbles will not be outputted",
                                            {'b', "bubbleFilePath"});
-    args::ValueFlag<uint32_t> numMinColors(parser, "numMinColors",
+    args::ValueFlag<uint32_t> numMinColors(parser, "Minimum number of colors",
                                            "The number of colors a kmer must be present in for a bubble to be formed. When set to 0, all colors must be present",
                                            {'n', "numMinColors"},
                                            0);
-    args::ValueFlag<uint32_t> maxDepth(parser, "maxDepth",
+    args::ValueFlag<uint32_t> maxDepth(parser, "Maximum depth",
                                        "The maximum depth for which to recursively extend paths for a bubble",
                                        {'d', "maxDepth"},
                                        30);

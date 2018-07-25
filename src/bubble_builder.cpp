@@ -174,6 +174,9 @@ bool BubbleBuilder::recursiveExtend(BFT_kmer* currentBFTKmer, uint32_t currentCo
             continue;
         }
         BFT_kmer* neighbor = graph->getBFTKmer(neighbors[i].kmer);
+        if(neighbor == NULL) {
+            continue;
+        }
 
         uint32_t* neighborColors = graph->getColors(neighbor);
         // check if the neighbor has the currentColor

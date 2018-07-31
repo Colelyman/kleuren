@@ -87,10 +87,11 @@ BFT_kmer* BubbleBuilder::findEndBFTKmer(BFT_kmer* startBFTKmer,
         BFT_kmer* neighbors = graph->getSuffixNeighbors(currentBFTKmer);
         for(size_t i = 0; i < 4; i++) {
             if(nodeLessThanNumColors && depth >= minDepth && filter.filterEnd(&neighbors[i], numColors, bubbleStats)) {
+                BFT_kmer* endBFTKmer = graph->getBFTKmer(neighbors[i].kmer);
                 free_BFT_kmer(currentBFTKmer, 1);
                 free_BFT_kmer(neighbors, 4);
                 freeQueue(queue);
-                return graph->getBFTKmer(neighbors[i].kmer);
+                return endBFTKmer;
             }
             else if(neighbors + i != NULL) {
                 BFT_kmer* neighbor = graph->getBFTKmer(neighbors[i].kmer);

@@ -6,25 +6,34 @@
 #include <memory>
 
 #include "driver.h"
-#include "color_set.h"
+
+extern "C" {
+    #include <bft.h>
+}
 
 using std::cout;
 using std::endl;
 
-Driver::Driver(Args args) {
-    this->args = args;
+Driver::Driver(Args args_p) {
+    this->args = args_p;
 
-    // open the color file
-    colorFile = new ifstream();
-    colorFile->open(args.getColorsFilePath());
-    colorManager = ColorManager(colorFile);
+    char* bftFilePath = (char*) malloc(args.getBFTFilePath().length() + 1);
+    strcpy(bftFilePath, args.getBFTFilePath().c_str());
+    graph = new Graph(bftFilePath);
+
+    if(args.getN() == 0) {
+        args.setN(graph->getNumColors());
+    }
 
     // open the kmer file
     kmerFile = new ifstream();
     kmerFile->open(args.getKmerFilePath());
 
     kmerBank = new KmerBank(kmerFile);
-    bubbleBuilder = BubbleBuilder();
+
+    bubbleStats = new BubbleStats();
+
+    bubbleBuilder = new BubbleBuilder(graph, bubbleStats);
 
     // create the output bubble file
     if(!args.getBubbleFilePath().empty()) {
@@ -32,72 +41,55 @@ Driver::Driver(Args args) {
         bubbleFile->open(args.getBubbleFilePath());
     }
 
-    // create the output matrix file
-    if(!args.getMatrixFilePath().empty()) {
-        matrixFile = new ofstream();
-        matrixFile->open(args.getMatrixFilePath());
-    }
-
-    bubbleManager = BubbleManager(bubbleFile, matrixFile);
+    bubbleManager = BubbleManager(bubbleFile, graph);
 }
 
 Driver::~Driver() {
-    colorFile->close();
-    delete colorFile;
     kmerFile->close();
     delete kmerFile;
     delete kmerBank;
+    delete graph;
+    delete bubbleBuilder;
+    delete bubbleStats;
     if(!args.getBubbleFilePath().empty()) {
         bubbleFile->close();
         delete bubbleFile;
-    }
-    if(!args.getMatrixFilePath().empty()) {
-        matrixFile->close();
-        delete matrixFile;
     }
 }
 
 void Driver::run() {
     string kmer = kmerBank->getNextKmer();
-    shared_ptr<Color> color0 = colorManager.getColor(0);
-    ColorSet colors = colorManager.getColors(args.getN());
 
     // iterate over the kmers
     while(kmer != "") {
+        bubbleStats->incNumKmers();
+        char* strKmer = const_cast<char*>(kmer.c_str());
         // find a start kmer for a bubble
-        if(colors.nContainsKmer(kmer)) {
-            cout << "startKmer: " << kmer << endl;
+        if(graph->isBFTKmer(strKmer)) {
+            BFT_kmer* bftKmer = graph->getBFTKmer(strKmer);
+
             // build the bubble
-            Bubble bubble = bubbleBuilder.build(kmer, colors, args.getMaxDepth());
+            Bubble bubble = bubbleBuilder->build(bftKmer, args.getN(), args.getMaxDepth());
             if(bubble.getPaths().empty()) { // no bubble was found, try next kmer
-                cout << "\tno bubble" << endl;
+                bubbleStats->incNumNoPathsFound();
                 kmer = kmerBank->getNextKmer();
                 continue;
             }
-            if(!bubble.isValid(kmer.length())) { // the bubble is not valid, try next kmer
-                cout << "\tinvalid bubble" << endl;
+            if(!bubble.isValid(kmer.length(), args.getN())) { // the bubble is not valid, try next kmer
                 kmer = kmerBank->getNextKmer();
                 continue;
+            }
+            else {
+                bubbleStats->incNumBubblesFound();
             }
             // write the bubble if there is a file to write to
             if(!args.getBubbleFilePath().empty()) {
-                cout << "\tbubble found" << endl;
                 bubbleManager.writeBubble(bubble);
-            }
-            // construct matrix if there is a file 
-            if(!args.getMatrixFilePath().empty()) {
-                bubbleManager.countSharedKmers(bubble, kmer.length()); 
             }
         }
         // get the next kmer
         kmer = kmerBank->getNextKmer();
     }
-
-    // write the matirx to the file 
-    if(!args.getMatrixFilePath().empty()) {
-        bubbleManager.writeSharedKmerMatrix(bubbleManager.averageSharedKmerMatrix(), colorManager);
-    }
-
-    return;
+    cout << bubbleStats->toString() << endl;
 }
 

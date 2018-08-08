@@ -8,12 +8,13 @@
 
 TEST_CASE("Testing the method getNextKmer", "[KmerBank]") {
     ifstream kmerFile;
-    kmerFile.open("data/super_viruses.kmers.txt");
+    kmerFile.open("data/small/kmers.out");
 
     KmerBank kmerBank = KmerBank(&kmerFile);
-    REQUIRE(kmerBank.getNextKmer() == "AAAAAAACAATATTTGA");
-    REQUIRE(kmerBank.getNextKmer() == "AAAAAACAAAGAGTGAA");
-    REQUIRE(kmerBank.getNextKmer() == "AAAAAACAATATTTGAA");
+
+    REQUIRE(kmerBank.getNextKmer() == "CTAACACAT");
+    REQUIRE(kmerBank.getNextKmer() == "CTAACACCT");
+    REQUIRE(kmerBank.getNextKmer() == "CTAACACTT");
 
     kmerFile.close();
 }

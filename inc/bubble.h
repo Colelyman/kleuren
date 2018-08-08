@@ -2,11 +2,11 @@
  * @class Bubble
  *
  * Bubble represents a set of paths for 2 or more colors that share a common
- * starting and ending node. 
+ * starting and ending node.
  *
  * @author Cole Lyman
  *
- * @date 2017/6/21
+ * @date 2018/5/21
  *
  */
 
@@ -14,73 +14,46 @@
 #define BUBBLE_H
 
 #include <map>
-#include <utility>
+#include <string>
 #include <set>
-#include <memory>
-
-#include "path.h"
+#include <utility>
 
 using std::map;
-using std::pair;
+using std::string;
 using std::set;
-using std::shared_ptr;
+using std::pair;
 
 class Bubble {
-    
+
     public:
         Bubble();
 
-        /** 
-         * Runs Needleman-Wunsch algorithm on each pair in a pair-wise fashion.
-         * @return a map of key pair<int, int> where each int in the pair is the
-         * ID of the colors compared, and value int which is the score for that 
-         * pair of paths.
-         */
-        map<pair<int, int>, int> runNW();
+        /// Checks if the path is present in the bubble
+        bool pathExists(string path) const;
 
         /**
-         * Runs a shared kmer count for each pair in a pair-wise fasion.
-         * @return a map of key pair<int, int> where each int int the pair is the
-         * ID of the colors compared, and value unsigned int is the number of shared kmers
-         * between the pair of paths.
+         * Checks if a bubble is valid, meaning it fits the following criteria:
+         *  - there is more than one path
+         *  - none of the paths are empty
+         *  - at least n colors are present in the bubble
+         *  - there are no paths that have overlapping colors
          */
-        map<pair<int, int>, unsigned int> runSharedKmerCount(unsigned int kmerLen);
+        bool isValid(size_t kmerLen, uint32_t n) const;
 
-        /// Checks if the path is present in the bubble
-        bool pathExists(Path path) const;
-
-        /// Checks if a bubble is valid, meaning it fits the following criteria:
-        /// * there is more than one path
-        /// * none of the paths are empty
-        bool isValid(size_t kmerLen) const;
-
-        /** 
+        /**
          * Adds a path to paths, and appends the color to the corresponding path
          * if the path is already contained in colors.
          * @param path the path to add to paths
-         * @param color the color that is associated with the path
+         * @param colors the colors that are associated with that path
          */
-        void addPath(Path path, shared_ptr<Color> color);
-
-        /// Returns the colors that are associated with path
-        set<shared_ptr<Color> > getColors(Path path) const;
-
-        /// Returns the name of the Colors that path is associated with
-        vector<string> getColorNames(Path path) const;
-
-        /// Returns the ID of the Colors that path is associated with
-        vector<int> getColorIDs(Path path) const;
+        void addPath(string path, uint32_t* colors);
 
         /// Returns the paths of the bubble
-        map<Path, set<shared_ptr<Color> > > getPaths() const;
+        map<string, set<uint32_t> > getPaths() const;
 
     private:
-        /// Return all of the paths in a vector
-        vector<Path> pathsToVector() const;
-
         /// The paths that this bubble holds
-        map<Path, set<shared_ptr<Color> > > paths;
-
+        map<string, set<uint32_t> > paths;
 };
 
 #endif // BUBBLE_H

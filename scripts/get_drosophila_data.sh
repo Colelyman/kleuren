@@ -9,7 +9,7 @@ cd $OUT_DIR
 
 # download the genomes to the desired directory (first command line argument)
 wget ftp://ftp.flybase.net/genomes/Drosophila_ananassae/dana_r1.05_FB2016_05/fasta/dana-all-chromosome-r1.05.fasta.gz 
-mv dana-all-chromosome-r1.05.fasta.gz d_anaassae.fasta.gz
+mv dana-all-chromosome-r1.05.fasta.gz d_ananassae.fasta.gz
 wget ftp://ftp.flybase.net/genomes/Drosophila_erecta/dere_r1.05_FB2016_05/fasta/dere-all-chromosome-r1.05.fasta.gz 
 mv dere-all-chromosome-r1.05.fasta.gz d_erecta.fasta.gz
 wget ftp://ftp.flybase.net/genomes/Drosophila_grimshawi/dgri_r1.05_FB2017_02/fasta/dgri-all-chromosome-r1.05.fasta.gz 

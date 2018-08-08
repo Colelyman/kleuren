@@ -1,15 +1,9 @@
-[submodule "thirdparty/dbgfm"]
-	path = thirdparty/dbgfm
-	url = https://github.com/Colelyman/dbgfm.git
-[submodule "thirdparty/cxxopts"]
-	path = thirdparty/cxxopts
-	url = https://github.com/jarro2783/cxxopts.git
 [submodule "thirdparty/dsk"]
 	path = thirdparty/dsk
-	url = https://github.com/GATB/dsk.git
-[submodule "test/thirdparty/mutatrix"]
-	path = test/thirdparty/mutatrix
-	url = https://github.com/ekg/mutatrix
+	url = git@github.com:GATB/dsk.git
 [submodule "thirdparty/doxygen-bootstrapped"]
 	path = thirdparty/doxygen-bootstrapped
-	url = https://github.com/Velron/doxygen-bootstrapped.git
+	url = git@github.com:Velron/doxygen-bootstrapped.git
+[submodule "thirdparty/args"]
+	path = thirdparty/args
+	url = https://github.com/Taywee/args.git

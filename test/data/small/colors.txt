@@ -1,0 +1,4 @@
+./data/small/1.kmers.txt
+./data/small/2.kmers.txt
+./data/small/3.kmers.txt
+./data/small/4.kmers.txt

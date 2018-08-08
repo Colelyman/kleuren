@@ -17,10 +17,11 @@
 #include <fstream>
 
 #include "args.h"
-#include "color_manager.h"
 #include "kmer_bank.h"
 #include "bubble_builder.h"
 #include "bubble_manager.h"
+#include "bubble_stats.h"
+#include "graph.h"
 
 using std::set;
 using std::ifstream;
@@ -37,30 +38,26 @@ class Driver {
         void run();
 
     private:
-        /// The only instance of the ColorManager, which regulates the addition,
-        /// removal, and access of colors
-        ColorManager colorManager;
-
-        /// The pointer to the file handle that contains the colors
-        ifstream* colorFile;
-
         /// The pointer to the file handle that contains the kmers
         ifstream* kmerFile;
 
         /// The pointer to the file handle that will output the bubbles
         ofstream* bubbleFile;
 
-        /// The pointer to the file handle that will output the matrix
-        ofstream* matrixFile;
-
         /// The KmerBank provides a super set of kmers for each color
         KmerBank* kmerBank;
 
+        /// The Graph underlying structure to represent the Colored de Bruijn graph
+        Graph* graph;
+
         /// Builds bubbles!
-        BubbleBuilder bubbleBuilder;
+        BubbleBuilder* bubbleBuilder;
 
         /// Manages bubbles
         BubbleManager bubbleManager;
+
+        /// Hold statistics about the bubbles and kleuren in general
+        BubbleStats* bubbleStats;
 
         /// The arguments for the current run
         Args args;

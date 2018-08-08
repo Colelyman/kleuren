@@ -2,121 +2,73 @@
  * Implementation of bubble.h
  */
 
-#include <iostream>
-
 #include "bubble.h"
 
-using std::cout;
-using std::endl;
+#define DEBUG(STR) if(true) printf("In file: %s on line: %d\n\tMessage: %s\n", __FILE__, __LINE__, STR);
 
-Bubble::Bubble() {
+Bubble::Bubble() { }
 
-}
-
-map<pair<int, int>, int> Bubble::runNW() {
-    map<pair<int, int>, int> results;
-    // iterate over each pair of paths in this->paths
-    /// @todo refactor runNW in Bubble
-    /*for(unsigned int i = 0; i < paths.size() - 1; i++) {
-        for(unsigned int j = i + 1; j < paths.size(); j++) {
-            pair<int, int> currentPair;
-            currentPair.first = paths[i].getColorID();
-            currentPair.second = paths[j].getColorID();
-
-            int score = paths[i].runNW(paths[j]);
-
-            results[currentPair] = score;
-        }
-    }*/
-
-    return results;
-}
-
-map<pair<int, int>, unsigned int> Bubble::runSharedKmerCount(unsigned int kmerLen) {
-    // put the paths from the map into a vector
-    vector<Path> pathVector = pathsToVector();
-    map<pair<int, int>, unsigned int> results;
-    // iterate over each pair of paths
-    for(unsigned int i = 0; i < pathVector.size() - 1; i++) {
-        for(unsigned int j = i + 1; j < pathVector.size(); j++) {
-            unsigned int score = pathVector[i].runSharedKmerCount(pathVector[j], kmerLen);
-            set<shared_ptr<Color> > iColors = paths[pathVector[i]];
-            set<shared_ptr<Color> > jColors = paths[pathVector[j]];
-            // get the pairs of colors
-            for(auto const& iColor : iColors) {
-                for(auto const& jColor : jColors) {
-                    pair<int, int> currentPair = pair<int, int>(iColor->getID(), jColor->getID());
-
-                    results[currentPair] = score;
-                }
-            }
-        }
+bool Bubble::pathExists(string path) const {
+    if(paths.find(path) != paths.end()) {
+        return true;
     }
-
-    return results;
+    return false;
 }
 
-bool Bubble::pathExists(Path path) const {
-    return paths.find(path) != paths.end();
-}
-
-bool Bubble::isValid(size_t kmerLen) const {
+bool Bubble::isValid(size_t kmerLen, uint32_t n) const {
     // check if there is more than one path
     if(paths.size() <= 1) {
+        DEBUG("There are 1 or less paths")
         return false;
     }
     // check if any of the paths are empty or less than or equal to the kmer length
     for(auto const& path : paths) {
-        if(path.first.getSequence().empty() || path.first.getSequence().length() <= kmerLen) {
+        if(path.first.empty() || path.first.length() <= kmerLen) {
+            DEBUG("A path length is less than the kmer length")
             return false;
         }
+    }
+    // make sure that all of the colors are accounted for, and that there are no paths
+    // with duplicate colors
+    set<uint32_t> colors;
+    for(auto const& path : paths) {
+        for(auto const& color : path.second) {
+            pair<set<uint32_t>::iterator, bool> result = colors.insert(color);
+            // check if the color has been inserted
+            if(!result.second) {
+                DEBUG("There is a duplicate color somewhere")
+                return false;
+            }
+        }
+    }
+
+    if(colors.size() < n) {
+        DEBUG("There aren't enough colors")
+        return false;
     }
 
     return true;
 }
 
-void Bubble::addPath(Path path, shared_ptr<Color> color) {
-    //cout << "Bubble::addPath, seq: " << path.getSequence() << endl;
-    if(paths.find(path) == paths.end()) { // path is not found
-        paths[path] = set<shared_ptr<Color> >({color});
+set<uint32_t> colorArrayToSet(uint32_t* colors) {
+    set<uint32_t> newColorSet;
+    for(uint32_t i = 1; i <= colors[0]; i++) {
+        newColorSet.insert(colors[i]);
     }
-    else { // path exists in paths, therefore add the color
-        paths[path].insert(color);
+    return newColorSet;
+}
+
+void Bubble::addPath(string path, uint32_t* colors) {
+    auto p = paths.find(path);
+    if(p != paths.end()) {
+        auto colorSet = colorArrayToSet(colors);
+        p->second.insert(colorSet.begin(), colorSet.end());
+    }
+    else {
+        paths[path] = colorArrayToSet(colors);
     }
 }
 
-set<shared_ptr<Color> > Bubble::getColors(Path path) const {
-    if(pathExists(path)) {
-        return paths.at(path);
-    }
-}
-
-vector<string> Bubble::getColorNames(Path path) const {
-    set<shared_ptr<Color> > colors = getColors(path);
-    vector<string> names;
-    for(auto const& color : colors) {
-        names.push_back(color->getName());
-    }
-    return names;
-}
-
-vector<int> Bubble::getColorIDs(Path path) const {
-    set<shared_ptr<Color> > colors = getColors(path);
-    vector<int> ids;
-    for(auto const& color : colors) {
-        ids.push_back(color->getID());
-    }
-    return ids;
-}
-
-map<Path, set<shared_ptr<Color> > > Bubble::getPaths() const {
+map<string, set<uint32_t> > Bubble::getPaths() const {
     return paths;
-}
-
-vector<Path> Bubble::pathsToVector() const {
-    vector<Path> pathVector;
-    for(auto const& path : paths) {
-        pathVector.push_back(path.first);
-    }
-    return pathVector;
 }

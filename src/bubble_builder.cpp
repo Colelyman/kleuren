@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "bubble_builder.h"
+#include "filter.h"
 
 using std::vector;
 using std::pair;
@@ -19,116 +20,248 @@ using std::cerr;
 using std::endl;
 using std::random_shuffle;
 
-Bubble BubbleBuilder::build(string& startKmer, ColorSet colors, unsigned int maxDepth) {
+#define DEBUG(STR) if(true) printf("In file: %s on line: %d\n\tMessage: %s\n", __FILE__, __LINE__, STR);
+
+BubbleBuilder::BubbleBuilder(Graph* graph, BubbleStats* bubbleStats) :
+    filter(graph) {
+    this->graph = graph;
+    this->bubbleStats = bubbleStats;
+}
+
+Bubble BubbleBuilder::build(BFT_kmer* startBFTKmer, uint32_t numColors, uint32_t maxDepth) {
     Bubble bubble = Bubble();
-    // get the first color in ColorSet
-    set<shared_ptr<Color> >::iterator colorIt = colors.getBeginIterator();
+    bubbleStats->incNumVisitedNodes();
 
-    // find the next kmer that occurs in all of the colors
-    // loop until there is an endKmer, or all colors have been tried
-    // also, make sure that each color has a neighbor for startKmer
-    string endKmer = "";
-    while(endKmer.empty() && colorIt != colors.getEndIterator()) {
-        // if the color doesn't have any suffix neighbors, return an empty bubble
-        if(!(*colorIt)->hasSuffixNeighbors(startKmer)) {
-            return bubble;
-        }
-        endKmer = findEndKmer(startKmer, *colorIt++, colors);
-    }
-
-    // if there is no endKmer, return an empty bubble
-    if(endKmer.empty()) {
+    if(!filter.filterStart(startBFTKmer, numColors, bubbleStats)) {
+        free_BFT_kmer(startBFTKmer, 1);
         return bubble;
     }
 
-    // extend the path from kmer to endKmer for each color in colors
-    for(set<shared_ptr<Color> >::iterator it = colors.getBeginIterator(); it != colors.getEndIterator(); ++it) {
-        Path path = Path(this->extendPath(startKmer, endKmer, *it, maxDepth));
-        bubble.addPath(path, *it);
+    // find the next kmer that occurs in all of the colors
+    BFT_kmer* endBFTKmer = findEndBFTKmer(startBFTKmer, numColors, maxDepth, 10);
+
+    // if there is no endKmer, or the endKmer is the same as the startKmer, return an empty bubble
+    if(!graph->isValidBFTKmer(endBFTKmer) || strncmp(startBFTKmer->kmer, endBFTKmer->kmer, strlen(startBFTKmer->kmer)) == 0) {
+        if(endBFTKmer != NULL) {
+            free_BFT_kmer(endBFTKmer, 1);
+        }
+        free_BFT_kmer(startBFTKmer, 1);
+        bubbleStats->incNumNoEndKmersFound();
+        return bubble;
     }
+    bubble = this->extendPaths(startBFTKmer, endBFTKmer, maxDepth);
+    free_BFT_kmer(startBFTKmer, 1);
+    free_BFT_kmer(endBFTKmer, 1);
 
     return bubble;
 }
 
-/**
- * Helper function to get the neighbors in color of kmers.
- * @param kmers the kmers to get the neighbors from
- * @return a vector of type string with all of the neighbors of the kmers
- */
-vector<string> getNeighbors(vector<string> kmers, const shared_ptr<Color> color) {
-    vector<string> neighbors;
-    for(string kmer : kmers) {
-        for(string neighbor : color->getSuffixNeighbors(kmer)) {
-            neighbors.push_back(neighbor);
-        }
+void freeQueue(list<BFT_kmer*> queue) {
+    while(!queue.empty()) {
+        BFT_kmer* currentBFTKmer = queue.front();
+        free_BFT_kmer(currentBFTKmer, 1);
+        queue.pop_front();
     }
-
-    return neighbors;
 }
 
-string BubbleBuilder::findEndKmer(string& startKmer, const shared_ptr<Color> color, const ColorSet colors) {
-    string revComp = reverseComplement(startKmer);
-    vector<string> neighbors = color->getSuffixNeighbors(startKmer);
+BFT_kmer* BubbleBuilder::findEndBFTKmer(BFT_kmer* startBFTKmer,
+                                        uint32_t numColors,
+                                        uint32_t maxDepth,
+                                        uint32_t minDepth) {
+    list<BFT_kmer*> queue;
+    list<uint32_t> depthQueue;
+
+    BFT_kmer* startCopy = graph->getBFTKmer(startBFTKmer->kmer);
+    uint32_t depth = 0;
+    queue.push_back(startCopy), depthQueue.push_back(depth);
+
+    bool nodeLessThanNumColors = false;
 
     // loop until a kmer is found or there are no more neighbors to check
-    while(true) {
-        neighbors = getNeighbors(neighbors, color);
-        if(neighbors.size() == 0) { // there are no neighbors to check, so break out of the loop
-            break;
-        }
+    while(!queue.empty() && depth < maxDepth) {
+        BFT_kmer* currentBFTKmer = queue.front();
+        depth = depthQueue.front();
+        queue.pop_front(), depthQueue.pop_front();
 
-        for(string neighbor : neighbors) {
-            if(colors.nContainsKmer(neighbor) && strcmp(neighbor.c_str(), revComp.c_str())) {
-                return neighbor;
+        // iterate over each of the neighbors for currentBFTKmer
+        BFT_kmer* neighbors = graph->getSuffixNeighbors(currentBFTKmer);
+        for(size_t i = 0; i < 4; i++) {
+            if(nodeLessThanNumColors && depth >= minDepth && filter.filterEnd(&neighbors[i], numColors, bubbleStats)) {
+                BFT_kmer* endBFTKmer = graph->getBFTKmer(neighbors[i].kmer);
+                free_BFT_kmer(currentBFTKmer, 1);
+                free_BFT_kmer(neighbors, 4);
+                freeQueue(queue);
+                return endBFTKmer;
             }
+            else if(neighbors + i != NULL) {
+                BFT_kmer* neighbor = graph->getBFTKmer(neighbors[i].kmer);
+                if(neighbor != NULL) {
+                    if(graph->getNumColors(neighbor) < numColors) {
+                        nodeLessThanNumColors = true;
+                    }
+                    queue.push_back(neighbor), depthQueue.push_back(depth + 1);
+                }
+            }
+        }
+        free_BFT_kmer(neighbors, 4);
+        free_BFT_kmer(currentBFTKmer, 1);
+    }
+    freeQueue(queue);
+    // there was no end node found given the specifications
+    return NULL;
+}
+
+bool isColorContained(uint32_t color, uint32_t* colorSet) {
+    for(uint32_t i = 1; i <= colorSet[0]; i++) {
+        if(color == colorSet[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+uint32_t min(uint32_t a, uint32_t b) {
+    if(a < b) {
+        return a;
+    }
+    else {
+        return b;
+    }
+}
+
+// Adapted from @GuillaumeHolley's function
+uint32_t* intersectColorArrays(uint32_t* a, uint32_t* b) {
+    uint32_t i = 1, j = 1, it = 0;
+    uint32_t aSize= a[0] + 1, bSize = b[0] + 1;
+
+    uint32_t* c = (uint32_t*) malloc(min(aSize, bSize) * sizeof(uint32_t));
+
+    while(i < aSize && j < bSize) {
+        if(a[i] > b[j]) {
+            j++;
+        }
+        else if(b[j] > a[i]){
+            i++;
+        }
+        else {
+            it++;
+            c[it] = a[i];
+            i++;
+            j++;
         }
     }
 
-    // there is no kmer in color that is present in all colors
-    return "";
+    c[0] = it;
+
+    return c;
 }
 
-bool recursiveExtend(const string& currentKmer, const string& endKmer, string& path, const shared_ptr<Color> color, set<string>& visited, unsigned int depth, unsigned int maxDepth) {
-    // mark the currentKmer as visited
-    visited.insert(currentKmer);
-    // the maxDepth has been reached, therefore return an empty path 
+bool BubbleBuilder::recursiveExtend(BFT_kmer* currentBFTKmer, uint32_t currentColor, uint32_t*& intersectingColors, BFT_kmer* endBFTKmer, string& path, uint32_t depth, uint32_t maxDepth) {
+    // the maxDepth has been reached, therefore return an empty path
     if(depth >= maxDepth) {
         path = "";
         return false;
     }
 
     // the base case is reached when the currentKmer is the same as the endKmer
-    if(strcmp(currentKmer.c_str(), endKmer.c_str()) == 0) {
+    if(!strncmp(currentBFTKmer->kmer, endBFTKmer->kmer, strlen(currentBFTKmer->kmer))) {
         return true;
     }
 
-    vector<string> neighbors = color->getSuffixNeighbors(currentKmer);
-    // shuffle the neighbors vector so that there is no bias towards A
-    random_shuffle(neighbors.begin(), neighbors.end());
-    // randomly shuffle the neighbors of currentKmer
-    for(string neighbor : neighbors) {
-        if(visited.find(neighbor) != visited.end()) { // the kmer has already been visited, thus skip it
+    // iterate over each of the neighbors to extend the path
+    BFT_kmer* neighbors = graph->getSuffixNeighbors(currentBFTKmer);
+    for(size_t i = 0; i < 4; i++) {
+        if(!filter.filterMiddle(&neighbors[i], bubbleStats)) {
             continue;
         }
-        string neighborSuffix = neighbor.substr(neighbor.length() - 1, 1);
+        BFT_kmer* neighbor = graph->getBFTKmer(neighbors[i].kmer);
+        if(neighbor == NULL) {
+            continue;
+        }
+
+        uint32_t* neighborColors = graph->getColors(neighbor);
+        // check if the neighbor has the currentColor
+        if(!isColorContained(currentColor, neighborColors)) {
+            free_BFT_kmer(neighbor, 1);
+            free(neighborColors);
+            continue;
+        }
+
+        // find the intersection between the current intersectionColors and the neighborColors
+        uint32_t* prevIntersectingColors = intersectingColors;
+        intersectingColors = intersectColorArrays(prevIntersectingColors, neighborColors);
+        free(prevIntersectingColors);
+        free(neighborColors);
+
+        // append the suffix of the neighbor to the path
+        size_t neighborLen = strlen(neighbor->kmer);
         string oldPath = path;
-        path += neighborSuffix;
-        depth += 1;
-        if(!recursiveExtend(neighbor, endKmer, path, color, visited, depth, maxDepth)) {
+        path.append(1, *(neighbor->kmer + neighborLen - 1));
+        depth++;
+
+        // recursively extend the path of the neighbor
+        if(!recursiveExtend(neighbor, currentColor, intersectingColors, endBFTKmer, path, depth, maxDepth)) {
+            // the path was a dead end, try the next neighbor
             path = oldPath;
+            free_BFT_kmer(neighbor, 1);
         }
         else {
+            // the path was complete, return up the tree with the true path
+            free_BFT_kmer(neighbor, 1);
+            free_BFT_kmer(neighbors, 4);
             return true;
         }
     }
+    // a path hasn't been found, thus set path to ""
+    path = ""; // TODO is this the right thing to do in this case?
+    free_BFT_kmer(neighbors, 4);
+    return false;
 }
 
-string BubbleBuilder::extendPath(string startKmer, string endKmer, const shared_ptr<Color> color, unsigned int maxDepth) {
-    string path = startKmer;
+Bubble BubbleBuilder::extendPaths(BFT_kmer* startBFTKmer, BFT_kmer* endBFTKmer, uint32_t maxDepth) {
+    Bubble bubble;
 
-    set<string> visited;
+    list<uint32_t> colorQueue;
 
-    recursiveExtend(startKmer, endKmer, path, color, visited, 0, maxDepth);
+    // add each color to the colorQueue
+    uint32_t* colors = graph->getColors(startBFTKmer);
+    for(uint32_t i = 1; i <= colors[0]; i++) {
+        colorQueue.push_back(colors[i]);
+    }
 
-    return path;
+    while(!colorQueue.empty()) {
+        // get the currentColor for which the path will be extended
+        uint32_t currentColor = colorQueue.front();
+        colorQueue.pop_front();
+
+        // initialize the path to begin with the startBFTKmer sequence
+        string pathString(startBFTKmer->kmer);
+        // check if paths can be extended for this color, if not return an empty bubble
+        if(!recursiveExtend(startBFTKmer, currentColor, colors, endBFTKmer, pathString, 0, maxDepth)) {
+            free(colors);
+            return Bubble();
+        }
+
+        bubble.addPath(pathString, colors);
+
+        // remove the colors from colorQueue that have been extended
+        list<uint32_t>::iterator it = colorQueue.begin();
+        while(it != colorQueue.end()) {
+            for(uint32_t i = 1; i <= colors[0]; i++) {
+                if(*it == colors[i]) {
+                    it = colorQueue.erase(it);
+                    break;
+                }
+            }
+            ++it;
+        }
+        free(colors);
+
+        // get the colors of the startBFTKmer to extend the next path
+        colors = graph->getColors(startBFTKmer);
+    }
+
+    free(colors);
+
+    return bubble;
 }

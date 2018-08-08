@@ -30,36 +30,17 @@
 *.exe
 *.out
 *.app
-kleuren
-kleuren-test
+bin
+build
 
-# Automake
-Makefile
-Makefile.in
-.deps
-.dirstamp
-
-# Autoconf
-config*
-install-sh
-depcomp
-missing
-ar-lib
-compile
-libtool
-ltmain.sh
-aclocal.m4
-autom4te.cache
-m4
-
-# dbgfm
-*.lm
-*.sm
-*.str
-*.fai
-
-# bwtdisk
-thirdparty/bwtdisk/
-
-# iqtree
+# Thirdparty dependencies
 thirdparty/iqtree-omp-1.5.5-Linux/
+thirdparty/tmp
+thirdparty/BloomFilterTrie
+
+test/thirdparty/jellyfish-1.1.12
+
+.snakemake
+
+# backup files
+*~

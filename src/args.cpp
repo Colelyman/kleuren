@@ -8,12 +8,12 @@ string Args::toString() {
     return "";
 }
 
-string Args::getColorsFilePath() {
-    return colorsFilePath;
+string Args::getBFTFilePath() {
+    return bftFilePath;
 }
 
-void Args::setColorsFilePath(string path) {
-    colorsFilePath = path;
+void Args::setBFTFilePath(string path) {
+    bftFilePath = path;
 }
 
 string Args::getKmerFilePath() {
@@ -32,26 +32,19 @@ void Args::setBubbleFilePath(string path) {
     bubbleFilePath = path;
 }
 
-string Args::getMatrixFilePath() {
-    return matrixFilePath;
-}
-
-void Args::setMatrixFilePath(string path) {
-    matrixFilePath = path;
-}
-
-unsigned int Args::getN() {
+uint32_t Args::getN() {
     return n;
 }
 
-void Args::setN(unsigned int n) {
+void Args::setN(uint32_t n) {
     this->n = n;
 }
 
-unsigned int Args::getMaxDepth() {
+uint32_t Args::getMaxDepth() {
     return maxDepth;
 }
 
-void Args::setMaxDepth(unsigned int maxDepth) {
+void Args::setMaxDepth(uint32_t maxDepth) {
     this->maxDepth = maxDepth;
 }
+

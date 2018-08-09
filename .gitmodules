@@ -1,9 +1,6 @@
-[submodule "thirdparty/dsk"]
-	path = thirdparty/dsk
-	url = git@github.com:GATB/dsk.git
 [submodule "thirdparty/doxygen-bootstrapped"]
 	path = thirdparty/doxygen-bootstrapped
-	url = git@github.com:Velron/doxygen-bootstrapped.git
+	url = https://github.com/Velron/doxygen-bootstrapped.git
 [submodule "thirdparty/args"]
 	path = thirdparty/args
 	url = https://github.com/Taywee/args.git

@@ -21,6 +21,7 @@ matrix:
                     - ubuntu-toolchain-r-test
                 packages:
                     - g++-4.9
+                    - cmake
                     - doxygen
                     - doxygen-doc
                     - doxygen-latex
@@ -36,20 +37,15 @@ git:
 # install the thirdparty dependencies
 before_install:
     - eval "${MATRIX_EVAL}"
-    - git submodule update --init --recursive
-    - cd thirdparty/BloomFilterTrie && ./configure make && cd -
+    - mkdir build
 
 install:
-    - make
-    - export PATH=$PATH:$PWD:$PWD/test/
-
-# install the test binary
-before_script:
-    - make test/kleuren-test
+    - cd build && cmake ..
+    # - export PATH=$PATH:$PWD:$PWD/test/
 
 # run the test cases
 script:
-    - make test
+    - ./bin/kleuren_test
 
 # generate and deploy documentation
 after_success:

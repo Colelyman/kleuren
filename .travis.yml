@@ -45,7 +45,7 @@ install:
 
 # run the test cases
 script:
-    - ./bin/kleuren_test
+    - cd ../bin && ./kleuren_test
 
 # generate and deploy documentation
 after_success:

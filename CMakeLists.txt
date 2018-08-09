@@ -62,12 +62,10 @@ set(BFT_PATH ${install_dir}/src/project_bft)
 set_property(TARGET bft PROPERTY IMPORTED_LOCATION ${BFT_PATH}/bin/libbft_static.a)
 
 # Judy array (a dependency of BloomFilterTrie)
-set(JUDY_PATH ${BFT_PATH}/bin/judy-1.0.5)
-find_library(JUDY_LIB NAMES Judy HINTS ${JUDY_PATH}/lib)
+set(JUDY_LIB ${BFT_PATH}/bin/judy-1.0.5/lib/libJudy${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 # Jemalloc (a dependency of BloomFilterTrie)
-set(JEMALLOC_PATH ${BFT_PATH}/bin/jemalloc-5.1.0)
-find_library(JEMALLOC_LIB NAMES jemalloc HINTS ${JEMALLOC_PATH}/lib)
+set(JEMALLOC_LIB ${BFT_PATH}/bin/jemalloc-5.1.0/lib/libjemalloc${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 include_directories(${BFT_PATH}/include 
   ${JUDY_PATH}/include

@@ -40,7 +40,7 @@ before_install:
     - mkdir build
 
 install:
-    - cd build && cmake ..
+    - cd build && cmake .. && make
     # - export PATH=$PATH:$PWD:$PWD/test/
 
 # run the test cases

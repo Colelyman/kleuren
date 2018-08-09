@@ -74,6 +74,6 @@ include_directories(${BFT_PATH}/include
   ${JEMALLOC_PATH}/include)
 
 add_dependencies(kleuren project_bft)
-target_link_libraries(kleuren_bin ${JUDY_LIB} ${JEMALLOC_LIB} bft)
-target_link_libraries(kleuren_static ${JUDY_LIB} ${JEMALLOC_LIB} bft)
+target_link_libraries(kleuren_bin bft ${JUDY_LIB} ${JEMALLOC_LIB})
+target_link_libraries(kleuren_static bft ${JUDY_LIB} ${JEMALLOC_LIB})
 

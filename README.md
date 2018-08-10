@@ -1,46 +1,91 @@
 # kleuren
-A colored de Bruijn graph implementation using the `dbgfm` library as the underlying de Bruijn graph structure.
+Find bubbles in the Colored de Bruijn Graph (CdBG) to reconstruct [phylogenetic
+trees](https://en.wikipedia.org/wiki/Phylogenetic_tree).
 
 [![Build Status](https://travis-ci.org/Colelyman/kleuren.svg?branch=master)](https://travis-ci.org/Colelyman/kleuren)
 
 ## Installation
 
-### Regular Use
+`kleuren` uses the [CMake](https://cmake.org/) (>= version 3.1) build system to
+compile and link its dependencies. Thus, in order to use `kleuren`, one must
+have [CMake installed](https://cmake.org/install/).
 
-**Coming soon...**
+### CMake on Ubuntu
 
-### Development
+If you have super-user priveleges then you can install CMake by running
+``` sh
+sudo apt-get install cmake
+```
+If you are running Ubuntu version 14.04 or earlier, then most likely the version
+that you have installed is too old to be compatible with `kleuren` (< version
+3.1). You can [download a CMake binary](https://cmake.org/download/) yourself,
+or add a PPA to install a newer version of CMake via the following commands
 
-To install `kleuren` with the intent to develop it, one must follow these steps:
+``` sh
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:george-edison55/cmake-3.x
+sudo apt-get update
+sudo apt-get upgrade
+```
+and an up-to-date version of CMake will be installed for you.
 
-1. Get the code. Clone the repository from Github by running the following command: `git clone https://github.com/Colelyman/kleuren.git`, and then move into the project folder `cd kleuren`.
-2. Get the Third Party dependencies. To get the dependencies, run: `git submodule update --init --recursive`.
-    1. Install `dbgfm`. First go to the `dbgfm` directory: `cd thirdparty/dbgfm`, then install: `make`.
-3. Setup the installation. `kleuren` uses [autotools](https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html) to maximize the portability of the project. Here are the steps to get the project configured:
-    1. Run `autoreconf --install`, which will install any missing tools and set up the build environment.
-    2. Run `./configure`, which will create a `Makefile` (among other files) that is tailored to your system.
-    3. Run `make`, which will install the `kleuren` library (which is found in `./.libs/libkleuren.a`) and the kleuren binary (which is found in `./kleuren`).
-    4. Run `./kleuren` to actually run `kleuren`.
-4. *Optional:* If one would like to run `kleuren` from anywhere on one's system, run `sudo make install`. In order for this to work one must have super-user privileges. One could also add the path to the directory in which `kleuren` is install to one's `PATH` variable, like this: `export PATH=$PATH:<path to where kleuren is installed>`.
-5. Go forth and develop! 
+### CMake on Mac OS X
 
-### Testing
+If you have [Homebrew](https://brew.sh/) installed, then just run
 
-`kleuren` uses the C++ unit-testing library [catch](https://github.com/philsquared/Catch) to run unit tests.
-To install the test cases, one must first follow the instructions above to install `kleuren` itself. Then one must move to the test directory: `cd test` and install the unit test: `make`.
+``` sh
+brew install cmake
+```
+and you are good to go!
 
-The data for the unit test is found in the `test/data` directory, and the unit tests themselves are found in `test/src` directory.
+### After CMake is Installed
 
-### Preparing Data Files
+Once CMake is installed, run the following commands to clone the `kleuren` repo
+and compile the project
+``` sh
+git clone --recursive https://github.com/Colelyman/kleuren.git
+cd kleuren
+mkdir build
+cd build && cmake ..
+make
+```
+there will be the `kleuren` executable in the `./bin/` folder of the root
+directory of the project. Thus, to run `kleuren` from the root directory of the
+project, you can simply execute
 
-`dbgfm` uses [bwtdisk](http://people.unipmn.it/manzini/bwtdisk/) to construct and store the FM-Index, therefore `kleuren` uses the same file format.
-Here is how you install the necessary packages to create .bwtdisk files from .fasta files.
+``` sh
+./bin/kleuren
+```
+and you have just run `kleuren`! 
 
-1. Unzip and install `bwtdisk`. 
-    1. A zipped version of `bwtdisk` is included in the `thirdparty` directory, go to that directory: `cd thirdparty`, unzip it: `mkdir bwtdisk && tar zxvf bwtdisk.0.9.0.tgz -C bwtdisk`. (For reference, the zipped file is found [here](http://people.unipmn.it/manzini/bwtdisk/bwtdisk.0.9.0.tgz))
-    2. Install `bwtdisk` by going into the directory: `cd bwtdisk` and running `make`.
-    3. If there were no errors and there is a `bwte` file (among other executables) in the `bwtdisk` directory, it installed correctly!
+If you need to link against `kleuren` to use it in your own program, then there
+is also a static library in the `./bin` folder.
+
+## Testing
+
+`kleuren` uses the C++ unit-testing library
+[catch](https://github.com/philsquared/Catch) to run unit tests. To run the test
+suite, you can execute `./bin/kleuren_test`.
+
+The data for the unit test is found in the `test/data/small` directory, and the
+unit tests themselves are found in `test/src` directory.
+
+## Using `kleuren`
+
+`kleuren` depends on the
+[BloomFilterTrie](https://github.com/GuilluameHolley/BloomFilterTrie) to represent
+the CdBG. Thus, one must create the `BloomFilterTrie` representation of the CdBG
+and pass that into `kleuren`. In order to create the CdBG one must count the
+kmers of the genomes and pass that into `BloomFilterTrie`. 
+
+There is a [scipipe](https://github.com/scipipe/scipipe) workflow available at
+[kleuren-scipipe-workflow](https://github.com/Colelyman/kleuren-scipipe-workflow).
+This will install `kleuren` and all of the other dependencies needed
+(`BloomFilterTrie` and `jellyfish`) to run `kleuren` end-to-end, from genomes to
+bubbles.
 
 ## What's in a name?
 
-*Kleuren* is the Dutch word for colors, which pays homage to the language of the home country of the de Bruin graph's namesake, [Nicolaas Govert de Bruijn](https://en.wikipedia.org/wiki/Nicolaas_Govert_de_Bruijn).
+*Kleuren* is the Dutch word for colors, which pays homage to the language of the
+home country of the de Bruin graph's namesake, [Nicolaas Govert de
+Bruijn](https://en.wikipedia.org/wiki/Nicolaas_Govert_de_Bruijn).

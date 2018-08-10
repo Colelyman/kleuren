@@ -82,7 +82,9 @@ There is a [scipipe](https://github.com/scipipe/scipipe) workflow available at
 [kleuren-scipipe-workflow](https://github.com/Colelyman/kleuren-scipipe-workflow).
 This will install `kleuren` and all of the other dependencies needed
 (`BloomFilterTrie` and `jellyfish`) to run `kleuren` end-to-end, from genomes to
-bubbles.
+bubbles. If you would like to just see the steps needed to create the necessary
+files, an example can be found in
+[test/Makefile](https://github.com/Colelyman/kleuren/blob/master/test/Makefile).
 
 ## What's in a name?
 

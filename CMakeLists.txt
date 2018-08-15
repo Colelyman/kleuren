@@ -33,6 +33,7 @@ set_target_properties(kleuren_test
 target_include_directories(kleuren PUBLIC
   "${CMAKE_SOURCE_DIR}/inc"
   "${THIRDPARTY}/args"
+  "${THIRDPARTY}/sparsepp"
 )
 target_include_directories(kleuren_test PUBLIC
   "${CMAKE_SOURCE_DIR}/inc"

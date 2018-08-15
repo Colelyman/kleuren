@@ -1,5 +1,6 @@
 target_sources(kleuren
   PUBLIC
+    "${CMAKE_CURRENT_LIST_DIR}/abstract_graph.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/arg_parse.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/args.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/bubble.cpp"

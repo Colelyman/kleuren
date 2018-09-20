@@ -77,14 +77,40 @@ BFT_kmer* Graph::getSuffixNeighbors(BFT_kmer* bftKmer) const {
     return NULL;
 }
 
-bool Graph::hasSuffixNeighbors(BFT_kmer* bftKmer) const {
-    BFT_kmer* neighbors = getSuffixNeighbors(bftKmer);
-    if(neighbors == NULL) {
-        return false;
+vector<BFT_kmer*> Graph::getSuffixNeighbors(char* kmer) const {
+    vector<BFT_kmer*> neighbors;
+    uint32_t len = strlen(kmer);
+    char* neighborKmer = (char*) malloc(len + 1);
+    memcpy(neighborKmer, kmer + 1, (len - 1) * sizeof(char));
+    for(int i = 0; i < 4; i++) {
+        switch(i) {
+            case 0: neighborKmer[len - 1] = 'A'; break;
+            case 1: neighborKmer[len - 1] = 'C'; break;
+            case 2: neighborKmer[len - 1] = 'G'; break;
+            case 3: neighborKmer[len - 1] = 'T'; break;
+        }
+        BFT_kmer* neighbor = getBFTKmer(neighborKmer);
+        if(neighbor != NULL) {
+            if(isValidBFTKmer(neighbor)) {
+                neighbors.push_back(neighbor);
+            } else {
+                free_BFT_kmer(neighbor, 1);
+            }
+        }
     }
-    bool hasNeighbors = !(checkIfEmpty(neighbors));
-    free_BFT_kmer(neighbors, 4);
-    return hasNeighbors;
+    free(neighborKmer);
+    return neighbors;
+}
+
+bool Graph::hasSuffixNeighbors(BFT_kmer* bftKmer) const {
+    return getNumSuffixNeighbors(bftKmer) > 0;
+}
+
+uint32_t Graph::getNumSuffixNeighbors(BFT_kmer* bftKmer) const {
+    vector<BFT_kmer*> neighbors = getSuffixNeighbors(bftKmer->kmer);
+    uint32_t numNeighbors = neighbors.size();
+    freeBFTKmers(neighbors);
+    return numNeighbors;
 }
 
 BFT_kmer* Graph::getPrefixNeighbors(BFT_kmer* bftKmer) const {
@@ -94,14 +120,50 @@ BFT_kmer* Graph::getPrefixNeighbors(BFT_kmer* bftKmer) const {
     return NULL;
 }
 
-bool Graph::hasPrefixNeighbors(BFT_kmer* bftKmer) const {
-    BFT_kmer* neighbors = getPrefixNeighbors(bftKmer);
-    if(neighbors == NULL) {
-        return false;
+vector<BFT_kmer*> Graph::getPrefixNeighbors(char* kmer) const {
+    vector<BFT_kmer*> neighbors;
+    uint32_t len = strlen(kmer);
+    char* neighborKmer = (char*) malloc(len + 1);
+    memcpy(neighborKmer + 1, kmer, (len - 1) * sizeof(char));
+    for(int i = 0; i < 4; i++) {
+        switch(i) {
+            case 0: neighborKmer[0] = 'A'; break;
+            case 1: neighborKmer[0] = 'C'; break;
+            case 2: neighborKmer[0] = 'G'; break;
+            case 3: neighborKmer[0] = 'T'; break;
+        }
+        BFT_kmer* neighbor = getBFTKmer(neighborKmer);
+        if(neighbor != NULL) {
+            if(isValidBFTKmer(neighbor)) {
+                neighbors.push_back(neighbor);
+            } else {
+                free_BFT_kmer(neighbor, 1);
+            }
+        }
     }
-    bool hasNeighbors = !(checkIfEmpty(neighbors));
-    free_BFT_kmer(neighbors, 4);
-    return hasNeighbors;
+    free(neighborKmer);
+    return neighbors;
+}
+
+bool Graph::hasPrefixNeighbors(BFT_kmer* bftKmer) const {
+    return getNumPrefixNeighbors(bftKmer) > 0;
+}
+
+uint32_t Graph::getNumPrefixNeighbors(BFT_kmer *bftKmer) const {
+    vector<BFT_kmer*> neighbors = getPrefixNeighbors(bftKmer->kmer);
+    uint32_t numNeighbors = neighbors.size();
+    freeBFTKmers(neighbors);
+    return numNeighbors;
+}
+
+void Graph::freeBFTKmers(vector<BFT_kmer*> kmers) const {
+    for(auto const& kmer : kmers) {
+        free_BFT_kmer(kmer, 1);
+    }
+}
+
+uint32_t Graph::getKmerSize() const {
+    return bft->k;
 }
 
 bool Graph::checkIfEmpty(BFT_kmer* bftKmers) const {

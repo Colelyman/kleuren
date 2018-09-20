@@ -18,6 +18,10 @@ extern "C" {
     #include <bft.h>
 }
 
+#include <vector>
+
+using std::vector;
+
 class Graph {
 
     public:
@@ -47,14 +51,28 @@ class Graph {
        /// Returns a vector of all of the vertices that neighbor v on the suffix side
        BFT_kmer* getSuffixNeighbors(BFT_kmer* bftKmer) const;
 
+       vector<BFT_kmer*> getSuffixNeighbors(char* kmer) const;
+
        /// Returns the boolean value according to if the vertex has suffix neighbors
        bool hasSuffixNeighbors(BFT_kmer* bftKmer) const;
+
+       /// Returns the number of valid suffix neighbors for bftKmer
+       uint32_t getNumSuffixNeighbors(BFT_kmer* bftKmer) const;
 
        /// Returns a vector of all of the vertices that neighbor v on the prefix side
        BFT_kmer* getPrefixNeighbors(BFT_kmer* bftKmer) const;
 
+       vector<BFT_kmer*> getPrefixNeighbors(char* kmer) const;
+
        /// Returns the boolean value according to if the vertex has prefix neighbors
        bool hasPrefixNeighbors(BFT_kmer* bftKmer) const;
+
+       /// Returns the number of valid prefix neighbors for bftKmer
+       uint32_t getNumPrefixNeighbors(BFT_kmer* bftKmer) const;
+
+       void freeBFTKmers(vector<BFT_kmer*> kmers) const;
+
+       uint32_t getKmerSize() const;
 
     private:
 

@@ -34,10 +34,13 @@ target_include_directories(kleuren PUBLIC
   "${CMAKE_SOURCE_DIR}/inc"
   "${THIRDPARTY}/args"
   "${THIRDPARTY}/sparsepp"
+  "${THIRDPARTY}/pfasta"
 )
 target_include_directories(kleuren_test PUBLIC
   "${CMAKE_SOURCE_DIR}/inc"
   "${CMAKE_SOURCE_DIR}/test/thirdparty/catch"
+  "${THIRDPARTY}/sparsepp"
+  "${THIRDPARTY}/pfasta"
 )
 target_link_libraries(kleuren_test kleuren_static)
 
@@ -78,3 +81,7 @@ add_dependencies(kleuren project_bft)
 target_link_libraries(kleuren_bin bft ${JUDY_LIB} ${JEMALLOC_LIB})
 target_link_libraries(kleuren_static bft ${JUDY_LIB} ${JEMALLOC_LIB})
 
+# pfasta
+add_library(pfasta STATIC ${THIRDPARTY}/pfasta/pfasta.c ${THIRDPARTY}/pfasta/pfasta.h)
+target_link_libraries(kleuren_bin pfasta)
+target_link_libraries(kleuren_static pfasta)

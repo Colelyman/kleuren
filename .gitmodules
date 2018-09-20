@@ -4,3 +4,6 @@
 [submodule "thirdparty/args"]
 	path = thirdparty/args
 	url = https://github.com/Taywee/args.git
+[submodule "thirdparty/sparsepp"]
+	path = thirdparty/sparsepp
+	url = https://github.com/greg7mdp/sparsepp.git

@@ -1,4 +1,5 @@
 import argparse, copy, pdb
+from functools import reduce
 import numpy as np
 from Bio import SeqIO
 from collections import deque
@@ -7,7 +8,7 @@ from collections import deque
 
 from typing import List, Tuple, Optional
 
-Colors = np.array # List[bool]
+Colors = np.ndarray # List[bool]
 
 
 class Node:
@@ -65,8 +66,19 @@ def find_bubbles(graph: dict, min_colors: int, min_depth: int = 10, max_depth: i
         colors = val.colors
         if val.num_colors() >= min_colors and len(get_suffix_neighbors(graph, start)) > 1:
             end = find_end(graph, start, min_colors, min_depth, max_depth)
+            if end is None:
+                continue
             print(start, end)
-            extend_paths(graph, start, end, max_depth)
+            paths = extend_paths(graph, start, end, max_depth)
+            bubble_stats(paths)
+
+
+def bubble_stats(paths: dict):
+    present_colors = reduce((lambda x, y: np.array(x) | np.array(y)), [colors for colors in paths.keys()])
+    print('Number of present colors:', len(np.where(present_colors)[0]))
+    avg_path_length = sum(len(path) for path in paths.values()) / len(paths)
+    print('Average path length:', avg_path_length)
+    print()
 
 
 def find_end(graph: dict, start: str, min_colors: int, min_depth: int, max_depth: int) -> Optional[str]:
@@ -92,19 +104,21 @@ def extend_paths(graph: dict, start: str, end: str, max_depth: int):
 
     paths = {}
     colors_found = np.copy(~graph[start].colors)
-    print('start colors', graph[start].colors)
+    # print('start colors', graph[start].colors)
 
     while not np.all(colors_found):
         current_color_index = np.where(~colors_found)[0][0]
-        print('current_color_index', current_color_index, 'colors_found', colors_found)
+        # print('current_color_index', current_color_index, 'colors_found', colors_found)
         path, colors = dfs(graph, start, end, current_color_index, max_depth)
+        if colors is None:
+            continue
         colors_t = tuple(colors)
         if colors_t in paths:
             print('Existing color set found again in bubble')
         paths[colors_t] = path
         colors_found |= colors
 
-    print(paths)
+    return paths
 
 
 def dfs(graph: dict, start: str, end: str, current_color_index: int, max_depth: int) -> Tuple[str, list]:
@@ -115,8 +129,8 @@ def dfs(graph: dict, start: str, end: str, current_color_index: int, max_depth: 
             return path, intersecting_colors, True
 
         for neighbor in get_suffix_neighbors(graph, current):
-            print('current', current, 'neighbor', neighbor, 'path', path)
-            if graph[neighbor].colors[current_color_index]: # TODO check this
+            # print('current', current, 'neighbor', neighbor, 'path', path)
+            if graph[neighbor].colors[current_color_index]:
                # print(intersecting_colors, graph[neighbor].colors)
                intersecting_colors &= graph[neighbor].colors # and_colors(intersecting_colors, graph[neighbor].colors)
                path += neighbor[-1]
@@ -132,9 +146,9 @@ def dfs(graph: dict, start: str, end: str, current_color_index: int, max_depth: 
         return '', intersecting_colors, False
 
     intersecting_colors = np.copy(graph[start].colors)
-    path, colors, found = _dfs(start, current_color_index, intersecting_colors, start, 0)
+    path, colors, found = _dfs(start, current_color_index, intersecting_colors, '', 0)
     if found:
-        return path, colors
+        return path[:-len(end)], colors
     else:
         return None, None
 
